@@ -1,0 +1,83 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:p="http://primefaces.org/ui">
+ <h:head><title>Hesap Uzmanlari Dernegi</title>
+  <style type="text/css">
+        .ui-widget,.ui-widget .ui-widget {
+            font-size: 90% !important;
+        }
+    </style>
+ </h:head>
+ <h:body>
+ 
+ <h:form>
+ <table>
+ <tr>
+ <h:graphicImage value="/images/Banner.png" />
+ </tr>
+ 
+
+ <tr>
+ <p:toolbar>
+    <p:toolbarGroup align="left">
+    
+    	<h:commandButton value="Ana Sayfa" icon="ui-icon-document" action ="index.xhtml" ajax="false"/>
+    
+        <h:commandButton value="Mevzuat Setleri" icon="ui-icon-document" action ="MevzuatSeti.xhtml" ajax="false"/>
+    
+    	<h:commandButton value="Kanun Icerikleri" icon="ui-icon-document" action ="KanunIcerik.xhtml" ajax="false"/>
+    
+       
+    </p:toolbarGroup>
+
+    
+
+  </p:toolbar>
+ </tr>
+ 
+ 
+</table>
+ 
+  
+ </h:form>
+     
+ 
+ 
+ <h:form>
+ 
+   <h3 class="title ui-widget-header ui-corner-all">Hesap Uzmanları Derneği</h3>
+ 
+</h:form>
+<h:form id="form">
+ 
+    <p:growl id="growl" showDetail="true" />
+ 
+    <p:dashboard id="board" model="#{dashboardBean.model}">
+        <p:ajax event="reorder" listener="#{dashboardBean.handleReorder}" update="growl" />
+ 
+        <p:panel id="sports" header="Sports">
+            <h:outputText value="Sports Content" />
+        </p:panel>
+ 
+        <p:panel id="finance" header="Finance">
+            <h:outputText value="Finance Content" />
+        </p:panel>
+ 
+        <p:panel id="lifestyle" header="Lifestyle">
+            <h:outputText value="Lifestyle Content"  />
+        </p:panel>
+ 
+        <p:panel id="weather" header="Weather">
+            <h:outputText value="Weather Content" />
+        </p:panel>
+ 
+        <p:panel id="politics" header="Politics">
+            <h:outputText value="Politics Content" />
+        </p:panel>
+    </p:dashboard>
+ 
+</h:form>
+
+</h:body>
+</html>

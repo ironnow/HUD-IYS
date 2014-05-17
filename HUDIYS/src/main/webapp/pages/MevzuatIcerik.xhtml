@@ -1,0 +1,136 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:p="http://primefaces.org/ui">
+ <h:head><title>Hesap Uzmanlari Dernegi</title>
+  <style type="text/css">
+        .ui-widget,.ui-widget .ui-widget {
+            font-size: 90% !important;
+        }
+    </style>
+ </h:head>
+ <h:body>
+ 
+ <h:form>
+ <table>
+ <tr>
+ <h:graphicImage value="/images/Banner.png" />
+ </tr>
+ 
+
+ <tr>
+ <p:toolbar>
+    <p:toolbarGroup align="left">
+    
+    	<h:commandButton value="Ana Sayfa" icon="ui-icon-document" action ="index.xhtml" ajax="false"/>
+    
+        <h:commandButton value="Mevzuat Setleri" icon="ui-icon-document" action ="MevzuatSeti.xhtml" ajax="false"/>
+    
+       
+    </p:toolbarGroup>
+
+    
+
+  </p:toolbar>
+ </tr>
+ 
+ 
+</table>
+ 
+  
+ </h:form>
+     
+ <h3 class="title ui-widget-header ui-corner-all"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" />
+  Mevzuat İçerikleri</h3>
+ 
+ <h:form>
+ 
+    <p:growl id="growl" showDetail="true" />
+ 
+    <p:fieldset legend="Mevzuat İçerikleri" toggleable="true" toggleSpeed="500">
+        <h:panelGrid columns="8" cellpadding="10">
+        
+        <p:panel header="Kanunlar">
+        
+			<h:commandLink action="KanunGrid.xhtml">
+			  <p:graphicImage value="/images/kanunlar.jpg"
+			            width="80"
+			            height="90">
+			  </p:graphicImage>
+			</h:commandLink>
+       		
+    	</p:panel>
+        
+        <p:panel header="Tüzükler">
+        
+			<h:commandLink action="MevzuatSeti.xhtml">
+			  <p:graphicImage value="/images/tuzukler.jpg"
+			            width="80"
+			            height="90">
+			  </p:graphicImage>
+			</h:commandLink>
+       		
+    	</p:panel>
+    	
+            <p:panel header="Tebliğler">
+        
+			<h:commandLink action="KanunGrid.xhtml">
+			  <p:graphicImage value="/images/teblig.jpg"
+			            width="80"
+			            height="90">
+			  </p:graphicImage>
+			</h:commandLink>
+       		
+    	</p:panel>
+           
+           </h:panelGrid>
+    </p:fieldset>
+ 
+</h:form>
+ 
+<h:form>
+ 
+    <p:growl id="growl" showDetail="true" />
+ 
+    <p:fieldset legend="İçtihatlar" toggleable="true" toggleSpeed="500">
+        <h:panelGrid columns="8" cellpadding="10">
+        
+        <p:panel header="Yargıtay">
+        
+			<h:commandLink action="KanunGrid.xhtml">
+			  <p:graphicImage value="/images/yargitay.jpg"
+			            width="80"
+			            height="90">
+			  </p:graphicImage>
+			</h:commandLink>
+       		
+    	</p:panel>
+        
+        <p:panel header="Danıştay">
+        
+			<h:commandLink action="KanunGrid.xhtml">
+			  <p:graphicImage value="/images/danistay.jpg"
+			            width="80"
+			            height="90">
+			  </p:graphicImage>
+			</h:commandLink>
+       		
+    	</p:panel>
+    	
+            <p:panel header="Sayıştay" >
+        
+			<h:commandLink action="KanunGrid.xhtml">
+			  <p:graphicImage value="/images/sayistay.jpg"
+			            width="80"
+			            height="90">
+			  </p:graphicImage>
+			</h:commandLink>
+       		
+    	</p:panel>
+           
+           </h:panelGrid>
+    </p:fieldset>
+ 
+</h:form>
+</h:body>
+</html>
