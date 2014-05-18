@@ -148,7 +148,7 @@ public class MevzuatBean implements Serializable {
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
        
-        FacesContext.getCurrentInstance().getExternalContext().redirect("MevzuatIcerik.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuatIcerik.jsf");
 
 
     }

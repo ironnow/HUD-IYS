@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml" 
@@ -8,7 +8,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"> 
 	<body> 
 		<ui:composition> 
-			<h1>This is default content page</h1> 
+			 <h:form>
+				 <p:toolbar>
+				    <p:toolbarGroup align="left">
+				        <h:commandButton value="Ana Sayfa" icon="ui-icon-document" action ="index.xhtml" ajax="false"/>
+				    	<h:commandButton value="Mevzuat Setleri" icon="ui-icon-document" action ="mevzuatSeti.xhtml" ajax="false"/>
+				    </p:toolbarGroup>				
+				  </p:toolbar>
+			</h:form>
 		</ui:composition>	 
 	</body> 
 </html>
