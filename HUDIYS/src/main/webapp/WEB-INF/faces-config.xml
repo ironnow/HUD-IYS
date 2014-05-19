@@ -28,30 +28,6 @@ http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
         </navigation-case>
     </navigation-rule>
     
-    <navigation-rule>
-     <from-view-id>/pages/mevzuatSeti.xhtml</from-view-id>
-     <navigation-case>
-         <from-outcome>success</from-outcome>
-            <to-view-id>/pages/mevzuatSeti.xhtml</to-view-id>
-        </navigation-case>
-         <navigation-case>
-         <from-outcome>error</from-outcome>
-            <to-view-id>/pages/error.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    
-     <navigation-rule>
-     <from-view-id>/pages/mevzuat.xhtml</from-view-id>
-     <navigation-case>
-         <from-outcome>success</from-outcome>
-            <to-view-id>/pages/mevzuat.xhtml</to-view-id>
-        </navigation-case>
-         <navigation-case>
-         <from-outcome>error</from-outcome>
-            <to-view-id>/pages/error.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    
      <navigation-rule>
      <from-view-id>/pages/kanunGrid.xhtml</from-view-id>
      <navigation-case>

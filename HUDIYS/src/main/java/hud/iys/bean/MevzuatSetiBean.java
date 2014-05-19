@@ -173,7 +173,8 @@ public class MevzuatSetiBean implements Serializable {
 		  
 		setSelectedMevzuatSetiMevzuatList(this.selectedMevzuatSetiMevzuatList);
 		
-        FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuat.xhtml");
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
 
 
     }

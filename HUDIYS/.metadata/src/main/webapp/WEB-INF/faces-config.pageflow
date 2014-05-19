@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13998315341960" configfile="/HUDIYS/src/main/webapp/WEB-INF/faces-config.xml">
   <nodes xsi:type="pageflow:PFPage" name="pages/index.xhtml" x="122" y="764" id="pf13998495169221" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13998495169233 pf14004004856800" path="/pages/index.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/error.xhtml" x="554" y="764" id="pf13998495169245" referenceLink="//@navigationRule.3/@navigationCase.1/@toViewId|" inlinks="pf13998495169233 pf14004004856801 pf14004004856802 pf14004004856803" path="/pages/error.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/MevzuatSeti.xhtml" x="338" y="178" id="pf13998546018678" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14004004856804 pf14004004856801" inlinks="pf14004004856804" path="/pages/mevzuatSeti.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/Mevzuat.xhtml" x="338" y="967" id="pf139985460186710" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" outlinks="pf14004004856802 pf14004004856805" inlinks="pf14004004856805" path="/pages/mevzuat.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/error.xhtml" x="554" y="764" id="pf13998495169245" referenceLink="//@navigationRule.3/@navigationCase.1/@toViewId|" inlinks="pf13998495169233 pf14004004856803" path="/pages/error.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/kanunGrid.xhtml" id="pf14004004856806" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" outlinks="pf14004004856803 pf14004004856807" inlinks="pf14004004856800 pf14004004856807" path="/pages/kanunGrid.xhtml"/>
   <links id="pf13998495169233" target="pf13998495169245" source="pf13998495169221" outcome="error"/>
   <links id="pf14004004856800" target="pf14004004856806" source="pf13998495169221" outcome="success"/>
-  <links id="pf14004004856804" target="pf13998546018678" source="pf13998546018678" outcome="success"/>
-  <links id="pf14004004856801" target="pf13998495169245" source="pf13998546018678" outcome="error"/>
-  <links id="pf14004004856802" target="pf13998495169245" source="pf139985460186710" outcome="error"/>
-  <links id="pf14004004856805" target="pf139985460186710" source="pf139985460186710" outcome="success"/>
   <links id="pf14004004856803" target="pf13998495169245" source="pf14004004856806" outcome="error"/>
   <links id="pf14004004856807" target="pf14004004856806" source="pf14004004856806" outcome="success"/>
 </pageflow:Pageflow>

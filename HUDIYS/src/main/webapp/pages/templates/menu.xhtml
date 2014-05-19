@@ -11,8 +11,10 @@
 			 <h:form>
 				 <p:toolbar>
 				    <p:toolbarGroup align="left">
-				        <h:commandButton value="Ana Sayfa" icon="ui-icon-document" action ="index.xhtml" ajax="false"/>
-				    	<h:commandButton value="Mevzuat Setleri" icon="ui-icon-document" action ="mevzuatSeti.xhtml" ajax="false"/>
+				        <h:commandButton value="Ana Sayfa" icon="ui-icon-document" action ="index?faces-redirect=true" ajax="false"/>
+				    	<h:commandButton value="Mevzuat Setleri" icon="ui-icon-document" action ="mevzuatSeti?faces-redirect=true" ajax="false"/>
+				    	<h:commandButton value="Kanun Icerikleri" icon="ui-icon-document" action ="kanunIcerik?faces-redirect=true" ajax="false"/>
+    
 				    </p:toolbarGroup>				
 				  </p:toolbar>
 			</h:form>

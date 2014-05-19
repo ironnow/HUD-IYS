@@ -53,8 +53,7 @@
   				<p:growl id="growl" showDetail="true"/>
    				<p:dataTable id="dataTable" var="mevzuatSeti" value="#{mevzuatSetiMB.mevzuatSetleriModel}" sortMode="multiple" rows="15" paginator="true"
 					selection="#{mevzuatSetiMB.selectedMevzuatSeti}" selectionMode="single" >        
-					<p:ajax event="rowSelect" listener="#{mevzuatSetiMB.onRowSelect}"
-                 				  update=":form:display :form:growl" oncomplete="PF('mevzuatSetiDialog').show()" />
+					<p:ajax event="rowSelect" listener="#{mevzuatSetiMB.onRowSelect}" update=":form:growl"/>
        				<p:ajax event="rowUnselect" listener="#{mevzuatSetiMB.onRowUnselect}" update=":form:growl"/>
 	
        				<p:column style="width:30%" sortBy="mevzuatSetiAdi" headerText="Mevzuat Seti">
@@ -66,19 +65,7 @@
 			        </p:column>
    				</p:dataTable>
 
-                <p:dialog id="dialog" header="Mevzuat Seti Detaylari" widgetVar="mevzuatSetiDialog" resizable="false"
-               		showEffect="fade" hideEffect="explode">
-
-       				<p:dataTable id="display" var="mevzuat" value="#{mevzuatSetiMB.selectedMevzuatSetiMevzuatList}" sortMode="multiple" rows="10" paginator="true">
-        				<p:column style="width:30%;" sortBy="mevzuatAdi" headerText="Mevzuat">
-				            <h:outputText value="#{mevzuat.mevzuatAdi}" />
-				        </p:column>
-				
-				        <p:column style="width:70%;" sortBy="mevzuatAciklama" headerText="Açıklama">
-				            <h:outputText value="#{mevzuat.mevzuatAciklama}" />
-				        </p:column>
-    				</p:dataTable>
-   				</p:dialog>
+                
 			</h:form>
 			
 		</ui:define> 			 

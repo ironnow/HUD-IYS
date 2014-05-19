@@ -1,86 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml"
-     xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-     xmlns:p="http://primefaces.org/ui">
- <h:head><title>Hesap Uzmanlari Dernegi</title>
-  <style type="text/css">
-        .ui-widget,.ui-widget .ui-widget {
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head><title>Hesap Uzmanlari Dernegi</title>
+	<style type="text/css">
+        .ui-widget,.ui-widget .ui-widget 
+        {
             font-size: 90% !important;
         }
-    </style>
- </h:head>
- <h:body>
- 
- <h:form>
- <table>
- <tr>
- <h:graphicImage value="/images/Banner.png" />
- </tr>
- 
- 
-
- <tr>
- <p:toolbar>
-    <p:toolbarGroup align="left">
-    
-    	<h:commandButton value="Ana Sayfa" icon="ui-icon-document" action ="index.xhtml" ajax="false"/>
-    
-        <h:commandButton value="Mevzuat Setleri" icon="ui-icon-document" action ="MevzuatSeti.xhtml" ajax="false"/>
-    
-    	<h:commandButton value="Kanun Icerikleri" icon="ui-icon-document" action ="KanunIcerik.xhtml" ajax="false"/>
-    
-       
-    </p:toolbarGroup>
-
-    
-
-  </p:toolbar>
- </tr>
- 
- 
-</table>
- 
-  
- </h:form>
-     
- 
- 
-<p:layout style="min-width:400px;min-height:600px;" id="layout">
-    <p:layoutUnit position="west" header="Kanun İçerikleri" resizable="true" size="200" minSize="100" maxSize="300">
-       <h:form id="form">
- 
-	    <p:growl id="messages" showDetail="true" />
-	 
-	    <p:tree value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
-	            selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">
-	 
-	 		<p:ajax event="select" update=":output1,:output2" listener="#{kanunIcerikMB.onNodeSelect}" />
-        
-	       
-	        <p:treeNode>
-	            <h:outputText value="#{node.kanunIcerikAdi}" />
-	        </p:treeNode>
-	    </p:tree>
-	 
-		</h:form>
-    </p:layoutUnit>
- 
-    <p:layoutUnit position="center" header="Detaylar">
-    
-    <p:outputPanel deferred="true" deferredMode="visible">
-	    <h3>
-	    	<h:outputText id="output1" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" />
-		</h3>
-	    <p>
-	    <h:outputText id="output2" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />
-	
-	    	</p>
-	</p:outputPanel>
-    
-    	 
-       
-    </p:layoutUnit>
-</p:layout>
-
-</h:body>
+	</style>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+			<p:layout style="min-width:400px;min-height:500px;" id="layout">
+				<p:layoutUnit position="west" header="Kanun İçerikleri" resizable="true" size="200" minSize="100" maxSize="300">
+					<h:form id="form"> 
+						<p:growl id="messages" showDetail="true" />	 
+						<p:tree value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
+							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
+							<p:ajax event="select" update=":output1,:output2" listener="#{kanunIcerikMB.onNodeSelect}" />	       
+							<p:treeNode>
+								<h:outputText value="#{node.kanunIcerikAdi}" />
+							</p:treeNode>
+						</p:tree>	 
+					</h:form>
+				</p:layoutUnit> 
+				
+				<p:layoutUnit position="center" header="Detaylar">    
+					<p:outputPanel deferred="true" deferredMode="visible">
+						<h3>
+							<h:outputText id="output1" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" />
+						</h3>
+						<p>
+							<h:outputText id="output2" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />	
+						</p>
+					</p:outputPanel>       
+				</p:layoutUnit>
+			</p:layout>
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
 </html>

@@ -21,6 +21,7 @@ import hud.iys.model.Mevzuat;
 import hud.iys.model.MevzuatSeti;
 import hud.iys.service.IMevzuatService;
 import hud.iys.service.IMevzuatSetiService;
+import hud.iys.view.MevzuatSetiDataModel;
 
 
 @ManagedBean(name="mevzuatMB")
@@ -46,6 +47,10 @@ public class MevzuatBean implements Serializable {
 		
 	 List<Mevzuat> mevzuatList;
 	
+	 List<Mevzuat> selectedMevzuatSetiMevzuatList;
+	 
+	 private MevzuatSetiDataModel mevzuatSetleriModel;
+	 
 	 private String mevzuatAdi;
 	 private String mevzuatAciklama;
 	 private int mevzuatSetiId;
@@ -143,6 +148,32 @@ public class MevzuatBean implements Serializable {
 
 	
 	
+	
+	
+	public List<Mevzuat> getSelectedMevzuatSetiMevzuatList() {
+		
+		//HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		//int mevzuatSetiId = Integer.parseInt(request.getParameter("id"));
+		
+		//selectedMevzuatSetiMevzuatList = new ArrayList<Mevzuat>();
+		//selectedMevzuatSetiMevzuatList.addAll(getMevzuatService().getMevzuatlarByMevzuatSetiId(mevzuatSetiId));
+		
+		return selectedMevzuatSetiMevzuatList;
+	}
+
+	public void setSelectedMevzuatSetiMevzuatList(
+			List<Mevzuat> selectedMevzuatSetiMevzuatList) {
+		this.selectedMevzuatSetiMevzuatList = selectedMevzuatSetiMevzuatList;
+	}
+
+	public MevzuatSetiDataModel getMevzuatSetleriModel() {
+		return mevzuatSetleriModel;
+	}
+
+	public void setMevzuatSetleriModel(MevzuatSetiDataModel mevzuatSetleriModel) {
+		this.mevzuatSetleriModel = mevzuatSetleriModel;
+	}
+
 	public void onRowSelect(SelectEvent event) throws IOException {
         //FacesMessage msg = new FacesMessage("MevzuatSeti Selected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
  
