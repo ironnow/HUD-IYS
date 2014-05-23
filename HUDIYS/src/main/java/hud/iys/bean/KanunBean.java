@@ -1,5 +1,6 @@
 package hud.iys.bean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +9,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.springframework.dao.DataAccessException;
 
 import hud.iys.model.Kanun;
+import hud.iys.model.Mevzuat;
 import hud.iys.service.IKanunService;
 
 
@@ -33,6 +38,8 @@ public class KanunBean implements Serializable {
 	 private String kanunAdi;
 	 private int RGNo;
 	 private String RGTarihi;
+	 
+	 private Kanun selectedKanun;
 
 	 public String addKanun() {
 		  try {
@@ -108,6 +115,42 @@ public class KanunBean implements Serializable {
 		this.kanunList = kanunList;
 	}
 
+	
+	
+	public Kanun getSelectedKanun() {
+		return selectedKanun;
+	}
+
+	public void setSelectedKanun(Kanun selectedKanun) {
+		this.selectedKanun = selectedKanun;
+	}
+
+	
+	
+	
+	
+	public void onRowSelect(SelectEvent event) throws IOException {
+        //FacesMessage msg = new FacesMessage("MevzuatSeti Selected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
+ 
+        //FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+       
+		
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("kanunIcerik.jsf?id=" +((Kanun) event.getObject()).getKanunId());
+
+
+    }
+ 
+    public void onRowUnselect(UnselectEvent event) throws IOException {
+        //FacesMessage msg = new FacesMessage("MevzuatSeti Unselected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
+ 
+        //FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
+
+
+    }
  
 	 
 

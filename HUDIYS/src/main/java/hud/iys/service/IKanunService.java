@@ -3,6 +3,7 @@ package hud.iys.service;
 import java.util.List;
 
 import hud.iys.model.Kanun;
+import hud.iys.model.Mevzuat;
 
 
 public interface IKanunService {
@@ -16,4 +17,6 @@ public interface IKanunService {
 	 public Kanun getKanunById(int id);
 	
 	 public List<Kanun> getKanunlar();
+	 
+	 public List<Kanun> getKanunlarByMevzuatId(int mevzuatId);
 }

@@ -51,9 +51,15 @@
 				</h:form>
 			</p:dialog>
 			
- 			<h:form styleClass="form-style">
-				<p:dataTable id="dataTable" var="kanun" value="#{kanunMB.kanunList}" sortMode="multiple" rows="15" paginator="true">
-					<p:column sortBy="kanunNo" headerText="Kanun No">
+ 				
+			
+			<h:form id="form" styleClass="form-style">
+				<p:growl id="growl" showDetail="true"/>
+				<p:dataTable id="display" var="mevzuat" value="#{mevzuatMB.kanunlarModel}" sortMode="multiple" rows="10" paginator="true"
+						selection="#{kanunMB.selectedKanun}" selectionMode="single" >
+					<p:ajax event="rowSelect" listener="#{kanunMB.onRowSelect}" update=":form:display :form:growl" />
+					<p:ajax event="rowUnselect" listener="#{kanunMB.onRowUnselect}" update=":form:growl"/>
+					<p:column style="width:10%" sortBy="kanunNo" headerText="Kanun No">
 						<h:outputText value="#{kanun.kanunNo}" />
 					</p:column>
 					<p:column sortBy="kanunAdi" headerText="Kanun Adi">
@@ -66,7 +72,8 @@
 						<h:outputText value="#{kanun.RGTarihi}" />
 					</p:column>
 				</p:dataTable>
-			</h:form>
+			</h:form>	
+			
 			
 		</ui:define> 			 
 	</ui:decorate> 

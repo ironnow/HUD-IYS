@@ -2,9 +2,12 @@ package hud.iys.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +19,7 @@ public class Kanun {
 	 private String kanunAdi;
 	 private int RGNo;
 	 private String RGTarihi;
+	 private Mevzuat mevzuat;
 
 
 	 @Id
@@ -73,6 +77,17 @@ public class Kanun {
 		 this.RGNo = RGNo;
 	 }
 	
+	 
+	 @ManyToOne(fetch = FetchType.LAZY)
+	 @JoinColumn(name = "MevzuatID", nullable = false)
+	 public Mevzuat getMevzuat() {
+		 return this.mevzuat;
+	 }
+ 
+	 public void setMevzuat(Mevzuat mevzuat) {
+		 this.mevzuat = mevzuat;
+	 }
+	 
 	 @Override
 	 public String toString() {
 		  StringBuffer strBuff = new StringBuffer();

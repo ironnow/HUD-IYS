@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import hud.iys.model.Kanun;
+import hud.iys.model.Mevzuat;
 import hud.iys.dao.IKanunDAO;
 
 @Transactional(readOnly = true)
@@ -45,6 +46,10 @@ public class KanunService implements IKanunService {
 		 return getKanunDAO().getKanunlar();
 	 }
 	
+	 @Override
+	 public List<Kanun> getKanunlarByMevzuatId(int mevzuatId){
+		 return getKanunDAO().getKanunlarByMevzuatId(mevzuatId);
+	 }
 	
 	 public IKanunDAO getKanunDAO() {
 		 return kanunDAO;

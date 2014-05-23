@@ -4,11 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
@@ -25,6 +29,7 @@ public class Mevzuat {
 	 private String mevzuatAdi;
 	 private String mevzuatAciklama;
 	 private MevzuatSeti mevzuatSeti;
+	 Set<Kanun> kanunlar; 
 
 
 	 @Id
@@ -71,6 +76,14 @@ public class Mevzuat {
 		 this.mevzuatSeti = mevzuatSeti;
 	 }
 	 
+	 @OneToMany(mappedBy = "mevzuat")
+	 public Set<Kanun> getKanunlar() {
+	 	 return this.kanunlar;
+	 }
+ 
+	 public void setKanunlar(Set<Kanun> kanunlar) {
+	 	 this.kanunlar = kanunlar;
+	 }
 	
 	 @Override
 	 public String toString() {

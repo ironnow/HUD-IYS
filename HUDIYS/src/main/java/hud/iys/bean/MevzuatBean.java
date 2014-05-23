@@ -17,10 +17,14 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.dao.DataAccessException;
 
+import hud.iys.model.Kanun;
 import hud.iys.model.Mevzuat;
 import hud.iys.model.MevzuatSeti;
+import hud.iys.service.IKanunService;
 import hud.iys.service.IMevzuatService;
 import hud.iys.service.IMevzuatSetiService;
+import hud.iys.view.KanunDataModel;
+import hud.iys.view.MevzuatDataModel;
 import hud.iys.view.MevzuatSetiDataModel;
 
 
@@ -39,6 +43,10 @@ public class MevzuatBean implements Serializable {
 	 @ManagedProperty(value="#{MevzuatSetiService}")
 	 IMevzuatSetiService mevzuatSetiService;
 	 
+	 //Spring Kanun Service is injected...
+	 @ManagedProperty(value="#{KanunService}")
+	 IKanunService kanunService;
+	 
 	 @ManagedProperty(value="#{mevzuatSetiMB}")
 	 private MevzuatSetiBean mevzuatSetiBean;
 	 
@@ -49,10 +57,15 @@ public class MevzuatBean implements Serializable {
 	
 	 List<Mevzuat> selectedMevzuatSetiMevzuatList;
 	 
+	 List<Kanun> selectedMevzuatKanunList;
+		
+	 private KanunDataModel kanunlarModel;
+	 
 	 private MevzuatSetiDataModel mevzuatSetleriModel;
 	 
 	 private String mevzuatAdi;
 	 private String mevzuatAciklama;
+	 
 	 private int mevzuatSetiId;
 
 	 public String addMevzuat() {
@@ -100,6 +113,14 @@ public class MevzuatBean implements Serializable {
 	}
 
 	
+	public IKanunService getKanunService() {
+		return kanunService;
+	}
+
+	public void setKanunService(IKanunService kanunService) {
+		this.kanunService = kanunService;
+	}
+
 	public String getMevzuatAdi() {
 		return mevzuatAdi;
 	}
@@ -145,8 +166,16 @@ public class MevzuatBean implements Serializable {
 	public void setSelectedMevzuat(Mevzuat selectedMevzuat) {
 		this.selectedMevzuat = selectedMevzuat;
 	}
-
 	
+		
+	public List<Kanun> getSelectedMevzuatKanunList() {
+		return selectedMevzuatKanunList;
+	}
+
+	public void setSelectedMevzuatKanunList(List<Kanun> selectedMevzuatKanunList) {
+		this.selectedMevzuatKanunList = selectedMevzuatKanunList;
+	}
+
 	
 	
 	
@@ -174,12 +203,30 @@ public class MevzuatBean implements Serializable {
 		this.mevzuatSetleriModel = mevzuatSetleriModel;
 	}
 
+	
+	
+	public KanunDataModel getKanunlarModel() {
+		kanunlarModel = new KanunDataModel(getSelectedMevzuatKanunList());
+		return kanunlarModel;
+	}
+
+	public void setKanunlarModel(KanunDataModel kanunlarModel) {
+		this.kanunlarModel = kanunlarModel;
+	}
+	
+	
 	public void onRowSelect(SelectEvent event) throws IOException {
         //FacesMessage msg = new FacesMessage("MevzuatSeti Selected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
-       
-        FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuatIcerik.jsf");
+        
+        this.selectedMevzuatKanunList = new ArrayList<Kanun>();
+		this.selectedMevzuatKanunList.addAll(getKanunService().getKanunlarByMevzuatId(((Mevzuat) event.getObject()).getMevzuatId()));
+		  
+		setSelectedMevzuatKanunList(this.selectedMevzuatKanunList);
+		
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("kanunGrid.jsf?id=" +((Mevzuat) event.getObject()).getMevzuatId());
 
 
     }

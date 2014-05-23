@@ -3,6 +3,7 @@ package hud.iys.dao;
 import java.util.List;
 
 import hud.iys.model.Kanun;
+import hud.iys.model.Mevzuat;
 
 
 public interface IKanunDAO {
@@ -16,4 +17,6 @@ public interface IKanunDAO {
 	 public Kanun getKanunById(int id);
 	
 	 public List<Kanun> getKanunlar();
+	 
+	 public List<Kanun> getKanunlarByMevzuatId(int mevzuatId);
 }
