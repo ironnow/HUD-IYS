@@ -32,6 +32,9 @@ public class KanunBean implements Serializable {
 	 @ManagedProperty(value="#{KanunService}")
 	 IKanunService kanunService;
 	
+	 @ManagedProperty(value="#{mevzuatMB}")
+	 private MevzuatBean mevzuatBean;
+	 
 	 List<Kanun> kanunList;
 	
 	 private int kanunNo;
@@ -49,6 +52,7 @@ public class KanunBean implements Serializable {
 			   kanun.setRGNo(getRGNo());
 			   kanun.setRGTarihi(getRGTarihi());
 			  
+			   kanun.setMevzuat(mevzuatBean.getSelectedMevzuat());
 			   getKanunService().addKanun(kanun);
 			   return SUCCESS;
 		  } catch (DataAccessException e) {
@@ -125,10 +129,17 @@ public class KanunBean implements Serializable {
 		this.selectedKanun = selectedKanun;
 	}
 
+		
+	public MevzuatBean getMevzuatBean() {
+		return mevzuatBean;
+	}
+
+	public void setMevzuatBean(MevzuatBean mevzuatBean) {
+		this.mevzuatBean = mevzuatBean;
+	}
 	
 	
-	
-	
+
 	public void onRowSelect(SelectEvent event) throws IOException {
         //FacesMessage msg = new FacesMessage("MevzuatSeti Selected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
  

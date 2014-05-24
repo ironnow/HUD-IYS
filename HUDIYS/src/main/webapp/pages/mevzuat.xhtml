@@ -33,13 +33,15 @@
 			</table>		
 			
 			<p:dialog header="Yeni Mevzuat Oluştur" widgetVar="dlg" resizable="false">
+			
+			  	    
 				<h:form>
 					<p:panel header="Yeni Mevzuat Ekle">
 						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
 							<h:outputText value="Mevzuat " />
 							<p:inputText id="mevzuatAdi" value="#{mevzuatMB.mevzuatAdi}"></p:inputText>
 							<h:outputText value="Açıklama " />
-							<p:inputText id="mevzuatAciklama" value="#{mevzuatMB.mevzuatAciklama}"></p:inputText>
+							<p:inputTextarea rows="5" id="mevzuatAciklama" value="#{mevzuatMB.mevzuatAciklama}"></p:inputTextarea>
 							<h:outputText value="Mevzuat Seti " />
 							<p:inputText disabled="true" id="mevzuatSeti" value="#{mevzuatSetiMB.selectedMevzuatSeti.mevzuatSetiAdi}"></p:inputText>
 							<p:commandButton id="addMevzuat" value="Ekle" action="#{mevzuatMB.addMevzuat}" ajax="false"/>

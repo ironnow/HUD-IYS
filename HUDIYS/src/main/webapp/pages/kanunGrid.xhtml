@@ -55,7 +55,7 @@
 			
 			<h:form id="form" styleClass="form-style">
 				<p:growl id="growl" showDetail="true"/>
-				<p:dataTable id="display" var="mevzuat" value="#{mevzuatMB.kanunlarModel}" sortMode="multiple" rows="10" paginator="true"
+				<p:dataTable id="display" var="kanun" value="#{mevzuatMB.kanunlarModel}" sortMode="multiple" rows="10" paginator="true"
 						selection="#{kanunMB.selectedKanun}" selectionMode="single" >
 					<p:ajax event="rowSelect" listener="#{kanunMB.onRowSelect}" update=":form:display :form:growl" />
 					<p:ajax event="rowUnselect" listener="#{kanunMB.onRowUnselect}" update=":form:growl"/>

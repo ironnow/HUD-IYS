@@ -1,6 +1,7 @@
 package hud.iys.bean;
 
 import hud.iys.model.KanunIcerik;
+import hud.iys.model.Mevzuat;
 import hud.iys.service.IKanunIcerikService;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.springframework.dao.DataAccessException;
 
 
 @ManagedBean(name="kanunIcerikMB")
@@ -30,6 +32,9 @@ public class KanunIcerikBean implements Serializable {
 	
 	private KanunIcerik selectedKanunIcerik;
 	
+	private String kanunIcerikAdi;
+	private String kanunIcerikMetin;
+	
 	//Spring KanunIcerik Service is injected...
 	@ManagedProperty(value="#{KanunIcerikService}")
 	IKanunIcerikService kanunIcerikService;
@@ -38,6 +43,7 @@ public class KanunIcerikBean implements Serializable {
     public void init() {
         KanunIcerik root = getKanunIcerikService().getKanunIcerikById(1); // instead get root object from database 
         rootNode = newNodeWithChildren(root, null);
+       
     }
 
     /**
@@ -75,8 +81,28 @@ public class KanunIcerikBean implements Serializable {
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
     }
+    
+    
      
-    public void displaySelectedSingle() {
+    public String getKanunIcerikAdi() {
+		return kanunIcerikAdi;
+	}
+
+	public void setKanunIcerikAdi(String kanunIcerikAdi) {
+		this.kanunIcerikAdi = kanunIcerikAdi;
+	}
+	
+	public String getKanunIcerikMetin() {
+		return kanunIcerikMetin;
+	}
+
+	public void setKanunIcerikMetin(String kanunIcerikMetin) {
+		this.kanunIcerikMetin = kanunIcerikMetin;
+	}
+	
+	
+
+	public void displaySelectedSingle() {
         if(selectedNode != null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
  
@@ -85,14 +111,35 @@ public class KanunIcerikBean implements Serializable {
     }
  
     public void deleteNode() {
+    	 
+    	getKanunIcerikService().deleteKanunIcerik((KanunIcerik)selectedNode.getData());
+         
         selectedNode.getChildren().clear();
         selectedNode.getParent().getChildren().remove(selectedNode);
         selectedNode.setParent(null);
          
-        selectedNode = null;
-        
+        selectedNode = null;       
     }
     
+    public void addKanunIcerik() {
+		  try {
+			   KanunIcerik kanunIcerik = new KanunIcerik();
+			   kanunIcerik.setKanunIcerikAdi(getKanunIcerikAdi());
+			   kanunIcerik.setKanunIcerikMetin(getKanunIcerikMetin());
+			   
+			   kanunIcerik.setKanunIcerik((KanunIcerik)selectedNode.getData());
+			   
+			   TreeNode newNode = new DefaultTreeNode(kanunIcerik, selectedNode);
+			   selectedNode.setExpanded(true);
+			  
+			   getKanunIcerikService().addKanunIcerik(kanunIcerik);
+			   
+		  } catch (DataAccessException e) {
+		   e.printStackTrace();
+		  }  
+	
+		 
+	 }
     
     public void onNodeSelect(NodeSelectEvent event) {
     	

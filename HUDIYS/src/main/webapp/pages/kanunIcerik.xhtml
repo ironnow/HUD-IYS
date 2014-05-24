@@ -18,18 +18,42 @@
 <h:body> 
 	<ui:decorate template="templates/template.xhtml">			 
 		<ui:define name="content"> 
+		
+			<p:dialog header="Yeni Kanun İçerik Oluştur" widgetVar="dlg" resizable="false">
+				<h:form>
+					<p:panel header="Yeni Kanun İçerik Ekle">
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="İçerik Adı " />
+							<p:inputText id="kanunIcerikAdi" value="#{kanunIcerikMB.kanunIcerikAdi}"></p:inputText>
+							<h:outputText value="Metin " />
+							<p:inputTextarea id="kanunIcerikMetin" value="#{kanunIcerikMB.kanunIcerikMetin}"></p:inputTextarea>
+							<p:commandButton id="addKanunIcerik" value="Ekle" action="#{kanunIcerikMB.addKanunIcerik}" ajax="false"/>
+							<p:commandButton id="reset" value="Iptal" action="#{mevzuatMB.reset}" ajax="false"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>	
+				
 			<p:layout style="min-width:400px;min-height:500px;" id="layout">
-				<p:layoutUnit position="west" header="Kanun İçerikleri" resizable="true" size="200" minSize="100" maxSize="300">
+				<p:layoutUnit position="west" header="Kanun İçerikleri" resizable="true" size="300" minSize="100" maxSize="400">
+					
 					<h:form id="form"> 
 						<p:growl id="messages" showDetail="true" />	 
-						<p:tree value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
+						<p:tree style="min-width:300px; min-height:400px" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
 							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
 							<p:ajax event="select" update=":output1,:output2" listener="#{kanunIcerikMB.onNodeSelect}" />	       
 							<p:treeNode>
 								<h:outputText value="#{node.kanunIcerikAdi}" />
 							</p:treeNode>
 						</p:tree>	 
+						
+						<p:contextMenu for="tree">
+					        <p:menuitem value="Yeni" update="tree" onclick="PF('dlg').show()" icon="ui-icon-document" />
+					        <p:menuitem value="Sil" update="tree" actionListener="#{kanunIcerikMB.deleteNode}" icon="ui-icon-close"/>
+					    </p:contextMenu>
+						
 					</h:form>
+					
 				</p:layoutUnit> 
 				
 				<p:layoutUnit position="center" header="Detaylar">    
