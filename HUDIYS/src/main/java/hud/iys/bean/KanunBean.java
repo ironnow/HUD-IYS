@@ -18,10 +18,11 @@ import org.springframework.dao.DataAccessException;
 import hud.iys.model.Kanun;
 import hud.iys.model.Mevzuat;
 import hud.iys.service.IKanunService;
+import hud.iys.view.KanunDataModel;
 
 
 @ManagedBean(name="kanunMB")
-@ViewScoped
+@RequestScoped
 public class KanunBean implements Serializable {
 
 	 private static final long serialVersionUID = 1L;
@@ -43,6 +44,10 @@ public class KanunBean implements Serializable {
 	 private String RGTarihi;
 	 
 	 private Kanun selectedKanun;
+	 
+	 private KanunDataModel kanunlarModel;
+	 
+	 private int mevzuatId;
 
 	 public String addKanun() {
 		  try {
@@ -71,7 +76,7 @@ public class KanunBean implements Serializable {
 
 	 public List<Kanun> getKanunList() {
 		  kanunList = new ArrayList<Kanun>();
-		  kanunList.addAll(getKanunService().getKanunlar());
+		  kanunList.addAll(getKanunService().getKanunlarByMevzuatId(mevzuatId));
 		  return kanunList;
 	 }
 
@@ -139,6 +144,25 @@ public class KanunBean implements Serializable {
 	}
 	
 	
+	
+
+	public KanunDataModel getKanunlarModel() {
+		kanunlarModel = new KanunDataModel(getKanunList());
+		return kanunlarModel;
+	}
+
+	public void setKanunlarModel(KanunDataModel kanunlarModel) {
+		this.kanunlarModel = kanunlarModel;
+	}
+	
+
+	public int getMevzuatId() {
+		return mevzuatId;
+	}
+
+	public void setMevzuatId(int mevzuatId) {
+		this.mevzuatId = mevzuatId;
+	}
 
 	public void onRowSelect(SelectEvent event) throws IOException {
         //FacesMessage msg = new FacesMessage("MevzuatSeti Selected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
