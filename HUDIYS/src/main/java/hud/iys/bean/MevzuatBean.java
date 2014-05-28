@@ -29,7 +29,7 @@ import hud.iys.view.MevzuatSetiDataModel;
 
 
 @ManagedBean(name="mevzuatMB")
-@SessionScoped
+@RequestScoped
 public class MevzuatBean implements Serializable {
 
 	 private static final long serialVersionUID = 1L;
@@ -56,11 +56,10 @@ public class MevzuatBean implements Serializable {
 	 List<Mevzuat> mevzuatList;
 	
 	 List<Mevzuat> selectedMevzuatSetiMevzuatList;
+	 	
 	 
-	 List<Kanun> selectedMevzuatKanunList;
-		
-	 private KanunDataModel kanunlarModel;
-	 
+	 private MevzuatDataModel mevzuatlarModel;
+	 	 
 	 private MevzuatSetiDataModel mevzuatSetleriModel;
 	 
 	 private String mevzuatAdi;
@@ -92,7 +91,7 @@ public class MevzuatBean implements Serializable {
 
 	 public List<Mevzuat> getMevzuatList() {
 		  mevzuatList = new ArrayList<Mevzuat>();
-		  mevzuatList.addAll(getMevzuatService().getMevzuatlar());
+		  mevzuatList.addAll(getMevzuatService().getMevzuatlarByMevzuatSetiId(mevzuatSetiId));
 		  return mevzuatList;
 	 }
 
@@ -167,16 +166,6 @@ public class MevzuatBean implements Serializable {
 		this.selectedMevzuat = selectedMevzuat;
 	}
 	
-		
-	public List<Kanun> getSelectedMevzuatKanunList() {
-		return selectedMevzuatKanunList;
-	}
-
-	public void setSelectedMevzuatKanunList(List<Kanun> selectedMevzuatKanunList) {
-		this.selectedMevzuatKanunList = selectedMevzuatKanunList;
-	}
-
-	
 	
 	
 	public List<Mevzuat> getSelectedMevzuatSetiMevzuatList() {
@@ -203,30 +192,25 @@ public class MevzuatBean implements Serializable {
 		this.mevzuatSetleriModel = mevzuatSetleriModel;
 	}
 
-	
-	
-	public KanunDataModel getKanunlarModel() {
-		kanunlarModel = new KanunDataModel(getSelectedMevzuatKanunList());
-		return kanunlarModel;
+	public MevzuatDataModel getMevzuatlarModel() {
+		mevzuatlarModel = new MevzuatDataModel(getMevzuatList());
+		return mevzuatlarModel;
 	}
 
-	public void setKanunlarModel(KanunDataModel kanunlarModel) {
-		this.kanunlarModel = kanunlarModel;
+	public void setMevzuatlarModel(MevzuatDataModel mevzuatlarModel) {
+		this.mevzuatlarModel = mevzuatlarModel;
 	}
+	
+	
 	
 	
 	public void onRowSelect(SelectEvent event) throws IOException {
         //FacesMessage msg = new FacesMessage("MevzuatSeti Selected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
-        
-        this.selectedMevzuatKanunList = new ArrayList<Kanun>();
-		this.selectedMevzuatKanunList.addAll(getKanunService().getKanunlarByMevzuatId(((Mevzuat) event.getObject()).getMevzuatId()));
-		  
-		setSelectedMevzuatKanunList(this.selectedMevzuatKanunList);
-		
+       
         //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
-		FacesContext.getCurrentInstance().getExternalContext().redirect("kanunGrid.jsf?id=" +((Mevzuat) event.getObject()).getMevzuatId());
+		FacesContext.getCurrentInstance().getExternalContext().redirect("kanunGrid.jsf?mevzuatId=" +((Mevzuat) event.getObject()).getMevzuatId());
 
 
     }
