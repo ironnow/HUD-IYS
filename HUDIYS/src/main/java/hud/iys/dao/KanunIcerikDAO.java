@@ -2,6 +2,7 @@ package hud.iys.dao;
 
 import java.util.List;
 
+import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
 
 import org.hibernate.SessionFactory;
@@ -50,6 +51,14 @@ public class KanunIcerikDAO implements IKanunIcerikDAO {
 	 public List<KanunIcerik> getKanunIcerikleri() {
 		 List list = getSessionFactory().getCurrentSession().createQuery("from KanunIcerik").list();
 		 return list;
+	 }
+	 
+	 @Override
+	 public List<KanunIcerik> getKanunIcerikleriByKanunId(int kanunId){
+		 List list = getSessionFactory().getCurrentSession()
+		           .createQuery("from KanunIcerik where KanunId=?")
+		                 .setParameter(0, kanunId).list();
+		  	 return list;
 	 }
 
 }

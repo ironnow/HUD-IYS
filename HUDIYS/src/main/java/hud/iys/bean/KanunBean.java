@@ -8,6 +8,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -16,13 +17,14 @@ import org.primefaces.event.UnselectEvent;
 import org.springframework.dao.DataAccessException;
 
 import hud.iys.model.Kanun;
+import hud.iys.model.KanunIcerik;
 import hud.iys.model.Mevzuat;
+import hud.iys.service.IKanunIcerikService;
 import hud.iys.service.IKanunService;
-import hud.iys.view.KanunDataModel;
 
 
 @ManagedBean(name="kanunMB")
-@RequestScoped
+@SessionScoped
 public class KanunBean implements Serializable {
 
 	 private static final long serialVersionUID = 1L;
@@ -32,11 +34,17 @@ public class KanunBean implements Serializable {
 	 //Spring Kanun Service is injected...
 	 @ManagedProperty(value="#{KanunService}")
 	 IKanunService kanunService;
+	 
+	 //Spring KanunIcerik Service is injected...
+	 @ManagedProperty(value="#{KanunIcerikService}")
+	 IKanunIcerikService kanunIcerikService;
 	
 	 @ManagedProperty(value="#{mevzuatMB}")
 	 private MevzuatBean mevzuatBean;
 	 
 	 List<Kanun> kanunList;
+	 
+	 List<KanunIcerik> selectedKanunKanunIcerikList;
 	
 	 private int kanunNo;
 	 private String kanunAdi;
@@ -44,10 +52,6 @@ public class KanunBean implements Serializable {
 	 private String RGTarihi;
 	 
 	 private Kanun selectedKanun;
-	 
-	 private KanunDataModel kanunlarModel;
-	 
-	 private int mevzuatId;
 
 	 public String addKanun() {
 		  try {
@@ -56,9 +60,19 @@ public class KanunBean implements Serializable {
 			   kanun.setKanunAdi(getKanunAdi());
 			   kanun.setRGNo(getRGNo());
 			   kanun.setRGTarihi(getRGTarihi());
-			  
+			   
+			   KanunIcerik kanunIcerik = new KanunIcerik();
+			   kanunIcerik.setKanunIcerik(null);
+			   kanunIcerik.setKanunIcerikAdi(getKanunAdi());
+			   getKanunIcerikService().addKanunIcerik(kanunIcerik);
+			   
+			   kanun.setKanunIcerikRoot(kanunIcerik.getKanunIcerikId());
+			   
 			   kanun.setMevzuat(mevzuatBean.getSelectedMevzuat());
 			   getKanunService().addKanun(kanun);
+			   kanunIcerik.setKanun(kanun);
+			   //getKanunIcerikService().updateKanunIcerik(kanunIcerik);
+			   
 			   return SUCCESS;
 		  } catch (DataAccessException e) {
 		   e.printStackTrace();
@@ -76,7 +90,7 @@ public class KanunBean implements Serializable {
 
 	 public List<Kanun> getKanunList() {
 		  kanunList = new ArrayList<Kanun>();
-		  kanunList.addAll(getKanunService().getKanunlarByMevzuatId(mevzuatId));
+		  kanunList.addAll(getKanunService().getKanunlar());
 		  return kanunList;
 	 }
 
@@ -143,25 +157,24 @@ public class KanunBean implements Serializable {
 		this.mevzuatBean = mevzuatBean;
 	}
 	
-	
-	
+		
 
-	public KanunDataModel getKanunlarModel() {
-		kanunlarModel = new KanunDataModel(getKanunList());
-		return kanunlarModel;
+	public List<KanunIcerik> getSelectedKanunKanunIcerikList() {
+		return selectedKanunKanunIcerikList;
 	}
 
-	public void setKanunlarModel(KanunDataModel kanunlarModel) {
-		this.kanunlarModel = kanunlarModel;
+	public void setSelectedKanunKanunIcerikList(
+			List<KanunIcerik> selectedKanunKanunIcerikList) {
+		this.selectedKanunKanunIcerikList = selectedKanunKanunIcerikList;
 	}
 	
-
-	public int getMevzuatId() {
-		return mevzuatId;
+	
+	public IKanunIcerikService getKanunIcerikService() {
+		return kanunIcerikService;
 	}
 
-	public void setMevzuatId(int mevzuatId) {
-		this.mevzuatId = mevzuatId;
+	public void setKanunIcerikService(IKanunIcerikService kanunIcerikService) {
+		this.kanunIcerikService = kanunIcerikService;
 	}
 
 	public void onRowSelect(SelectEvent event) throws IOException {
@@ -169,7 +182,11 @@ public class KanunBean implements Serializable {
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
         
-       
+		this.selectedKanunKanunIcerikList = new ArrayList<KanunIcerik>();
+		this.selectedKanunKanunIcerikList.addAll(getKanunIcerikService().getKanunIcerikleriByKanunId(((Kanun) event.getObject()).getKanunId()));
+		  
+		setSelectedKanunKanunIcerikList(this.selectedKanunKanunIcerikList);
+			
 		
         //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
 		FacesContext.getCurrentInstance().getExternalContext().redirect("kanunIcerik.jsf?id=" +((Kanun) event.getObject()).getKanunId());

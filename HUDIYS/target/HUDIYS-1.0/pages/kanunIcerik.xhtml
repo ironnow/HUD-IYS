@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head><title>Hesap Uzmanlari Dernegi</title>
+	<style type="text/css">
+        .ui-widget,.ui-widget .ui-widget 
+        {
+            font-size: 90% !important;
+        }
+        
+        .folder-open {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/open-folder.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+		
+		.folder-collapsed {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/closed-folder.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+		
+		.document-node {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/document-icon.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+	</style>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<p:dialog header="Yeni Kanun İçerik Oluştur" widgetVar="dlg" resizable="false">
+				<h:form>
+					<p:panel header="Yeni Kanun İçerik Ekle">
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="İçerik Adı " />
+							<p:inputText id="kanunIcerikAdi" value="#{kanunIcerikMB.kanunIcerikAdi}"></p:inputText>
+							<h:outputText value="Metin " />
+							<p:inputTextarea id="kanunIcerikMetin" value="#{kanunIcerikMB.kanunIcerikMetin}"></p:inputTextarea>
+							<p:commandButton id="addKanunIcerik" value="Ekle" action="#{kanunIcerikMB.addKanunIcerik}" ajax="false"/>
+							<p:commandButton id="reset" value="Iptal" action="#{mevzuatMB.reset}" ajax="false"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>	
+				
+			<p:layout style="min-width:400px" id="layout">
+				<p:layoutUnit position="west" resizable="true" size="300" minSize="200" maxSize="400">
+					
+					<h:form id="form"> 
+					
+						<p:toolbar>						
+							<f:facet name="left">
+								<h:outputText value="#{kanunMB.selectedKanun.kanunAdi}" />					            
+					            
+					        </f:facet>
+					 
+					        <f:facet name="right">
+					        	<span class="ui-separator">
+					                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+					            </span>
+					          	<p:commandButton id="ajax2" update="tree" onclick="PF('dlg').show()" styleClass="ui-priority-primary" icon="ui-icon-document" title="Yeni İçerik" />
+	 					
+	 							<p:commandButton id="ajax3" title="Sil" update="tree" action="#{kanunIcerikMB.deleteNode}" icon="ui-icon-trash" />
+					            <p:commandButton type="button" title="Yazdır" icon="ui-icon-print" />
+					        </f:facet>
+						</p:toolbar>
+	 					
+						<p:growl id="messages" showDetail="true" />	 
+						<p:tree style="width:99%" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
+							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
+							<p:ajax event="select" update=":output1,:output2" listener="#{kanunIcerikMB.onNodeSelect}" />	       
+							
+							<p:treeNode type="node"
+                                expandedIcon="folder-open"
+                                collapsedIcon="folder-collapsed">
+		                        <h:outputText value="#{node.kanunIcerikAdi}"/>
+		                    </p:treeNode>
+		                    <p:treeNode type="leaf" icon="document-node">
+		                        <h:outputText value="#{node.kanunIcerikAdi}" />
+		                    </p:treeNode>
+						</p:tree>	 
+						
+						<p:contextMenu for="tree">
+					        <p:menuitem value="Yeni" update="tree" onclick="PF('dlg').show()" icon="ui-icon-document" />
+					        <p:menuitem value="Sil" update="tree" actionListener="#{kanunIcerikMB.deleteNode}" icon="ui-icon-close"/>
+					    </p:contextMenu>
+						
+					</h:form>
+					
+				</p:layoutUnit> 
+				
+				<p:layoutUnit position="center">
+					<p:layout>
+					
+						<p:layoutUnit position="center" header="İçerik" resizable="true">    
+							<p:outputPanel deferred="true" deferredMode="visible">
+								<h3>
+									<h:outputText id="output1" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" />
+								</h3>
+								<p>
+									<h:outputText id="output2" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />	
+								</p>
+								
+								
+							</p:outputPanel>
+									
+								
+							
+						</p:layoutUnit> 
+						  
+						<p:layoutUnit header="İçerik Detayları" position="south" resizable="true" collapsible="true">	
+							<p:panel id="detaylar">					    
+								<p:tabView>
+							        <p:tab title="Detaylar">
+							            <h:panelGrid columns="2" cellpadding="10">
+							             	<h:outputText style="font-weight:bold" value="Madde No " />
+											<h:outputText id="output3" value="#{kanunMB.selectedKanun.kanunNo}" />
+											<h:outputText style="font-weight:bold" value="Kabul Tarihi " />
+											<h:outputText id="output4" value="#{kanunMB.selectedKanun.RGTarihi}" />
+							                <h:outputText style="font-weight:bold" value="RG No " />
+											<h:outputText id="output5" value="#{kanunMB.selectedKanun.RGNo}" />
+											<h:outputText style="font-weight:bold" value="RG Tarihi " />
+											<h:outputText id="output6" value="#{kanunMB.selectedKanun.RGTarihi}" />									
+							            </h:panelGrid>
+							        </p:tab>
+							        <p:tab title="Dip Notlar">
+							            <h:panelGrid columns="2" cellpadding="5">
+							                <h:outputText value=" " />
+											<h:outputText value=" " />
+							            </h:panelGrid>
+							        </p:tab>
+							        <p:tab title="Yorumlar">
+							            <h:panelGrid columns="2" cellpadding="10">
+							                <h:outputText value="Henüz yorum girilmemiştir." />
+											
+							            </h:panelGrid>
+							        </p:tab>
+							    </p:tabView>
+						    </p:panel>					
+						</p:layoutUnit>   
+					</p:layout> 
+				</p:layoutUnit>
+				
+				
+				
+				<p:layoutUnit position="east" header="İlgili İçerikler" resizable="true" collapsible="true" size="200" minSize="200" maxSize="400">    
+					<p:accordionPanel dynamic="true" cache="true">
+				        <p:tab title="İlgili Kanunlar">
+				            <h:panelGrid>
+				                <p:link outcome="kanunGrid" value="Vergi Kanunu">
+								    <f:param name="kanunId" value="10" />
+								</p:link>
+				            </h:panelGrid>
+				        </p:tab>
+				        <p:tab title="İlgili Tebliğler">
+				            <h:panelGrid>
+				                <h:outputText value="" />
+				            </h:panelGrid>
+				        </p:tab>
+				        <p:tab title="İlgili Genelgeler">
+				            <h:panelGrid>
+				                <h:outputText value="" />
+				            </h:panelGrid>
+				        </p:tab>
+				        <p:tab title="İlgili Tüzükler">
+				            <h:panelGrid>
+				                <h:outputText value="" />
+				            </h:panelGrid>
+				        </p:tab>
+				        <p:tab title="İlgili Yönetmelikler">
+				            <h:panelGrid>
+				                <h:outputText value="" />
+				            </h:panelGrid>
+				        </p:tab>
+				        <p:tab title="İlgili Özelgeler">
+				            <h:panelGrid>
+				                <h:outputText value="" />
+				            </h:panelGrid>
+				        </p:tab>
+				    </p:accordionPanel>	     
+				
+				</p:layoutUnit>
+			</p:layout>
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

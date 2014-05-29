@@ -52,8 +52,7 @@ public class MevzuatService implements IMevzuatService {
 	
 	 public IMevzuatDAO getMevzuatDAO() {
 		 return mevzuatDAO;
-	 }
-	
+	 }	
 	 
 	 public void setMevzuatDAO(IMevzuatDAO mevzuatDAO) {
 		 this.mevzuatDAO = mevzuatDAO;

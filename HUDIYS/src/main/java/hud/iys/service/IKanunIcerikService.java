@@ -2,6 +2,7 @@ package hud.iys.service;
 
 import java.util.List;
 
+import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
 
 
@@ -16,4 +17,6 @@ public interface IKanunIcerikService {
 	 public KanunIcerik getKanunIcerikById(int id);
 	
 	 public List<KanunIcerik> getKanunIcerikleri();
+	 
+	 public List<KanunIcerik> getKanunIcerikleriByKanunId(int kanunId);
 }

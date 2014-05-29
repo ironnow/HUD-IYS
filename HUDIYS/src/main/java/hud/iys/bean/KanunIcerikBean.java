@@ -2,14 +2,21 @@ package hud.iys.bean;
 
 import hud.iys.model.KanunIcerik;
 import hud.iys.model.Mevzuat;
+import hud.iys.model.MevzuatSeti;
+import hud.iys.model.Paragraf;
 import hud.iys.service.IKanunIcerikService;
+import hud.iys.service.IParagrafService;
+import hud.iys.view.tree.TreeNodeImpl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -19,8 +26,8 @@ import org.primefaces.model.TreeNode;
 import org.springframework.dao.DataAccessException;
 
 
-@ManagedBean(name="kanunIcerikMB")
-@ViewScoped
+@ManagedBean(eager=true,name="kanunIcerikMB")
+@SessionScoped
 public class KanunIcerikBean implements Serializable {	
 	
 	 private static final long serialVersionUID = 1L;
@@ -38,10 +45,21 @@ public class KanunIcerikBean implements Serializable {
 	//Spring KanunIcerik Service is injected...
 	@ManagedProperty(value="#{KanunIcerikService}")
 	IKanunIcerikService kanunIcerikService;
-
+	
+	//Spring KanunIcerik Service is injected...
+	@ManagedProperty(value="#{ParagrafService}")
+	IParagrafService paragrafService;
+	
+	
+	@ManagedProperty(value="#{kanunMB}")
+	private KanunBean kanunBean;
+	 
+	List<Paragraf> selectedKanunIcerikParagrafList;
+	
+	
     @PostConstruct
     public void init() {
-        KanunIcerik root = getKanunIcerikService().getKanunIcerikById(1); // instead get root object from database 
+        KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
         rootNode = newNodeWithChildren(root, null);
        
     }
@@ -50,7 +68,7 @@ public class KanunIcerikBean implements Serializable {
      *  recursive function that returns a new node with its children
     */
     public TreeNode newNodeWithChildren(KanunIcerik ttParent, TreeNode parent){
-         TreeNode newNode= new DefaultTreeNode(ttParent, parent);
+         TreeNode newNode= new TreeNodeImpl(ttParent, parent);
          for (KanunIcerik tt : ttParent.getChildren()){
               TreeNode newNode2= newNodeWithChildren(tt, newNode);
          }
@@ -102,6 +120,33 @@ public class KanunIcerikBean implements Serializable {
 	
 	
 
+	public KanunBean getKanunBean() {
+		return kanunBean;
+	}
+
+	public void setKanunBean(KanunBean kanunBean) {
+		this.kanunBean = kanunBean;
+	}
+
+		
+
+	public IParagrafService getParagrafService() {
+		return paragrafService;
+	}
+
+	public void setParagrafService(IParagrafService paragrafService) {
+		this.paragrafService = paragrafService;
+	}
+
+	public List<Paragraf> getSelectedKanunIcerikParagrafList() {
+		return selectedKanunIcerikParagrafList;
+	}
+
+	public void setSelectedKanunIcerikParagrafList(
+			List<Paragraf> selectedKanunIcerikParagrafList) {
+		this.selectedKanunIcerikParagrafList = selectedKanunIcerikParagrafList;
+	}
+
 	public void displaySelectedSingle() {
         if(selectedNode != null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
@@ -127,10 +172,20 @@ public class KanunIcerikBean implements Serializable {
 			   kanunIcerik.setKanunIcerikAdi(getKanunIcerikAdi());
 			   kanunIcerik.setKanunIcerikMetin(getKanunIcerikMetin());
 			   
-			   kanunIcerik.setKanunIcerik((KanunIcerik)selectedNode.getData());
+			   if(selectedNode == null){
+				   kanunIcerik.setKanunIcerik(getKanunIcerikService().getKanunIcerikById(kanunBean.getSelectedKanun().getKanunIcerikRoot()));
+				   TreeNode newNode = new TreeNodeImpl(kanunIcerik, rootNode);
+				   
+			   }
+			   else {
+				   kanunIcerik.setKanunIcerik((KanunIcerik)selectedNode.getData());
+				   TreeNode newNode = new TreeNodeImpl(kanunIcerik, selectedNode);
+				   selectedNode.setExpanded(true);
+			   }
 			   
-			   TreeNode newNode = new DefaultTreeNode(kanunIcerik, selectedNode);
-			   selectedNode.setExpanded(true);
+			   kanunIcerik.setKanun(kanunBean.getSelectedKanun());
+			   
+			   
 			  
 			   getKanunIcerikService().addKanunIcerik(kanunIcerik);
 			   
@@ -147,6 +202,12 @@ public class KanunIcerikBean implements Serializable {
     	
     	selectedKanunIcerik=(KanunIcerik)(getSelectedNode().getData()); 
     	
+    	if(selectedKanunIcerik != null){
+    		this.selectedKanunIcerikParagrafList = new ArrayList<Paragraf>();
+    		this.selectedKanunIcerikParagrafList.addAll(getParagrafService().getParagraflarByKanunIcerikId(selectedKanunIcerik.getKanunIcerikId()));
+    		
+    		setSelectedKanunIcerikParagrafList(this.selectedKanunIcerikParagrafList);
+    	}
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", event.getTreeNode().toString());
  
         FacesContext.getCurrentInstance().addMessage(null, message);

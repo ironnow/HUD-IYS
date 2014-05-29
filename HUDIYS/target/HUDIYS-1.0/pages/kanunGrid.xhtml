@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head><title>Hesap Uzmanlari Dernegi</title>
+	<style type="text/css">
+        .ui-widget,.ui-widget .ui-widget 
+        {
+            font-size: 90% !important;
+        }
+	</style>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<table style="width:100%; margin:0px; min-width:1000px; max-width:1400px">
+				<tr>
+					<td style="idth:80%">
+						<h3 style="font-family:arial">Kanunlar</h3>		
+					</td>
+					<td style="text-align:right; width:20%">
+						<h:form>
+							<p:commandButton align="right" id="showDialogButton" type="button" value="Yeni Kanun" onclick="PF('dlg').show()" />
+						</h:form>
+					</td>
+				</tr>
+			</table>		
+			
+			<p:dialog header="Yeni Kanun Oluştur" widgetVar="dlg" resizable="false">
+				<h:form>
+					<p:panel header="Yeni Kanun Ekle">				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Kanun No: "/>
+							<p:inputText id="kanunNo" value="#{kanunMB.kanunNo}"></p:inputText>         
+							<h:outputText value="Kanun Adi: " />
+							<p:inputText id="kanunAdi" value="#{kanunMB.kanunAdi}"> </p:inputText>		
+							<h:outputText value="RG No: " />
+							<p:inputText id="RGNo" value="#{kanunMB.RGNo}"></p:inputText>        
+							<h:outputText value="RG Tarihi: " />
+							<p:inputMask id="RGTarihi" value="#{kanunMB.RGTarihi}" mask="99/99/9999"></p:inputMask>         
+							<p:commandButton id="addKanun" value="Ekle" action="#{kanunMB.addKanun}" ajax="false"/>
+							<p:commandButton id="reset" value="Iptal" action="#{kanunMB.reset}" ajax="false"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+ 				
+			
+			<h:form id="form" styleClass="form-style">
+				<p:growl id="growl" showDetail="true"/>
+				<p:dataTable id="display" var="kanun" value="#{mevzuatMB.kanunlarModel}" sortMode="multiple" rows="10" paginator="true"
+						selection="#{kanunMB.selectedKanun}" selectionMode="single" >
+					<p:ajax event="rowSelect" listener="#{kanunMB.onRowSelect}" update=":form:display :form:growl" />
+					<p:ajax event="rowUnselect" listener="#{kanunMB.onRowUnselect}" update=":form:growl"/>
+					<p:column style="width:10%" sortBy="kanunNo" headerText="Kanun No">
+						<h:outputText value="#{kanun.kanunNo}" />
+					</p:column>
+					<p:column sortBy="kanunAdi" headerText="Kanun Adi">
+						<h:outputText value="#{kanun.kanunAdi}" />
+					</p:column>        
+					 <p:column sortBy="RGNo" headerText="RG No">
+						<h:outputText value="#{kanun.RGNo}" />
+					</p:column>        
+					 <p:column sortBy="RGTarihi" headerText="RG Tarihi">
+						<h:outputText value="#{kanun.RGTarihi}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>	
+			
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

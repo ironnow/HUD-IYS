@@ -13,6 +13,24 @@
         {
             font-size: 90% !important;
         }
+        
+        .folder-open {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/open-folder.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+		
+		.folder-collapsed {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/closed-folder.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+		
+		.document-node {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/document-icon.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
 	</style>
 </h:head>
 <h:body> 
@@ -34,17 +52,41 @@
 				</h:form>
 			</p:dialog>	
 				
-			<p:layout style="min-width:400px;min-height:100%;" id="layout">
-				<p:layoutUnit position="west" header="Kanun İçerikleri" resizable="true" size="200" minSize="100" maxSize="400">
+			<p:layout style="min-width:400px" id="layout">
+				<p:layoutUnit position="west" resizable="true" size="300" minSize="200" maxSize="400">
 					
-					<h:form id="form"> 
+					<h:form id="formTree"> 
+					
+						<p:toolbar>						
+							<f:facet name="left">
+								<h:outputText value="#{kanunMB.selectedKanun.kanunAdi}" />					            
+					            
+					        </f:facet>
+					 
+					        <f:facet name="right">
+					        	<span class="ui-separator">
+					                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+					            </span>
+					          	<p:commandButton id="ajax2" update="tree" onclick="PF('dlg').show()" styleClass="ui-priority-primary" icon="ui-icon-document" title="Yeni İçerik" />
+	 					
+	 							<p:commandButton id="ajax3" title="Sil" update="tree" action="#{kanunIcerikMB.deleteNode}" icon="ui-icon-trash" />
+					            <p:commandButton type="button" title="Yazdır" icon="ui-icon-print" />
+					        </f:facet>
+						</p:toolbar>
+	 					
 						<p:growl id="messages" showDetail="true" />	 
-						<p:tree style="width:99%; height:100%" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
+						<p:tree style="width:99%" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
 							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
-							<p:ajax event="select" update=":output1,:output2" listener="#{kanunIcerikMB.onNodeSelect}" />	       
-							<p:treeNode>
-								<h:outputText value="#{node.kanunIcerikAdi}" />
-							</p:treeNode>
+							<p:ajax event="select" update=":output1,:output2,:form:display" listener="#{kanunIcerikMB.onNodeSelect}" />	       
+							
+							<p:treeNode type="node"
+                                expandedIcon="folder-open"
+                                collapsedIcon="folder-collapsed">
+		                        <h:outputText value="#{node.kanunIcerikAdi}"/>
+		                    </p:treeNode>
+		                    <p:treeNode type="leaf" icon="document-node">
+		                        <h:outputText value="#{node.kanunIcerikAdi}" />
+		                    </p:treeNode>
 						</p:tree>	 
 						
 						<p:contextMenu for="tree">
@@ -54,12 +96,57 @@
 						
 					</h:form>
 					
-				</p:layoutUnit> 
+				</p:layoutUnit>
+				
+				<p:dialog header="Yeni Paragraf Oluştur" widgetVar="dlgParagraf" resizable="false">			  	    
+					<h:form>
+						<p:panel header="Yeni Paragraf Ekle">
+							<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+								<h:outputText value="No " />
+								<p:inputText id="paragrafNo" value="#{paragrafMB.paragrafNo}"></p:inputText>
+								<h:outputText value="Paragraf Metin " />
+								<p:inputTextarea rows="5" id="paragrafMetin" value="#{paragrafMB.paragrafMetin}"></p:inputTextarea>
+								<p:commandButton id="addParagraf" value="Ekle" action="#{paragrafMB.addParagraf}" ajax="false"/>
+								<p:commandButton id="reset" value="Iptal" action="#{paragrafMB.reset}" ajax="false"/>
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</p:dialog>	 
+				
+				<p:dialog header="Yeni Bent Oluştur" widgetVar="dlgBent" resizable="false">			  	    
+					<h:form>
+						<p:panel header="Yeni Bent Ekle">
+							<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+								<h:outputText value="No " />
+								<p:inputText id="bentSira" value="#{bentMB.bentSira}"></p:inputText>
+								<h:outputText value="Bent Metin " />
+								<p:inputTextarea rows="5" id="bentMetin" value="#{bentMB.bentMetin}"></p:inputTextarea>
+								<p:commandButton id="addBent" value="Ekle" action="#{bentMB.addBent}" ajax="false"/>
+								<p:commandButton id="reset" value="Iptal" action="#{bentMB.reset}" ajax="false"/>
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</p:dialog>	
 				
 				<p:layoutUnit position="center">
 					<p:layout>
+						
 					
-						<p:layoutUnit style="min-height:60%;" position="center" header="İçerik" resizable="true">    
+						<p:layoutUnit position="center" header="İçerik" resizable="true">
+							<table>
+								<tr>
+									<td style="idth:80%">
+										<h3 style="font-family:arial"><h:outputText value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" /> Mevzuat Seti</h3>	
+									</td>
+									<td style="text-align:right; width:20%">
+										<h:form>				
+											<p:commandButton align="right" id="showDialogParagraf" type="button" value="Yeni Paragraf" onclick="PF('dlgParagraf').show()" />
+											<p:commandButton align="right" id="showDialogBent" type="button" value="Yeni Bent" onclick="PF('dlgBent').show()" />
+										
+										</h:form>
+									</td>
+								</tr>
+							</table>    
 							<p:outputPanel deferred="true" deferredMode="visible">
 								<h3>
 									<h:outputText id="output1" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" />
@@ -67,38 +154,56 @@
 								<p>
 									<h:outputText id="output2" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />	
 								</p>
+								
+								<h:form id="form" styleClass="form-style">
+									<p:growl id="growl" showDetail="true"/>
+									<p:dataTable id="display" var="paragraf" value="#{kanunIcerikMB.selectedKanunIcerikParagrafList}" sortMode="multiple" rows="10" paginator="true"
+											selection="#{paragrafMB.selectedParagraf}" selectionMode="single" >
+										<p:ajax event="rowSelect" listener="#{paragrafMB.onRowSelect}" update=":form:display :form:growl" />
+										<p:ajax event="rowUnselect" listener="#{paragrafMB.onRowUnselect}" update=":form:growl"/>
+										<p:column style="width:30%" sortBy="paragrafNo" headerText="No">
+											<h:outputText value="#{paragraf.paragrafNo}" />
+										</p:column>
+										<p:column style="width:70%" sortBy="paragrafMetin" headerText="Metin">
+											<h:outputText value="#{paragraf.paragrafMetin}" />
+										</p:column>
+									</p:dataTable>
+								</h:form>	
 							</p:outputPanel>
+								
+								
+							
 						</p:layoutUnit> 
 						  
 						<p:layoutUnit header="İçerik Detayları" position="south" resizable="true" collapsible="true">	
-												    
-							<p:tabView>
-						        <p:tab title="Detaylar">
-						            <h:panelGrid columns="2" cellpadding="10">
-						             	<h:outputText style="font-weight:bold" value="Madde No " />
-										<h:outputText value="2" />
-										<h:outputText style="font-weight:bold" value="Kabul Tarihi " />
-										<h:outputText value="15/10/1982" />
-						                <h:outputText style="font-weight:bold" value="RG No " />
-										<h:outputText value="23598" />
-										<h:outputText style="font-weight:bold" value="RG Tarihi " />
-										<h:outputText value="01/01/1982" />										
-						            </h:panelGrid>
-						        </p:tab>
-						        <p:tab title="Dip Notlar">
-						            <h:panelGrid columns="2" cellpadding="5">
-						                <h:outputText value="(1) " />
-										<h:outputText value="İlgili bend maddeye 03/08/1989 tarihinde eklenmiştir." />
-						            </h:panelGrid>
-						        </p:tab>
-						        <p:tab title="Yorumlar">
-						            <h:panelGrid columns="2" cellpadding="10">
-						                <h:outputText value="Henüz yorum girilmemiştir." />
-										
-						            </h:panelGrid>
-						        </p:tab>
-						    </p:tabView>
-						    					
+							<p:panel id="detaylar">					    
+								<p:tabView>
+							        <p:tab title="Detaylar">
+							            <h:panelGrid columns="2" cellpadding="10">
+							             	<h:outputText style="font-weight:bold" value="Madde No " />
+											<h:outputText id="output3" value="#{kanunMB.selectedKanun.kanunNo}" />
+											<h:outputText style="font-weight:bold" value="Kabul Tarihi " />
+											<h:outputText id="output4" value="#{kanunMB.selectedKanun.RGTarihi}" />
+							                <h:outputText style="font-weight:bold" value="RG No " />
+											<h:outputText id="output5" value="#{kanunMB.selectedKanun.RGNo}" />
+											<h:outputText style="font-weight:bold" value="RG Tarihi " />
+											<h:outputText id="output6" value="#{kanunMB.selectedKanun.RGTarihi}" />									
+							            </h:panelGrid>
+							        </p:tab>
+							        <p:tab title="Dip Notlar">
+							            <h:panelGrid columns="2" cellpadding="5">
+							                <h:outputText value=" " />
+											<h:outputText value=" " />
+							            </h:panelGrid>
+							        </p:tab>
+							        <p:tab title="Yorumlar">
+							            <h:panelGrid columns="2" cellpadding="10">
+							                <h:outputText value="Henüz yorum girilmemiştir." />
+											
+							            </h:panelGrid>
+							        </p:tab>
+							    </p:tabView>
+						    </p:panel>					
 						</p:layoutUnit>   
 					</p:layout> 
 				</p:layoutUnit>

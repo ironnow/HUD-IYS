@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
 import hud.iys.dao.IKanunIcerikDAO;
 
@@ -45,7 +46,11 @@ public class KanunIcerikService implements IKanunIcerikService {
 		 return getKanunIcerikDAO().getKanunIcerikleri();
 	 }
 	
-	
+	 @Override
+	 public List<KanunIcerik> getKanunIcerikleriByKanunId(int kanunId){
+		 return getKanunIcerikDAO().getKanunIcerikleriByKanunId(kanunId);
+	 }
+	 
 	 public IKanunIcerikDAO getKanunIcerikDAO() {
 		 return kanunIcerikDAO;
 	 }

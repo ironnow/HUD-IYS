@@ -53,12 +53,14 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  
  <!-- Data Source Declaration -->
  
- <bean id="DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-  <property name="driverClass" value="com.mysql.jdbc.Driver" />
-  <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/testdb" />
-  <property name="user" value="root" />
-  <property name="password" value="Hud1234" />  
- </bean>
+ 
+
+<bean id="DataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    <property name="url" value="jdbc:mysql://localhost:3306/testdb?useUnicode=true&amp;characterEncoding=utf8" />
+    <property name="username" value="root" />
+    <property name="password" value="Hud1234" />
+</bean>
 
  <!-- Session Factory Declaration -->
  <bean id="SessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -75,6 +77,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
    <props>
     <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
     <prop key="hibernate.show_sql">true</prop>
+    <prop key="hibernate.connection.useUnicode">true</prop>
+	<prop key="hibernate.connection.characterEncoding">utf8</prop>
    </props>
   </property>
  </bean>

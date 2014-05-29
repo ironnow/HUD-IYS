@@ -43,6 +43,10 @@ public class KanunIcerik {
 	 @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "parent")
 	 private Collection<KanunIcerik> children;
 	 
+	 @ManyToOne(fetch = FetchType.LAZY)
+	 @JoinColumn(name = "KanunID", nullable = false)	 
+	 private Kanun kanun;
+	 
 	 
 	// @ManyToOne
 	// @JoinColumn(name="parentID")	    
@@ -98,7 +102,17 @@ public class KanunIcerik {
 	 	 this.children = children;
 	 }
 	
-	 @Override
+	 public Kanun getKanun() {
+		return kanun;
+	}
+
+
+	public void setKanun(Kanun kanun) {
+		this.kanun = kanun;
+	}
+
+
+	@Override
 	 public String toString() {
 		  StringBuffer strBuff = new StringBuffer();
 		  strBuff.append("id : ").append(getKanunIcerikId());

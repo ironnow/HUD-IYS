@@ -21,6 +21,7 @@ public class Kanun {
 	 private String RGTarihi;
 	 private Mevzuat mevzuat;
 
+	 private int kanunIcerikRoot;
 
 	 @Id
 	 @Column(name="KanunID")
@@ -88,7 +89,19 @@ public class Kanun {
 		 this.mevzuat = mevzuat;
 	 }
 	 
-	 @Override
+	 
+	 
+	 public int getKanunIcerikRoot() {
+		return kanunIcerikRoot;
+	}
+
+
+	public void setKanunIcerikRoot(int kanunIcerikRoot) {
+		this.kanunIcerikRoot = kanunIcerikRoot;
+	}
+
+
+	@Override
 	 public String toString() {
 		  StringBuffer strBuff = new StringBuffer();
 		  strBuff.append("id : ").append(getKanunId());
