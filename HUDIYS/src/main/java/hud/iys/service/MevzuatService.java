@@ -35,7 +35,7 @@ public class MevzuatService implements IMevzuatService {
 	 }
 	
 	 @Override
-	 public Mevzuat getMevzuatById(int id) {
+	 public Mevzuat getMevzuatById(Long id) {
 		 return getMevzuatDAO().getMevzuatById(id);
 	 }
 	
@@ -46,7 +46,7 @@ public class MevzuatService implements IMevzuatService {
 	 }
 	
 	 @Override
-	 public List<Mevzuat> getMevzuatlarByMevzuatSetiId(int mevzuatSetiId){
+	 public List<Mevzuat> getMevzuatlarByMevzuatSetiId(Long mevzuatSetiId){
 		 return getMevzuatDAO().getMevzuatlarByMevzuatSetiId(mevzuatSetiId);
 	 }
 	

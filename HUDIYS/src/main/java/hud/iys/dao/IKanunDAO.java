@@ -14,9 +14,9 @@ public interface IKanunDAO {
 	
 	 public void deleteKanun(Kanun kanun);
 	
-	 public Kanun getKanunById(int id);
+	 public Kanun getKanunById(Long id);
 	
 	 public List<Kanun> getKanunlar();
 	 
-	 public List<Kanun> getKanunlarByMevzuatId(int mevzuatId);
+	 public List<Kanun> getKanunlarByMevzuatId(Long mevzuatId);
 }

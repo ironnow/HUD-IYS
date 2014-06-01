@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name="MEVZUATSETI")
 public class MevzuatSeti {
 
-	 private int mevzuatSetiId;
+	 private Long mevzuatSetiId;
 	 private String mevzuatSetiAdi;
 	 private String mevzuatSetiAciklama;
 	 Set<Mevzuat> mevzuatlar; 
@@ -25,12 +25,12 @@ public class MevzuatSeti {
 	 @Id
 	 @GeneratedValue(strategy = IDENTITY)
 	 @Column(name = "MevzuatSetiID", unique = true, nullable = false)
-	 public int getMevzuatSetiId() {
+	 public Long getMevzuatSetiId() {
 		 return mevzuatSetiId;
 	 }
 
 	
-	 public void setMevzuatSetiId(int id) {
+	 public void setMevzuatSetiId(Long id) {
 		 this.mevzuatSetiId = id;
 	 }
 	

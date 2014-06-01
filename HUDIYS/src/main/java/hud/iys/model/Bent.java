@@ -30,8 +30,8 @@ public class Bent {
 	 private String bentMetin;
 	 private Long prevBentId;
 	 private Long nextBentId;
-	 private Paragraf paragraf;
-	 
+	 private Fikra fikra;
+	 Set<AltBent> altBentler; 
 
 	 @Id
 	 @GeneratedValue(strategy = IDENTITY)
@@ -87,15 +87,23 @@ public class Bent {
 	 }
 	 
 	 @ManyToOne(fetch = FetchType.LAZY)
-	 @JoinColumn(name = "ParagrafID", nullable = false)
-	 public Paragraf getParagraf() {
-		 return paragraf;
+	 @JoinColumn(name = "FikraID", nullable = false)
+	 public Fikra getFikra() {
+		 return fikra;
 	 }
  
-	 public void setParagraf(Paragraf paragraf) {
-		 this.paragraf = paragraf;
+	 public void setFikra(Fikra fikra) {
+		 this.fikra = fikra;
 	 }
 	 
+	 @OneToMany(mappedBy = "bent")
+	 public Set<AltBent> getAltBentler() {
+	 	 return altBentler;
+	 }
+ 
+	 public void setAltBentler(Set<AltBent> altBentler) {
+	 	 this.altBentler = altBentler;
+	 }
 	
 	
 	 @Override

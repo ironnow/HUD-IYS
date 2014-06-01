@@ -52,7 +52,7 @@ public class BentBean implements Serializable {
 			   bent.setBentSira(getBentSira());
 			   bent.setBentMetin(getBentMetin());
 			  
-			   bent.setParagraf(null);
+			   //bent.setFikra(null);
 			   getBentService().addBent(bent);
 			  
 			   return SUCCESS;
@@ -71,7 +71,7 @@ public class BentBean implements Serializable {
 
 	 public List<Bent> getBentList() {
 		  bentList = new ArrayList<Bent>();
-		  bentList.addAll(getBentService().getBentlerByParagrafId(kanunIcerikBean.getSelectedKanunIcerik().getKanunIcerikId()));
+		  bentList.addAll(getBentService().getBentlerByFikraId(kanunIcerikBean.getSelectedKanunIcerik().getKanunIcerikId()));
 		  return bentList;
 	 }
 

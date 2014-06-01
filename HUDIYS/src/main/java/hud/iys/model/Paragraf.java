@@ -31,9 +31,7 @@ public class Paragraf {
 	 private Long prevParagrafId;
 	 private Long nextParagrafId;
 	 private KanunIcerik kanunIcerik;
-	 Set<Bent> bentler; 
-
-
+	
 	 @Id
 	 @GeneratedValue(strategy = IDENTITY)
 	 @Column(name = "ParagrafID", unique = true, nullable = false)
@@ -98,14 +96,6 @@ public class Paragraf {
 		 this.kanunIcerik = kanunIcerik;
 	 }
 	 
-	 @OneToMany(mappedBy = "paragraf")
-	 public Set<Bent> getBentler() {
-	 	 return bentler;
-	 }
- 
-	 public void setBentler(Set<Bent> bentler) {
-	 	 this.bentler = bentler;
-	 }
 	
 	 @Override
 	 public String toString() {

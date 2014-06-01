@@ -36,7 +36,7 @@ public class KanunService implements IKanunService {
 	 }
 	
 	 @Override
-	 public Kanun getKanunById(int id) {
+	 public Kanun getKanunById(Long id) {
 		 return getKanunDAO().getKanunById(id);
 	 }
 	
@@ -47,7 +47,7 @@ public class KanunService implements IKanunService {
 	 }
 	
 	 @Override
-	 public List<Kanun> getKanunlarByMevzuatId(int mevzuatId){
+	 public List<Kanun> getKanunlarByMevzuatId(Long mevzuatId){
 		 return getKanunDAO().getKanunlarByMevzuatId(mevzuatId);
 	 }
 	

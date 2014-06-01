@@ -13,7 +13,7 @@ public interface IMevzuatSetiService {
 	
 	 public void deleteMevzuatSeti(MevzuatSeti mevzuatSeti);
 	
-	 public MevzuatSeti getMevzuatSetiById(int id);
+	 public MevzuatSeti getMevzuatSetiById(Long id);
 	
 	 public List<MevzuatSeti> getMevzuatSetleri();
 }

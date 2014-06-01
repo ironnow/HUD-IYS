@@ -19,7 +19,9 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="Kanun" class="hud.iys.model.Kanun"/>
  <bean id="MevzuatSeti" class="hud.iys.model.MevzuatSeti"/>
  <bean id="Mevzuat" class="hud.iys.model.Mevzuat"/>
-  <bean id="KanunIcerik" class="hud.iys.model.KanunIcerik"/>
+ <bean id="KanunIcerik" class="hud.iys.model.KanunIcerik"/>
+ <bean id="Paragraf" class="hud.iys.model.Paragraf"/>
+ <bean id="Bent" class="hud.iys.model.Bent"/>
   
  <!-- Service Declarations -->
  
@@ -35,6 +37,12 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="KanunIcerikService" class="hud.iys.service.KanunIcerikService">
   <property name="kanunIcerikDAO" ref="KanunIcerikDAO" />
  </bean>
+ <bean id="ParagrafService" class="hud.iys.service.ParagrafService">
+  <property name="ParagrafDAO" ref="ParagrafDAO" />
+ </bean>
+ <bean id="BentService" class="hud.iys.service.BentService">
+  <property name="BentDAO" ref="BentDAO" />
+ </bean>
  
  <!-- DAO Declarations -->
 
@@ -48,6 +56,12 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean>
  <bean id="KanunIcerikDAO" class="hud.iys.dao.KanunIcerikDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="ParagrafDAO" class="hud.iys.dao.ParagrafDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="BentDAO" class="hud.iys.dao.BentDAO">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean>
  
@@ -71,6 +85,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <value>hud.iys.model.MevzuatSeti</value>
     <value>hud.iys.model.Mevzuat</value>
     <value>hud.iys.model.KanunIcerik</value>
+    <value>hud.iys.model.Paragraf</value>
+    <value>hud.iys.model.Bent</value>
    </list>
   </property>
   <property name="hibernateProperties">

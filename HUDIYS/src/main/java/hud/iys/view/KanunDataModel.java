@@ -20,7 +20,7 @@ public class KanunDataModel extends ListDataModel<Kanun> implements SelectableDa
         List<Kanun> kanunlar = (List<Kanun>) getWrappedData();
          
         for(Kanun kanun : kanunlar) {
-            if((Integer.toString(kanun.getKanunId())).equals(rowKey))
+            if((Long.toString(kanun.getKanunId())).equals(rowKey))
                 return kanun;
         }
          

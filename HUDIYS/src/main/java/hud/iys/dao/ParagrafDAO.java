@@ -38,7 +38,7 @@ public class ParagrafDAO implements IParagrafDAO {
 	
 	 
 	 @Override
-	 public Paragraf getParagrafById(int id) {
+	 public Paragraf getParagrafById(Long id) {
 		 List list = getSessionFactory().getCurrentSession()
 	           .createQuery("from Paragraf where id=?")
 	                 .setParameter(0, id).list();
@@ -52,7 +52,7 @@ public class ParagrafDAO implements IParagrafDAO {
 	 }
 	 
 	 @Override
-	 public List<Paragraf> getParagraflarByKanunIcerikId(int kanunIcerikId){
+	 public List<Paragraf> getParagraflarByKanunIcerikId(Long kanunIcerikId){
 		 List list = getSessionFactory().getCurrentSession()
 		           .createQuery("from Paragraf where KanunIcerikId=?")
 		                 .setParameter(0, kanunIcerikId).list();

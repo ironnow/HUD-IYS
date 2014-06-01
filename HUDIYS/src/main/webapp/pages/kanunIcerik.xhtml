@@ -31,6 +31,11 @@
 		    height: 16px;
 		    width: 16px;
 		}
+		.ui-orderlist .ui-orderlist-list{
+           width: 600px;
+           height : 400px;
+        }
+        
 	</style>
 </h:head>
 <h:body> 
@@ -77,7 +82,7 @@
 						<p:growl id="messages" showDetail="true" />	 
 						<p:tree style="width:99%" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
 							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
-							<p:ajax event="select" update=":output1,:output2,:form:display" listener="#{kanunIcerikMB.onNodeSelect}" />	       
+							<p:ajax event="select" update=":output1,:output2,:outputParagraf" listener="#{kanunIcerikMB.onNodeSelect}" />	       
 							
 							<p:treeNode type="node"
                                 expandedIcon="folder-open"
@@ -106,7 +111,7 @@
 								<p:inputText id="paragrafNo" value="#{paragrafMB.paragrafNo}"></p:inputText>
 								<h:outputText value="Paragraf Metin " />
 								<p:inputTextarea rows="5" id="paragrafMetin" value="#{paragrafMB.paragrafMetin}"></p:inputTextarea>
-								<p:commandButton id="addParagraf" value="Ekle" action="#{paragrafMB.addParagraf}" ajax="false"/>
+								<p:commandButton id="addParagraf" value="Ekle" actionListener="#{paragrafMB.addParagraf}" ajax="false"/>
 								<p:commandButton id="reset" value="Iptal" action="#{paragrafMB.reset}" ajax="false"/>
 							</h:panelGrid>
 						</p:panel>
@@ -135,14 +140,12 @@
 						<p:layoutUnit position="center" header="İçerik" resizable="true">
 							<table>
 								<tr>
-									<td style="idth:80%">
-										<h3 style="font-family:arial"><h:outputText value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" /> Mevzuat Seti</h3>	
+									<td style="width:80%">
 									</td>
 									<td style="text-align:right; width:20%">
 										<h:form>				
 											<p:commandButton align="right" id="showDialogParagraf" type="button" value="Yeni Paragraf" onclick="PF('dlgParagraf').show()" />
-											<p:commandButton align="right" id="showDialogBent" type="button" value="Yeni Bent" onclick="PF('dlgBent').show()" />
-										
+											
 										</h:form>
 									</td>
 								</tr>
@@ -155,19 +158,9 @@
 									<h:outputText id="output2" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />	
 								</p>
 								
-								<h:form id="form" styleClass="form-style">
-									<p:growl id="growl" showDetail="true"/>
-									<p:dataTable id="display" var="paragraf" value="#{kanunIcerikMB.selectedKanunIcerikParagrafList}" sortMode="multiple" rows="10" paginator="true"
-											selection="#{paragrafMB.selectedParagraf}" selectionMode="single" >
-										<p:ajax event="rowSelect" listener="#{paragrafMB.onRowSelect}" update=":form:display :form:growl" />
-										<p:ajax event="rowUnselect" listener="#{paragrafMB.onRowUnselect}" update=":form:growl"/>
-										<p:column style="width:30%" sortBy="paragrafNo" headerText="No">
-											<h:outputText value="#{paragraf.paragrafNo}" />
-										</p:column>
-										<p:column style="width:70%" sortBy="paragrafMetin" headerText="Metin">
-											<h:outputText value="#{paragraf.paragrafMetin}" />
-										</p:column>
-									</p:dataTable>
+								<h:form id="outputParagraf" styleClass="form-style">
+									<p:orderList value="#{kanunIcerikMB.selectedKanunIcerikParagrafList}" var="paragraf" controlsLocation="none" itemLabel="#{paragraf.paragrafMetin}" itemValue="#{paragraf.paragrafId}" />
+    								
 								</h:form>	
 							</p:outputPanel>
 								

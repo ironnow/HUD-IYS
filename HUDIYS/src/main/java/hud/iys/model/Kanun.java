@@ -14,24 +14,24 @@ import javax.persistence.Table;
 @Table(name="KANUN")
 public class Kanun {
 
-	 private int kanunId;
+	 private Long kanunId;
 	 private int kanunNo;
 	 private String kanunAdi;
 	 private int RGNo;
 	 private String RGTarihi;
 	 private Mevzuat mevzuat;
 
-	 private int kanunIcerikRoot;
+	 private Long kanunIcerikRoot;
 
 	 @Id
 	 @Column(name="KanunID")
 	 @GeneratedValue(strategy=GenerationType.AUTO)
-	 public int getKanunId() {
+	 public Long getKanunId() {
 		 return kanunId;
 	 }
 
 	
-	 public void setKanunId(int id) {
+	 public void setKanunId(Long id) {
 		 this.kanunId = id;
 	 }
 	
@@ -43,15 +43,13 @@ public class Kanun {
 	
 	 public void setKanunNo(int kanunNo) {
 		 this.kanunNo = kanunNo;
-	 }
-	 
+	 }	 
 	
 	 
 	 @Column(name="KanunAdi")
 	 public String getKanunAdi() {
 		 return kanunAdi;
-	 }
-	
+	 }	
 	
 	 public void setKanunAdi(String kanunAdi) {
 		 this.kanunAdi = kanunAdi;
@@ -62,7 +60,6 @@ public class Kanun {
 	 public String getRGTarihi() {
 		 return RGTarihi;
 	 }
-	
 	 
 	 public void setRGTarihi(String RGTarihi) {
 		 this.RGTarihi = RGTarihi;
@@ -87,21 +84,20 @@ public class Kanun {
  
 	 public void setMevzuat(Mevzuat mevzuat) {
 		 this.mevzuat = mevzuat;
-	 }
+	 }	 
 	 
 	 
-	 
-	 public int getKanunIcerikRoot() {
+	 public Long getKanunIcerikRoot() {
 		return kanunIcerikRoot;
-	}
+	 }
 
 
-	public void setKanunIcerikRoot(int kanunIcerikRoot) {
+	 public void setKanunIcerikRoot(Long kanunIcerikRoot) {
 		this.kanunIcerikRoot = kanunIcerikRoot;
-	}
+	 }
 
 
-	@Override
+	 @Override
 	 public String toString() {
 		  StringBuffer strBuff = new StringBuffer();
 		  strBuff.append("id : ").append(getKanunId());

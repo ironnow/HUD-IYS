@@ -38,7 +38,7 @@ public class MevzuatSetiDAO implements IMevzuatSetiDAO {
 	
 	 
 	 @Override
-	 public MevzuatSeti getMevzuatSetiById(int id) {
+	 public MevzuatSeti getMevzuatSetiById(Long id) {
 		 List list = getSessionFactory().getCurrentSession()
 	           .createQuery("from MevzuatSeti where mevzuatSetiId=?")
 	                 .setParameter(0, id).list();

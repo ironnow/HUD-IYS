@@ -20,7 +20,7 @@ public class MevzuatDataModel extends ListDataModel<Mevzuat> implements Selectab
         List<Mevzuat> mevzuatlar = (List<Mevzuat>) getWrappedData();
          
         for(Mevzuat mevzuat : mevzuatlar) {
-            if((Integer.toString(mevzuat.getMevzuatId())).equals(rowKey))
+            if((Long.toString(mevzuat.getMevzuatId())).equals(rowKey))
                 return mevzuat;
         }
          

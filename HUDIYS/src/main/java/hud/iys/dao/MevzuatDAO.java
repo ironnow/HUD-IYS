@@ -38,7 +38,7 @@ public class MevzuatDAO implements IMevzuatDAO {
 	
 	 
 	 @Override
-	 public Mevzuat getMevzuatById(int id) {
+	 public Mevzuat getMevzuatById(Long id) {
 		 List list = getSessionFactory().getCurrentSession()
 	           .createQuery("from Mevzuat where id=?")
 	                 .setParameter(0, id).list();
@@ -53,7 +53,7 @@ public class MevzuatDAO implements IMevzuatDAO {
 	 }
 	 
 	 @Override
-	 public List<Mevzuat> getMevzuatlarByMevzuatSetiId(int mevzuatSetiId){
+	 public List<Mevzuat> getMevzuatlarByMevzuatSetiId(Long mevzuatSetiId){
 		 List list = getSessionFactory().getCurrentSession()
 		           .createQuery("from Mevzuat where MevzuatSetiId=?")
 		                 .setParameter(0, mevzuatSetiId).list();

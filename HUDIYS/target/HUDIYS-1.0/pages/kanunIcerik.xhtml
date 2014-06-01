@@ -31,6 +31,11 @@
 		    height: 16px;
 		    width: 16px;
 		}
+		.ui-orderlist .ui-orderlist-list{
+           width: 600px;
+           height : 400px;
+        }
+        
 	</style>
 </h:head>
 <h:body> 
@@ -55,7 +60,7 @@
 			<p:layout style="min-width:400px" id="layout">
 				<p:layoutUnit position="west" resizable="true" size="300" minSize="200" maxSize="400">
 					
-					<h:form id="form"> 
+					<h:form id="formTree"> 
 					
 						<p:toolbar>						
 							<f:facet name="left">
@@ -77,7 +82,7 @@
 						<p:growl id="messages" showDetail="true" />	 
 						<p:tree style="width:99%" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
 							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
-							<p:ajax event="select" update=":output1,:output2" listener="#{kanunIcerikMB.onNodeSelect}" />	       
+							<p:ajax event="select" update=":output1,:output2,:outputParagraf" listener="#{kanunIcerikMB.onNodeSelect}" />	       
 							
 							<p:treeNode type="node"
                                 expandedIcon="folder-open"
@@ -96,12 +101,55 @@
 						
 					</h:form>
 					
-				</p:layoutUnit> 
+				</p:layoutUnit>
+				
+				<p:dialog header="Yeni Paragraf Oluştur" widgetVar="dlgParagraf" resizable="false">			  	    
+					<h:form>
+						<p:panel header="Yeni Paragraf Ekle">
+							<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+								<h:outputText value="No " />
+								<p:inputText id="paragrafNo" value="#{paragrafMB.paragrafNo}"></p:inputText>
+								<h:outputText value="Paragraf Metin " />
+								<p:inputTextarea rows="5" id="paragrafMetin" value="#{paragrafMB.paragrafMetin}"></p:inputTextarea>
+								<p:commandButton id="addParagraf" value="Ekle" actionListener="#{paragrafMB.addParagraf}" ajax="false"/>
+								<p:commandButton id="reset" value="Iptal" action="#{paragrafMB.reset}" ajax="false"/>
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</p:dialog>	 
+				
+				<p:dialog header="Yeni Bent Oluştur" widgetVar="dlgBent" resizable="false">			  	    
+					<h:form>
+						<p:panel header="Yeni Bent Ekle">
+							<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+								<h:outputText value="No " />
+								<p:inputText id="bentSira" value="#{bentMB.bentSira}"></p:inputText>
+								<h:outputText value="Bent Metin " />
+								<p:inputTextarea rows="5" id="bentMetin" value="#{bentMB.bentMetin}"></p:inputTextarea>
+								<p:commandButton id="addBent" value="Ekle" action="#{bentMB.addBent}" ajax="false"/>
+								<p:commandButton id="reset" value="Iptal" action="#{bentMB.reset}" ajax="false"/>
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</p:dialog>	
 				
 				<p:layoutUnit position="center">
 					<p:layout>
+						
 					
-						<p:layoutUnit position="center" header="İçerik" resizable="true">    
+						<p:layoutUnit position="center" header="İçerik" resizable="true">
+							<table>
+								<tr>
+									<td style="width:80%">
+									</td>
+									<td style="text-align:right; width:20%">
+										<h:form>				
+											<p:commandButton align="right" id="showDialogParagraf" type="button" value="Yeni Paragraf" onclick="PF('dlgParagraf').show()" />
+											
+										</h:form>
+									</td>
+								</tr>
+							</table>    
 							<p:outputPanel deferred="true" deferredMode="visible">
 								<h3>
 									<h:outputText id="output1" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" />
@@ -110,9 +158,12 @@
 									<h:outputText id="output2" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />	
 								</p>
 								
-								
+								<h:form id="outputParagraf" styleClass="form-style">
+									<p:orderList value="#{kanunIcerikMB.selectedKanunIcerikParagrafList}" var="paragraf" controlsLocation="none" itemLabel="#{paragraf.paragrafMetin}" itemValue="#{paragraf.paragrafId}" />
+    								
+								</h:form>	
 							</p:outputPanel>
-									
+								
 								
 							
 						</p:layoutUnit> 

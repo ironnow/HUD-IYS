@@ -12,9 +12,9 @@ public interface IBentDAO {
 	
 	 public void deleteBent(Bent bent);
 	
-	 public Bent getBentById(int id);
+	 public Bent getBentById(Long id);
 	
 	 public List<Bent> getBentler();
 	 
-	 public List<Bent> getBentlerByParagrafId(int paragrafId);
+	 public List<Bent> getBentlerByFikraId(Long fikraId);
 }

@@ -39,7 +39,7 @@ public class KanunIcerikDAO implements IKanunIcerikDAO {
 	
 	 
 	 @Override
-	 public KanunIcerik getKanunIcerikById(int id) {
+	 public KanunIcerik getKanunIcerikById(Long id) {
 		 List list = getSessionFactory().getCurrentSession()
 	           .createQuery("from KanunIcerik where kanunIcerikId=?")
 	                 .setParameter(0, id).list();
@@ -54,7 +54,7 @@ public class KanunIcerikDAO implements IKanunIcerikDAO {
 	 }
 	 
 	 @Override
-	 public List<KanunIcerik> getKanunIcerikleriByKanunId(int kanunId){
+	 public List<KanunIcerik> getKanunIcerikleriByKanunId(Long kanunId){
 		 List list = getSessionFactory().getCurrentSession()
 		           .createQuery("from KanunIcerik where KanunId=?")
 		                 .setParameter(0, kanunId).list();

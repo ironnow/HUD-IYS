@@ -35,7 +35,7 @@ public class MevzuatSetiService implements IMevzuatSetiService {
 	 }
 	
 	 @Override
-	 public MevzuatSeti getMevzuatSetiById(int id) {
+	 public MevzuatSeti getMevzuatSetiById(Long id) {
 		 return getMevzuatSetiDAO().getMevzuatSetiById(id);
 	 }
 	

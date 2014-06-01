@@ -20,7 +20,7 @@ public class MevzuatSetiDataModel extends ListDataModel<MevzuatSeti> implements 
         List<MevzuatSeti> mevzuatSetleri = (List<MevzuatSeti>) getWrappedData();
          
         for(MevzuatSeti mevzuatSeti : mevzuatSetleri) {
-            if((Integer.toString(mevzuatSeti.getMevzuatSetiId())).equals(rowKey))
+            if((Long.toString(mevzuatSeti.getMevzuatSetiId())).equals(rowKey))
                 return mevzuatSeti;
         }
          

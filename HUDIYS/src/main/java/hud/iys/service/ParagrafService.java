@@ -35,7 +35,7 @@ public class ParagrafService implements IParagrafService {
 	 }
 	
 	 @Override
-	 public Paragraf getParagrafById(int id) {
+	 public Paragraf getParagrafById(Long id) {
 		 return getParagrafDAO().getParagrafById(id);
 	 }
 	
@@ -46,7 +46,7 @@ public class ParagrafService implements IParagrafService {
 	 }
 	
 	 @Override
-	 public List<Paragraf> getParagraflarByKanunIcerikId(int kanunIcerikId){
+	 public List<Paragraf> getParagraflarByKanunIcerikId(Long kanunIcerikId){
 		 return getParagrafDAO().getParagraflarByKanunIcerikId(kanunIcerikId);
 	 }
 	

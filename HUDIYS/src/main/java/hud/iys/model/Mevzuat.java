@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
 @Table(name="MEVZUAT")
 public class Mevzuat {
 
-	 private int mevzuatId;
+	 private Long mevzuatId;
 	 private String mevzuatAdi;
 	 private String mevzuatAciklama;
 	 private MevzuatSeti mevzuatSeti;
@@ -35,12 +35,12 @@ public class Mevzuat {
 	 @Id
 	 @GeneratedValue(strategy = IDENTITY)
 	 @Column(name = "MevzuatID", unique = true, nullable = false)
-	 public int getMevzuatId() {
+	 public Long getMevzuatId() {
 		 return mevzuatId;
 	 }
 
 	
-	 public void setMevzuatId(int id) {
+	 public void setMevzuatId(Long id) {
 		 this.mevzuatId = id;
 	 }
 	

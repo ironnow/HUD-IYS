@@ -38,7 +38,7 @@ public class BentDAO implements IBentDAO {
 	
 	 
 	 @Override
-	 public Bent getBentById(int id) {
+	 public Bent getBentById(Long id) {
 		 List list = getSessionFactory().getCurrentSession()
 	           .createQuery("from Bent where id=?")
 	                 .setParameter(0, id).list();
@@ -53,10 +53,10 @@ public class BentDAO implements IBentDAO {
 	 }
 	 
 	 @Override
-	 public List<Bent> getBentlerByParagrafId(int paragrafId){
+	 public List<Bent> getBentlerByFikraId(Long fikraId){
 		 List list = getSessionFactory().getCurrentSession()
 		           .createQuery("from Bent where ParagrafId=?")
-		                 .setParameter(0, paragrafId).list();
+		                 .setParameter(0, fikraId).list();
 		  	 return list;
 	 }
 	 

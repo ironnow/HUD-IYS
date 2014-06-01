@@ -36,7 +36,7 @@ public class KanunIcerikService implements IKanunIcerikService {
 	 }
 	
 	 @Override
-	 public KanunIcerik getKanunIcerikById(int id) {
+	 public KanunIcerik getKanunIcerikById(Long id) {
 		 return getKanunIcerikDAO().getKanunIcerikById(id);
 	 }
 	
@@ -47,7 +47,7 @@ public class KanunIcerikService implements IKanunIcerikService {
 	 }
 	
 	 @Override
-	 public List<KanunIcerik> getKanunIcerikleriByKanunId(int kanunId){
+	 public List<KanunIcerik> getKanunIcerikleriByKanunId(Long kanunId){
 		 return getKanunIcerikDAO().getKanunIcerikleriByKanunId(kanunId);
 	 }
 	 

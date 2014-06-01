@@ -28,11 +28,11 @@ import org.springframework.dao.DataAccessException;
 
 @ManagedBean(eager=true,name="kanunIcerikMB")
 @SessionScoped
-public class KanunIcerikBean implements Serializable {	
+public class KanunIcerikBean implements Serializable {		
 	
-	 private static final long serialVersionUID = 1L;
-	 private static final String SUCCESS = "success";
-	 private static final String ERROR   = "error";
+	private static final long serialVersionUID = 1L;
+	private static final String SUCCESS = "success";
+	private static final String ERROR   = "error";
 	
 	private TreeNode rootNode;
 	private TreeNode selectedNode;

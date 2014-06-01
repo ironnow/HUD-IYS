@@ -35,7 +35,7 @@ public class BentService implements IBentService {
 	 }
 	
 	 @Override
-	 public Bent getBentById(int id) {
+	 public Bent getBentById(Long id) {
 		 return getBentDAO().getBentById(id);
 	 }
 	
@@ -46,8 +46,8 @@ public class BentService implements IBentService {
 	 }
 	
 	 @Override
-	 public List<Bent> getBentlerByParagrafId(int paragrafId){
-		 return getBentDAO().getBentlerByParagrafId(paragrafId);
+	 public List<Bent> getBentlerByFikraId(Long fikraId){
+		 return getBentDAO().getBentlerByFikraId(fikraId);
 	 }
 	
 	 public IBentDAO getBentDAO() {

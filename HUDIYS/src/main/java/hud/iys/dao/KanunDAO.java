@@ -39,7 +39,7 @@ public class KanunDAO implements IKanunDAO {
 	
 	 
 	 @Override
-	 public Kanun getKanunById(int id) {
+	 public Kanun getKanunById(Long id) {
 		 List list = getSessionFactory().getCurrentSession()
 	           .createQuery("from Kanun where id=?")
 	                 .setParameter(0, id).list();
@@ -54,7 +54,7 @@ public class KanunDAO implements IKanunDAO {
 	 }
 	 
 	 @Override
-	 public List<Kanun> getKanunlarByMevzuatId(int mevzuatId){
+	 public List<Kanun> getKanunlarByMevzuatId(Long mevzuatId){
 		 List list = getSessionFactory().getCurrentSession()
 		           .createQuery("from Kanun where MevzuatId=?")
 		                 .setParameter(0, mevzuatId).list();

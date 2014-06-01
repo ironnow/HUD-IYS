@@ -13,9 +13,9 @@ public interface IMevzuatService {
 	
 	 public void deleteMevzuat(Mevzuat mevzuat);
 	
-	 public Mevzuat getMevzuatById(int id);
+	 public Mevzuat getMevzuatById(Long id);
 	
 	 public List<Mevzuat> getMevzuatlar();
 	 
-	 public List<Mevzuat> getMevzuatlarByMevzuatSetiId(int mevzuatSetiId);
+	 public List<Mevzuat> getMevzuatlarByMevzuatSetiId(Long mevzuatSetiId);
 }

@@ -13,9 +13,9 @@ public interface IKanunIcerikDAO {
 	
 	 public void deleteKanunIcerik(KanunIcerik kanunIcerik);
 	
-	 public KanunIcerik getKanunIcerikById(int id);
+	 public KanunIcerik getKanunIcerikById(Long id);
 	
 	 public List<KanunIcerik> getKanunIcerikleri();
 	 
-	 public List<KanunIcerik> getKanunIcerikleriByKanunId(int kanunId);
+	 public List<KanunIcerik> getKanunIcerikleriByKanunId(Long kanunId);
 }

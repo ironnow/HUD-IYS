@@ -12,9 +12,9 @@ public interface IParagrafDAO {
 	
 	 public void deleteParagraf(Paragraf paragraf);
 	
-	 public Paragraf getParagrafById(int id);
+	 public Paragraf getParagrafById(Long id);
 	
 	 public List<Paragraf> getParagraflar();
 	 
-	 public List<Paragraf> getParagraflarByKanunIcerikId(int kanunIcerikId);
+	 public List<Paragraf> getParagraflarByKanunIcerikId(Long kanunIcerikId);
 }
