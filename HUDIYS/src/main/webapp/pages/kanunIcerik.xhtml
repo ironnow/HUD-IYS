@@ -36,6 +36,10 @@
            height : 400px;
         }
         
+        .ui-dt-c {
+          padding: 0px !important;
+       }
+        
 	</style>
 </h:head>
 <h:body> 
@@ -82,7 +86,7 @@
 						<p:growl id="messages" showDetail="true" />	 
 						<p:tree style="width:99%" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
 							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
-							<p:ajax event="select" update=":output1,:output2,:outputParagraf" listener="#{kanunIcerikMB.onNodeSelect}" />	       
+							<p:ajax event="select" update=":output1,:output2,:outputIcerik" listener="#{kanunIcerikMB.onNodeSelect}" />	       
 							
 							<p:treeNode type="node"
                                 expandedIcon="folder-open"
@@ -118,6 +122,21 @@
 					</h:form>
 				</p:dialog>	 
 				
+				<p:dialog header="Yeni Fıkra Oluştur" widgetVar="dlgFikra" resizable="false">			  	    
+					<h:form>
+						<p:panel header="Yeni Fıkra Ekle">
+							<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+								<h:outputText value="No " />
+								<p:inputText id="fikraNo" value="#{fikraMB.fikraNo}"></p:inputText>
+								<h:outputText value="Fıkra Metin " />
+								<p:inputTextarea rows="5" id="fikraMetin" value="#{fikraMB.fikraMetin}"></p:inputTextarea>
+								<p:commandButton id="addFikra" value="Ekle" action="#{fikraMB.addFikra}" ajax="false"/>
+								<p:commandButton id="reset" value="Iptal" action="#{fikraMB.reset}" ajax="false"/>
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</p:dialog>	
+				
 				<p:dialog header="Yeni Bent Oluştur" widgetVar="dlgBent" resizable="false">			  	    
 					<h:form>
 						<p:panel header="Yeni Bent Ekle">
@@ -145,6 +164,9 @@
 									<td style="text-align:right; width:20%">
 										<h:form>				
 											<p:commandButton align="right" id="showDialogParagraf" type="button" value="Yeni Paragraf" onclick="PF('dlgParagraf').show()" />
+											<p:commandButton align="right" id="showDialogFikra" type="button" value="Yeni Fıkra" onclick="PF('dlgFikra').show()" />
+											<p:commandButton align="right" id="showDialogBent" type="button" value="Yeni Bent" onclick="PF('dlgBent').show()" />
+											<p:commandButton align="right" id="showDialogAltBent" type="button" value="Yeni Alt Bent" onclick="PF('dlgAltBent').show()" />
 											
 										</h:form>
 									</td>
@@ -158,9 +180,32 @@
 									<h:outputText id="output2" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />	
 								</p>
 								
-								<h:form id="outputParagraf" styleClass="form-style">
-									<p:orderList value="#{kanunIcerikMB.selectedKanunIcerikParagrafList}" var="paragraf" controlsLocation="none" itemLabel="#{paragraf.paragrafMetin}" itemValue="#{paragraf.paragrafId}" />
-    								
+								<h:form id="outputIcerik" styleClass="form-style">
+									<p:dataTable id="paragraflar" var="paragraf" value="#{kanunIcerikMB.selectedKanunIcerikParagrafList}">
+								        <p:column>
+									        <h:outputText value="#{paragraf.paragrafMetin}" />
+									    </p:column>									    							   
+									</p:dataTable>
+									<br/>
+									
+									 <p:contextMenu for="fikralar">
+								        <p:menuitem value="Yeni Fikra" update="fikraDetaylar" icon="ui-icon-document" oncomplete="PF('dlgFikra').show()"/>
+								        <p:menuitem value="Sil" update="fikralar" icon="ui-icon-close" actionListener="#{fikraMB.deleteFikra}"/>
+								    </p:contextMenu>
+ 									<p:outputPanel id="fikraDetaylar">
+										<p:dataTable id="fikralar" var="fikra" value="#{kanunIcerikMB.selectedKanunIcerikFikraList}">
+										
+										    <p:column>
+										        <h:outputText value="#{fikra.fikraMetin}" />
+										        <p:dataTable var="bent" value="#{fikra.bentler}">
+												    <p:column>
+												        <h:outputText value="#{bent.bentMetin}" />
+												        
+												    </p:column>									   
+												</p:dataTable>									        
+										    </p:column>    								   
+										</p:dataTable>
+									</p:outputPanel>								
 								</h:form>	
 							</p:outputPanel>
 								

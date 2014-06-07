@@ -55,7 +55,7 @@ public class BentDAO implements IBentDAO {
 	 @Override
 	 public List<Bent> getBentlerByFikraId(Long fikraId){
 		 List list = getSessionFactory().getCurrentSession()
-		           .createQuery("from Bent where ParagrafId=?")
+		           .createQuery("from Bent where FikraId=?")
 		                 .setParameter(0, fikraId).list();
 		  	 return list;
 	 }

@@ -31,7 +31,7 @@ public class Bent {
 	 private Long prevBentId;
 	 private Long nextBentId;
 	 private Fikra fikra;
-	 Set<AltBent> altBentler; 
+	 private Set<AltBent> altBentler; 
 
 	 @Id
 	 @GeneratedValue(strategy = IDENTITY)
@@ -39,7 +39,6 @@ public class Bent {
 	 public Long getBentId() {
 		 return bentId;
 	 }
-
 	
 	 public void setBentId(Long id) {
 		 this.bentId = id;
@@ -96,7 +95,7 @@ public class Bent {
 		 this.fikra = fikra;
 	 }
 	 
-	 @OneToMany(mappedBy = "bent")
+	 @OneToMany(mappedBy = "bent",fetch = FetchType.LAZY)
 	 public Set<AltBent> getAltBentler() {
 	 	 return altBentler;
 	 }

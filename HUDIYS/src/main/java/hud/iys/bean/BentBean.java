@@ -30,17 +30,15 @@ public class BentBean implements Serializable {
 	 private static final String SUCCESS = "success";
 	 private static final String ERROR   = "error";
 
-	 //Spring Paragraf Service is injected...
 	 @ManagedProperty(value="#{BentService}")
 	 IBentService bentService;
 	 
-	 @ManagedProperty(value="#{kanunIcerikMB}")
-	 private KanunIcerikBean kanunIcerikBean;
+	 @ManagedProperty(value="#{fikraMB}")
+	 private FikraBean fikraBean;
 	 
 	 List<Bent> bentList;
 	 
-	 List<Bent> selectedParagrafBentList;
-	
+	 
 	 private String bentSira;
 	 private String bentMetin;
 	
@@ -52,7 +50,8 @@ public class BentBean implements Serializable {
 			   bent.setBentSira(getBentSira());
 			   bent.setBentMetin(getBentMetin());
 			  
-			   //bent.setFikra(null);
+			   bent.setFikra(fikraBean.getSelectedFikra());
+			   
 			   getBentService().addBent(bent);
 			  
 			   return SUCCESS;
@@ -71,7 +70,7 @@ public class BentBean implements Serializable {
 
 	 public List<Bent> getBentList() {
 		  bentList = new ArrayList<Bent>();
-		  bentList.addAll(getBentService().getBentlerByFikraId(kanunIcerikBean.getSelectedKanunIcerik().getKanunIcerikId()));
+		  bentList.addAll(getBentService().getBentlerByFikraId(fikraBean.getSelectedFikra().getFikraId()));
 		  return bentList;
 	 }
 
@@ -86,12 +85,12 @@ public class BentBean implements Serializable {
 		this.bentService = bentService;
 	}
 
-	public KanunIcerikBean getKanunIcerikBean() {
-		return kanunIcerikBean;
+	public FikraBean getFikraBean() {
+		return fikraBean;
 	}
 
-	public void setKanunIcerikBean(KanunIcerikBean kanunIcerikBean) {
-		this.kanunIcerikBean = kanunIcerikBean;
+	public void setFikraBean(FikraBean fikraBean) {
+		this.fikraBean = fikraBean;
 	}
 
 	

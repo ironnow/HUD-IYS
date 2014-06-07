@@ -1,9 +1,12 @@
 package hud.iys.bean;
 
+import hud.iys.model.Fikra;
 import hud.iys.model.KanunIcerik;
 import hud.iys.model.Mevzuat;
 import hud.iys.model.MevzuatSeti;
 import hud.iys.model.Paragraf;
+import hud.iys.service.IBentService;
+import hud.iys.service.IFikraService;
 import hud.iys.service.IKanunIcerikService;
 import hud.iys.service.IParagrafService;
 import hud.iys.view.tree.TreeNodeImpl;
@@ -42,19 +45,24 @@ public class KanunIcerikBean implements Serializable {
 	private String kanunIcerikAdi;
 	private String kanunIcerikMetin;
 	
-	//Spring KanunIcerik Service is injected...
 	@ManagedProperty(value="#{KanunIcerikService}")
 	IKanunIcerikService kanunIcerikService;
 	
-	//Spring KanunIcerik Service is injected...
 	@ManagedProperty(value="#{ParagrafService}")
 	IParagrafService paragrafService;
 	
+	@ManagedProperty(value="#{FikraService}")
+	IFikraService fikraService;
+	
+	@ManagedProperty(value="#{BentService}")
+	IBentService bentService;
 	
 	@ManagedProperty(value="#{kanunMB}")
 	private KanunBean kanunBean;
 	 
 	List<Paragraf> selectedKanunIcerikParagrafList;
+	List<Fikra> selectedKanunIcerikFikraList;
+	
 	
 	
     @PostConstruct
@@ -75,7 +83,9 @@ public class KanunIcerikBean implements Serializable {
          return newNode;
     }
 
-    public TreeNode getRootNode() {
+    public TreeNode getRootNode() {    	
+    	KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
+        rootNode = newNodeWithChildren(root, null);
         return rootNode;
     }
 
@@ -138,6 +148,22 @@ public class KanunIcerikBean implements Serializable {
 		this.paragrafService = paragrafService;
 	}
 
+	public IFikraService getFikraService() {
+		return fikraService;
+	}
+
+	public void setFikraService(IFikraService fikraService) {
+		this.fikraService = fikraService;
+	}
+
+	public IBentService getBentService() {
+		return bentService;
+	}
+
+	public void setBentService(IBentService bentService) {
+		this.bentService = bentService;
+	}
+
 	public List<Paragraf> getSelectedKanunIcerikParagrafList() {
 		return selectedKanunIcerikParagrafList;
 	}
@@ -145,6 +171,15 @@ public class KanunIcerikBean implements Serializable {
 	public void setSelectedKanunIcerikParagrafList(
 			List<Paragraf> selectedKanunIcerikParagrafList) {
 		this.selectedKanunIcerikParagrafList = selectedKanunIcerikParagrafList;
+	}
+
+	public List<Fikra> getSelectedKanunIcerikFikraList() {
+		return selectedKanunIcerikFikraList;
+	}
+
+	public void setSelectedKanunIcerikFikraList(
+			List<Fikra> selectedKanunIcerikFikraList) {
+		this.selectedKanunIcerikFikraList = selectedKanunIcerikFikraList;
 	}
 
 	public void displaySelectedSingle() {
@@ -203,11 +238,18 @@ public class KanunIcerikBean implements Serializable {
     	selectedKanunIcerik=(KanunIcerik)(getSelectedNode().getData()); 
     	
     	if(selectedKanunIcerik != null){
-    		this.selectedKanunIcerikParagrafList = new ArrayList<Paragraf>();
-    		this.selectedKanunIcerikParagrafList.addAll(getParagrafService().getParagraflarByKanunIcerikId(selectedKanunIcerik.getKanunIcerikId()));
+    		selectedKanunIcerikParagrafList = new ArrayList<Paragraf>();
+    		selectedKanunIcerikParagrafList.addAll(getParagrafService().getParagraflarByKanunIcerikId(selectedKanunIcerik.getKanunIcerikId()));
+    		setSelectedKanunIcerikParagrafList(selectedKanunIcerikParagrafList);
     		
-    		setSelectedKanunIcerikParagrafList(this.selectedKanunIcerikParagrafList);
+    		selectedKanunIcerikFikraList = new ArrayList<Fikra>();
+    		selectedKanunIcerikFikraList.addAll(getFikraService().getFikralarByKanunIcerikId(selectedKanunIcerik.getKanunIcerikId()));
+    		setSelectedKanunIcerikFikraList(selectedKanunIcerikFikraList);
+    		
     	}
+    	
+    	selectedNode.setExpanded(true);
+    	
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", event.getTreeNode().toString());
  
         FacesContext.getCurrentInstance().addMessage(null, message);
