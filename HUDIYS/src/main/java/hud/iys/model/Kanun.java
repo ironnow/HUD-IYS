@@ -1,5 +1,7 @@
 package hud.iys.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,7 +20,8 @@ public class Kanun {
 	 private int kanunNo;
 	 private String kanunAdi;
 	 private int RGNo;
-	 private String RGTarihi;
+	 private Date RGTarihi;
+	 private Date kabulTarihi;
 	 private Mevzuat mevzuat;
 
 	 private Long kanunIcerikRoot;
@@ -57,15 +60,26 @@ public class Kanun {
 	
 	
 	 @Column(name="RGTarihi")
-	 public String getRGTarihi() {
+	 public Date getRGTarihi() {
 		 return RGTarihi;
 	 }
 	 
-	 public void setRGTarihi(String RGTarihi) {
+	 public void setRGTarihi(Date RGTarihi) {
 		 this.RGTarihi = RGTarihi;
 	 } 
 	 
 	 
+	 @Column(name="KabulTarihi")
+	 public Date getKabulTarihi() {
+		 return kabulTarihi;
+	 }
+
+
+	 public void setKabulTarihi(Date kabulTarihi) {
+		 this.kabulTarihi = kabulTarihi;
+	 }
+
+
 	 @Column(name="RGNo")
 	 public int getRGNo() {
 		 return RGNo;

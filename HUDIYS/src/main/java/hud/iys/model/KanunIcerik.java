@@ -30,6 +30,9 @@ public class KanunIcerik {
 	 @Column(name = "KanunIcerikID", unique = true, nullable = false)	 
 	 private Long kanunIcerikId;	
 	 
+	 @Column(name="KanunIcerikNo")	 
+	 private String kanunIcerikNo;
+	 
 	 @Column(name="KanunIcerikAdi")	 
 	 private String kanunIcerikAdi;
 	 
@@ -54,7 +57,8 @@ public class KanunIcerik {
 	 Set<Paragraf> paragraflar;
 
 	 
-	
+	 private Long maddeIcerikRoot;
+	 
 	 public Long getKanunIcerikId() {
 		 return kanunIcerikId;
 	 }
@@ -64,6 +68,15 @@ public class KanunIcerik {
 	 }
 	
 	 
+	 
+	 public String getKanunIcerikNo() {
+		 return kanunIcerikNo;
+	 }
+
+	 public void setKanunIcerikNo(String kanunIcerikNo) {
+		 this.kanunIcerikNo = kanunIcerikNo;
+   	 }
+
 	 public String getKanunIcerikAdi() {
 		 return kanunIcerikAdi;
 	 }
@@ -126,8 +139,16 @@ public class KanunIcerik {
 	 	 this.paragraflar = paragraflar;
 	 }
 	 
-	 
-	 @Override
+	 	 
+	 public Long getMaddeIcerikRoot() {
+	 	 return maddeIcerikRoot;
+	 }
+
+	 public void setMaddeIcerikRoot(Long maddeIcerikRoot) {
+		 this.maddeIcerikRoot = maddeIcerikRoot;
+ 	 }
+
+	@Override
 	 public String toString() {
 		  StringBuffer strBuff = new StringBuffer();
 		  strBuff.append("id : ").append(getKanunIcerikId());

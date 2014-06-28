@@ -20,11 +20,12 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="MevzuatSeti" class="hud.iys.model.MevzuatSeti"/>
  <bean id="Mevzuat" class="hud.iys.model.Mevzuat"/>
  <bean id="KanunIcerik" class="hud.iys.model.KanunIcerik"/>
+ <bean id="MaddeIcerik" class="hud.iys.model.MaddeIcerik"/>
  <bean id="Paragraf" class="hud.iys.model.Paragraf"/>
  <bean id="Fikra" class="hud.iys.model.Fikra"/>
  <bean id="Bent" class="hud.iys.model.Bent"/>
  <bean id="AltBent" class="hud.iys.model.AltBent"/>
-  
+ <bean id="Dipnot" class="hud.iys.model.Dipnot"/>
  <!-- Service Declarations -->
  
  <bean id="KanunService" class="hud.iys.service.KanunService">
@@ -39,6 +40,9 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="KanunIcerikService" class="hud.iys.service.KanunIcerikService">
   <property name="kanunIcerikDAO" ref="KanunIcerikDAO" />
  </bean>
+ <bean id="MaddeIcerikService" class="hud.iys.service.MaddeIcerikService">
+  <property name="maddeIcerikDAO" ref="MaddeIcerikDAO" />
+ </bean>
  <bean id="ParagrafService" class="hud.iys.service.ParagrafService">
   <property name="ParagrafDAO" ref="ParagrafDAO" />
  </bean>
@@ -51,7 +55,9 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="AltBentService" class="hud.iys.service.AltBentService">
   <property name="AltBentDAO" ref="AltBentDAO" />
  </bean>
- 
+ <bean id="DipnotService" class="hud.iys.service.DipnotService">
+  <property name="DipnotDAO" ref="DipnotDAO" />
+ </bean>
  <!-- DAO Declarations -->
 
  <bean id="KanunDAO" class="hud.iys.dao.KanunDAO">
@@ -66,6 +72,9 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="KanunIcerikDAO" class="hud.iys.dao.KanunIcerikDAO">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean>
+ <bean id="MaddeIcerikDAO" class="hud.iys.dao.MaddeIcerikDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
  <bean id="ParagrafDAO" class="hud.iys.dao.ParagrafDAO">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean>
@@ -78,14 +87,16 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="AltBentDAO" class="hud.iys.dao.AltBentDAO">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean>
- 
+ <bean id="DipnotDAO" class="hud.iys.dao.DipnotDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean> 
  <!-- Data Source Declaration -->
  
  
 
 <bean id="DataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-    <property name="url" value="jdbc:mysql://localhost:3306/testdb?useUnicode=true&amp;characterEncoding=utf8" />
+    <property name="url" value="jdbc:mysql://localhost:3306/testdb?autoReconnect=true&amp;useUnicode=true&amp;characterSetResults=UTF-8&amp;characterEncoding=UTF-8" />
     <property name="username" value="root" />
     <property name="password" value="Hud1234" />
 </bean>
@@ -98,11 +109,13 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <value>hud.iys.model.Kanun</value>
     <value>hud.iys.model.MevzuatSeti</value>
     <value>hud.iys.model.Mevzuat</value>
-    <value>hud.iys.model.KanunIcerik</value>
+    <value>hud.iys.model.KanunIcerik</value>    
+    <value>hud.iys.model.MaddeIcerik</value>
     <value>hud.iys.model.Paragraf</value>
     <value>hud.iys.model.Fikra</value>
     <value>hud.iys.model.Bent</value>
     <value>hud.iys.model.AltBent</value>
+    <value>hud.iys.model.Dipnot</value>
    </list>
   </property>
   <property name="hibernateProperties">

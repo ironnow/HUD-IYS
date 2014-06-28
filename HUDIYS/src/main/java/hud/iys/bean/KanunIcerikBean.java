@@ -2,12 +2,14 @@ package hud.iys.bean;
 
 import hud.iys.model.Fikra;
 import hud.iys.model.KanunIcerik;
+import hud.iys.model.MaddeIcerik;
 import hud.iys.model.Mevzuat;
 import hud.iys.model.MevzuatSeti;
 import hud.iys.model.Paragraf;
 import hud.iys.service.IBentService;
 import hud.iys.service.IFikraService;
 import hud.iys.service.IKanunIcerikService;
+import hud.iys.service.IMaddeIcerikService;
 import hud.iys.service.IParagrafService;
 import hud.iys.view.tree.TreeNodeImpl;
 
@@ -42,6 +44,7 @@ public class KanunIcerikBean implements Serializable {
 	
 	private KanunIcerik selectedKanunIcerik;
 	
+	private String kanunIcerikNo;
 	private String kanunIcerikAdi;
 	private String kanunIcerikMetin;
 	
@@ -57,6 +60,9 @@ public class KanunIcerikBean implements Serializable {
 	@ManagedProperty(value="#{BentService}")
 	IBentService bentService;
 	
+	@ManagedProperty(value="#{MaddeIcerikService}")
+	IMaddeIcerikService maddeIcerikService;
+	
 	@ManagedProperty(value="#{kanunMB}")
 	private KanunBean kanunBean;
 	 
@@ -69,6 +75,7 @@ public class KanunIcerikBean implements Serializable {
     public void init() {
         KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
         rootNode = newNodeWithChildren(root, null);
+        setSelectedKanunIcerik((KanunIcerik)rootNode.getData());
        
     }
 
@@ -112,7 +119,15 @@ public class KanunIcerikBean implements Serializable {
     
     
      
-    public String getKanunIcerikAdi() {
+    public String getKanunIcerikNo() {
+		return kanunIcerikNo;
+	}
+
+	public void setKanunIcerikNo(String kanunIcerikNo) {
+		this.kanunIcerikNo = kanunIcerikNo;
+	}
+
+	public String getKanunIcerikAdi() {
 		return kanunIcerikAdi;
 	}
 
@@ -163,6 +178,14 @@ public class KanunIcerikBean implements Serializable {
 	public void setBentService(IBentService bentService) {
 		this.bentService = bentService;
 	}
+	
+	public IMaddeIcerikService getMaddeIcerikService() {
+		return maddeIcerikService;
+	}
+
+	public void setMaddeIcerikService(IMaddeIcerikService maddeIcerikService) {
+		this.maddeIcerikService = maddeIcerikService;
+	}
 
 	public List<Paragraf> getSelectedKanunIcerikParagrafList() {
 		return selectedKanunIcerikParagrafList;
@@ -204,8 +227,19 @@ public class KanunIcerikBean implements Serializable {
     public void addKanunIcerik() {
 		  try {
 			   KanunIcerik kanunIcerik = new KanunIcerik();
+			   kanunIcerik.setKanunIcerikNo(getKanunIcerikNo());
 			   kanunIcerik.setKanunIcerikAdi(getKanunIcerikAdi());
 			   kanunIcerik.setKanunIcerikMetin(getKanunIcerikMetin());
+			   
+			   
+			   MaddeIcerik maddeIcerik = new MaddeIcerik();
+			   maddeIcerik.setMaddeIcerik(null);
+			   maddeIcerik.setMaddeIcerikAdi(getKanunIcerikAdi());
+			   getMaddeIcerikService().addMaddeIcerik(maddeIcerik);
+			   
+			   kanunIcerik.setMaddeIcerikRoot(maddeIcerik.getMaddeIcerikId());
+			   
+			  
 			   
 			   if(selectedNode == null){
 				   kanunIcerik.setKanunIcerik(getKanunIcerikService().getKanunIcerikById(kanunBean.getSelectedKanun().getKanunIcerikRoot()));
@@ -223,6 +257,7 @@ public class KanunIcerikBean implements Serializable {
 			   
 			  
 			   getKanunIcerikService().addKanunIcerik(kanunIcerik);
+			   maddeIcerik.setKanunIcerik(kanunIcerik);
 			   
 		  } catch (DataAccessException e) {
 		   e.printStackTrace();
@@ -238,13 +273,10 @@ public class KanunIcerikBean implements Serializable {
     	selectedKanunIcerik=(KanunIcerik)(getSelectedNode().getData()); 
     	
     	if(selectedKanunIcerik != null){
-    		selectedKanunIcerikParagrafList = new ArrayList<Paragraf>();
-    		selectedKanunIcerikParagrafList.addAll(getParagrafService().getParagraflarByKanunIcerikId(selectedKanunIcerik.getKanunIcerikId()));
-    		setSelectedKanunIcerikParagrafList(selectedKanunIcerikParagrafList);
     		
-    		selectedKanunIcerikFikraList = new ArrayList<Fikra>();
-    		selectedKanunIcerikFikraList.addAll(getFikraService().getFikralarByKanunIcerikId(selectedKanunIcerik.getKanunIcerikId()));
-    		setSelectedKanunIcerikFikraList(selectedKanunIcerikFikraList);
+    		
+    		// MaddeIcerik root = getMaddeIcerikService().getMaddeIcerikById(selectedKanunIcerik.getMaddeIcerikRoot()); // instead get root object from database 
+    	    // rootNode = newNodeWithChildren(root, null);
     		
     	}
     	

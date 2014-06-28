@@ -14,6 +14,35 @@
             font-size: 90% !important;
         }
 	</style>
+	
+	<script type="text/javascript">  
+	    PrimeFaces.locales['tr'] = {
+	    closeText: 'kapat',
+	    prevText: 'geri',
+	    nextText: 'ileri',
+	    currentText: 'bugün',
+	    monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+	    monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz', 'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+	    dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+	    dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    weekHeader: 'Hf',
+	    firstDay: 1,
+	    isRTL: false,
+	    showMonthAfterYear: false,
+	    yearSuffix: '',
+	    timeOnlyTitle: 'Zaman Seçiniz',
+	    timeText: 'Zaman',
+	    hourText: 'Saat',
+	    minuteText: 'Dakika',
+	    secondText: 'Saniye',
+	    ampm: false,
+	    month: 'Ay',
+	    week: 'Hafta',
+	    day: 'Gün',
+	    allDayText : 'Tüm Gün'
+	};
+	</script>
 </h:head>
 <h:body> 
 	<ui:decorate template="templates/template.xhtml">			 
@@ -30,8 +59,17 @@
 						</h:form>
 					</td>
 				</tr>
-			</table>		
-			
+			</table>	
+				
+			<p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
+        		<p:panelGrid id="display" columns="2" columnClasses="label,value">
+        			<h:outputText value="RG Tarihi:" />
+		            <h:outputText value="#{kanunMB.RGTarihi}">
+		                <f:convertDateTime pattern="MM/dd/yyyy" />
+		            </h:outputText>
+ 				</p:panelGrid>
+   			</p:dialog>
+            
 			<p:dialog header="Yeni Kanun Oluştur" widgetVar="dlg" resizable="false">
 				<h:form>
 					<p:panel header="Yeni Kanun Ekle">				
@@ -42,8 +80,14 @@
 							<p:inputText id="kanunAdi" value="#{kanunMB.kanunAdi}"> </p:inputText>		
 							<h:outputText value="RG No: " />
 							<p:inputText id="RGNo" value="#{kanunMB.RGNo}"></p:inputText>        
-							<h:outputText value="RG Tarihi: " />
-							<p:inputMask id="RGTarihi" value="#{kanunMB.RGTarihi}" mask="99/99/9999"></p:inputMask>         
+							
+							<p:outputLabel for="calendar" value="RG Tarihi:" />
+        					<p:calendar id="calendar" value="#{kanunMB.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 
+							<p:outputLabel for="calendar" value="Kabul Tarihi:" />
+        					<p:calendar id="calendarKT" value="#{kanunMB.kabulTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 
+							
 							<p:commandButton id="addKanun" value="Ekle" action="#{kanunMB.addKanun}" ajax="false"/>
 							<p:commandButton id="reset" value="Iptal" action="#{kanunMB.reset}" ajax="false"/>
 						</h:panelGrid>
@@ -62,14 +106,22 @@
 					<p:column style="width:10%" sortBy="kanunNo" headerText="Kanun No">
 						<h:outputText value="#{kanun.kanunNo}" />
 					</p:column>
-					<p:column sortBy="kanunAdi" headerText="Kanun Adi">
+					<p:column style="width:60%" sortBy="kanunAdi" headerText="Kanun Adi">
 						<h:outputText value="#{kanun.kanunAdi}" />
 					</p:column>        
-					 <p:column sortBy="RGNo" headerText="RG No">
+					 <p:column style="width:10%" sortBy="RGNo" headerText="RG No">
 						<h:outputText value="#{kanun.RGNo}" />
 					</p:column>        
-					 <p:column sortBy="RGTarihi" headerText="RG Tarihi">
-						<h:outputText value="#{kanun.RGTarihi}" />
+					 <p:column style="width:10%" sortBy="RGTarihi" headerText="RG Tarihi">
+						<h:outputText value="#{kanun.RGTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					<p:column style="width:10%" sortBy="KabulTarihi" headerText="Kabul Tarihi">
+						<h:outputText value="#{kanun.kabulTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+ 
 					</p:column>
 				</p:dataTable>
 			</h:form>	

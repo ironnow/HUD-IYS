@@ -3,6 +3,7 @@ package hud.iys.bean;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -18,9 +19,11 @@ import org.springframework.dao.DataAccessException;
 
 import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
+import hud.iys.model.MaddeIcerik;
 import hud.iys.model.Mevzuat;
 import hud.iys.service.IKanunIcerikService;
 import hud.iys.service.IKanunService;
+import hud.iys.service.IMaddeIcerikService;
 
 
 @ManagedBean(name="kanunMB")
@@ -38,6 +41,9 @@ public class KanunBean implements Serializable {
 	 //Spring KanunIcerik Service is injected...
 	 @ManagedProperty(value="#{KanunIcerikService}")
 	 IKanunIcerikService kanunIcerikService;
+	 
+	 @ManagedProperty(value="#{MaddeIcerikService}")
+	 IMaddeIcerikService maddeIcerikService;
 	
 	 @ManagedProperty(value="#{mevzuatMB}")
 	 private MevzuatBean mevzuatBean;
@@ -49,7 +55,8 @@ public class KanunBean implements Serializable {
 	 private int kanunNo;
 	 private String kanunAdi;
 	 private int RGNo;
-	 private String RGTarihi;
+	 private Date RGTarihi;
+	 private Date kabulTarihi;
 	 
 	 private Kanun selectedKanun;
 
@@ -60,6 +67,7 @@ public class KanunBean implements Serializable {
 			   kanun.setKanunAdi(getKanunAdi());
 			   kanun.setRGNo(getRGNo());
 			   kanun.setRGTarihi(getRGTarihi());
+			   kanun.setKabulTarihi(getKabulTarihi());
 			   
 			   KanunIcerik kanunIcerik = new KanunIcerik();
 			   kanunIcerik.setKanunIcerik(null);
@@ -71,7 +79,19 @@ public class KanunBean implements Serializable {
 			   kanun.setMevzuat(mevzuatBean.getSelectedMevzuat());
 			   getKanunService().addKanun(kanun);
 			   kanunIcerik.setKanun(kanun);
-			   //getKanunIcerikService().updateKanunIcerik(kanunIcerik);
+			   
+			   
+			   MaddeIcerik maddeIcerik = new MaddeIcerik();
+			   maddeIcerik.setMaddeIcerik(null);
+			   maddeIcerik.setMaddeIcerikAdi(kanunIcerik.getKanunIcerikAdi());
+			   getMaddeIcerikService().addMaddeIcerik(maddeIcerik);
+			   
+			   kanunIcerik.setMaddeIcerikRoot(maddeIcerik.getMaddeIcerikId());
+			   
+			   getKanunIcerikService().updateKanunIcerik(kanunIcerik);
+			   maddeIcerik.setKanunIcerik(kanunIcerik);
+			   
+			   getMaddeIcerikService().updateMaddeIcerik(maddeIcerik);
 			   
 			   return SUCCESS;
 		  } catch (DataAccessException e) {
@@ -85,7 +105,7 @@ public class KanunBean implements Serializable {
 		 this.setKanunNo(0);
 		 this.setKanunAdi("");
 		 this.setRGNo(0);
-		 this.setRGTarihi("");
+		 this.setRGTarihi(null);
 	 }
 
 	 public List<Kanun> getKanunList() {
@@ -126,12 +146,20 @@ public class KanunBean implements Serializable {
 		RGNo = rGNo;
 	}
 
-	public String getRGTarihi() {
+	public Date getRGTarihi() {
 		return RGTarihi;
 	}
 
-	public void setRGTarihi(String rGTarihi) {
+	public void setRGTarihi(Date rGTarihi) {
 		RGTarihi = rGTarihi;
+	}
+	
+	public Date getKabulTarihi() {
+		return kabulTarihi;
+	}
+
+	public void setKabulTarihi(Date kabulTarihi) {
+		this.kabulTarihi = kabulTarihi;
 	}
 
 	public void setKanunList(List<Kanun> kanunList) {
@@ -175,6 +203,15 @@ public class KanunBean implements Serializable {
 
 	public void setKanunIcerikService(IKanunIcerikService kanunIcerikService) {
 		this.kanunIcerikService = kanunIcerikService;
+	}
+
+	
+	public IMaddeIcerikService getMaddeIcerikService() {
+		return maddeIcerikService;
+	}
+
+	public void setMaddeIcerikService(IMaddeIcerikService maddeIcerikService) {
+		this.maddeIcerikService = maddeIcerikService;
 	}
 
 	public void onRowSelect(SelectEvent event) throws IOException {
