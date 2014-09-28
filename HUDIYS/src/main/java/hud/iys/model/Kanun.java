@@ -25,6 +25,8 @@ public class Kanun {
 	 private Mevzuat mevzuat;
 
 	 private Long kanunIcerikRoot;
+	 
+	 private int durumId;
 
 	 @Id
 	 @Column(name="KanunID")
@@ -89,8 +91,17 @@ public class Kanun {
 		 this.RGNo = RGNo;
 	 }
 	
-	 
-	 @ManyToOne(fetch = FetchType.LAZY)
+	 @Column(name="DurumId")
+	 public int getDurumId() {
+		return durumId;
+	 }
+
+	 public void setDurumId(int durumId) {
+		this.durumId = durumId;
+	 }
+
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	 @JoinColumn(name = "MevzuatID", nullable = false)
 	 public Mevzuat getMevzuat() {
 		 return this.mevzuat;

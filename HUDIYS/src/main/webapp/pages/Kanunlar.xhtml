@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">
+        .ui-widget,.ui-widget .ui-widget 
+        {
+            font-size: 90% !important;
+        }
+	</style>
+	
+	<script type="text/javascript">  
+	    PrimeFaces.locales['tr'] = {
+	    closeText: 'kapat',
+	    prevText: 'geri',
+	    nextText: 'ileri',
+	    currentText: 'bugün',
+	    monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+	    monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz', 'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+	    dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+	    dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    weekHeader: 'Hf',
+	    firstDay: 1,
+	    isRTL: false,
+	    showMonthAfterYear: false,
+	    yearSuffix: '',
+	    timeOnlyTitle: 'Zaman Seçiniz',
+	    timeText: 'Zaman',
+	    hourText: 'Saat',
+	    minuteText: 'Dakika',
+	    secondText: 'Saniye',
+	    ampm: false,
+	    month: 'Ay',
+	    week: 'Hafta',
+	    day: 'Gün',
+	    allDayText : 'Tüm Gün'
+	};
+	</script>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<table style="width:100%; margin:0px; min-width:100%;">
+				<tr>
+					<td style="idth:80%">
+						<h3 style="font-family:arial"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" /> Kanunları</h3>	
+						
+					</td>
+					<td style="text-align:right; width:20%">
+						<h:form>
+							<p:commandButton align="right" id="showDialogButton" type="button" value="Yeni Kanun" onclick="PF('dlgYeni').show()" />
+						</h:form>
+					</td>
+				</tr>
+			</table>	
+				
+			<p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
+        		<p:panelGrid id="display" columns="2" columnClasses="label,value">
+        			<h:outputText value="RG Tarihi:" />
+		            <h:outputText value="#{kanunMB.RGTarihi}">
+		                <f:convertDateTime pattern="MM/dd/yyyy" />
+		            </h:outputText>
+ 				</p:panelGrid>
+   			</p:dialog>
+            
+			<p:dialog header="Yeni Kanun" widgetVar="dlgYeni" resizable="false">
+				<h:form>
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Kanun No: "/>
+							<p:inputText id="kanunNo" value="#{kanunMB.kanunNo}"></p:inputText>         
+							<h:outputText value="Kanun Adi: " />
+							<p:inputText id="kanunAdi" value="#{kanunMB.kanunAdi}"> </p:inputText>		
+							<h:outputText value="RG No: " />
+							<p:inputText id="RGNo" value="#{kanunMB.RGNo}"></p:inputText>        
+							
+							<p:outputLabel for="calendar" value="RG Tarihi:" />
+        					<p:calendar id="calendar" value="#{kanunMB.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 
+							<p:outputLabel for="calendar" value="Kabul Tarihi:" />
+        					<p:calendar id="calendarKT" value="#{kanunMB.kabulTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 
+							
+							<p:commandButton id="addKanun" update="kanunlar" value="Ekle" action="#{kanunMB.addKanun}" ajax="false"/>
+							<p:commandButton id="reset" value="İptal" action="#{kanunMB.reset}" ajax="false"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog header="Düzenle" widgetVar="dlgDuzenle" resizable="false">
+				<h:form id="duzenleForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Kanun No: "/>
+							<p:inputText id="kanunNo" value="#{kanunMB.selectedKanun.kanunNo}"></p:inputText>         
+							<h:outputText value="Kanun Adi: " />
+							<p:inputText id="kanunAdi" value="#{kanunMB.selectedKanun.kanunAdi}"> </p:inputText>		
+							<h:outputText value="RG No: " />
+							<p:inputText id="RGNo" value="#{kanunMB.selectedKanun.RGNo}"></p:inputText>        
+							
+							<p:outputLabel for="calendar" value="RG Tarihi:" />
+        					<p:calendar id="calendar" value="#{kanunMB.selectedKanun.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 
+							<p:outputLabel for="calendar" value="Kabul Tarihi:" />
+        					<p:calendar id="calendarKT" value="#{kanunMB.selectedKanun.kabulTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 
+							
+							<p:commandButton id="updateKanun" value="Düzenle" action="#{kanunMB.updateKanun}" ajax="false"/>
+							<p:commandButton id="reset" value="İptal" action="#{kanunMB.reset}" ajax="false"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+ 				
+ 			
+			
+			<h:form id="form" styleClass="form-style">
+				<p:contextMenu for="kanunlar">
+			        <p:menuitem value="Düzenle" update=":duzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenle').show()"/>
+			        <p:menuitem value="Sil" update="kanunlar" icon="ui-icon-close" actionListener="#{kanunMB.deleteKanun}"/>
+			    </p:contextMenu>
+			    
+				<p:dataTable id="kanunlar" var="kanun" value="#{kanunMB.kanunlarModel}" sortMode="multiple" rows="20" paginator="true"
+						selection="#{kanunMB.selectedKanun}" selectionMode="single" >
+						
+					<p:ajax event="rowSelect" listener="#{kanunMB.onRowSelect}" update=":form:kanunlar,:duzenleForm" />					
+					<p:ajax event="rowUnselect" listener="#{kanunMB.onRowUnselect}" />
+					
+					<p:column style="width:5%" sortBy="#{kanun.durumId}" headerText="Durum">
+						<p:graphicImage value="../images/icons/#{kanun.durumId}.jpg"
+			                    				width="15"
+			                    				height="15"/> 
+			        </p:column>
+					
+					<p:column style="width:10%" sortBy="#{kanun.kanunNo}" headerText="Kanun No">
+						<h:outputText value="#{kanun.kanunNo}" />
+					</p:column>
+					<p:column style="width:60%" sortBy="#{kanun.kanunAdi}" headerText="Kanun Adi">
+						<h:outputText value="#{kanun.kanunAdi}" />
+					</p:column>        
+					 <p:column style="width:10%" sortBy="#{kanun.RGNo}" headerText="RG No">
+						<h:outputText value="#{kanun.RGNo}" />
+					</p:column>        
+					 <p:column style="width:10%" sortBy="#{kanun.RGTarihi}" headerText="RG Tarihi">
+						<h:outputText value="#{kanun.RGTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					<p:column style="width:10%" sortBy="#{kanun.kabulTarihi}" headerText="Kabul Tarihi">
+						<h:outputText value="#{kanun.kabulTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText> 
+					</p:column>
+				</p:dataTable>
+			</h:form>	
+			
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

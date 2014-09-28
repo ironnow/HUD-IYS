@@ -7,7 +7,9 @@
       xmlns:p="http://primefaces.org/ui" 
 	  xmlns:ui="http://java.sun.com/jsf/facelets">
 	  
-<h:head><title>Hesap Uzmanlari Dernegi</title>
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
         .ui-widget,.ui-widget .ui-widget 
         {
@@ -19,80 +21,57 @@
 	<ui:decorate template="templates/template.xhtml">			 
 		<ui:define name="content"> 
 		
-			<table style="width:100%; margin:0px; min-width:1000px; max-width:1400px">
+			<table style="width:100%;margin:0px; min-width:100%;">
 				<tr>
 					<td style="idth:80%">
-						<h3 style="font-family:arial"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" /> Mevzuat İçerikleri</h3>
+						<h3 style="font-family:arial"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" /></h3>
 					</td>
 					<td style="text-align:right; width:20%">
-						
+						<h:form>
+							<p:commandButton align="right" update="icerikTipPickList" id="showDialogButton" type="button" value="İçerik Tipleri" action="#{mevzuatMB.mevzuatIcerikDuzenleClick}" onclick="PF('dlgIcerikTip').show()" />
+						</h:form>
 					</td>
 				</tr>
 			</table>		
 			
-			<h:form>
-				<p:growl id="growl" showDetail="true" />
-				<p:fieldset legend="Mevzuat İçerikleri" toggleable="true" toggleSpeed="500">
-					<h:panelGrid columns="8" cellpadding="10">
-						<p:panel header="Kanunlar">        
-							<h:commandLink action="kanunGrid.xhtml">
-							  <p:graphicImage value="/images/kanunlar.jpg"
-										width="80"
-										height="90">
-							  </p:graphicImage>
-							</h:commandLink>       		
-						</p:panel>        
-						<p:panel header="Tüzükler">        
-							<h:commandLink action="mevzuatSeti.xhtml">
-							  <p:graphicImage value="/images/tuzukler.jpg"
-										width="80"
-										height="90">
-							  </p:graphicImage>
-							</h:commandLink>       		
-						</p:panel>    	
-						<p:panel header="Tebliğler">        
-							<h:commandLink action="kanunGrid.xhtml">
-							  <p:graphicImage value="/images/teblig.jpg"
-										width="80"
-										height="90">
-							  </p:graphicImage>
-							</h:commandLink>       		
-						</p:panel>           
-					</h:panelGrid>
-				</p:fieldset> 
-			</h:form>
+			<p:dialog header="İçerikleri Düzenle" widgetVar="dlgIcerikTip" resizable="false">
+				<h:form>
+					 <p:pickList id="icerikTipPickList" value="#{mevzuatMB.icerikTipleri}" var="mevzuatIcerikTip" itemLabel="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}" itemValue="#{mevzuatIcerikTip.mevzuatIcerikTipId}" >
+					 	 <p:ajax event="transfer" listener="#{mevzuatMB.onTransfer}" update=":form:mevzuatIcerikTipleri" />
+ 					 </p:pickList>
+    				 <p:commandButton id="icerikleriDuzenle" action="#{mevzuatMB.mevzuatIcerikDuzenleClick}" onclick="PF('dlgIcerikTip').hide()" value="Tamam" update=":form:mevzuatIcerikTipleri" style="margin-left:200px;margin-right:auto;margin-top:5px" />
+				</h:form>
+			</p:dialog>
 			
-			<h:form> 
-				<p:growl id="growl" showDetail="true" /> 
-				<p:fieldset legend="İçtihatlar" toggleable="true" toggleSpeed="500">
-					<h:panelGrid columns="8" cellpadding="10">        
-						<p:panel header="Yargıtay">        
-							<h:commandLink action="kanunGrid.xhtml">
-							  <p:graphicImage value="/images/yargitay.jpg"
-										width="80"
-										height="90">
-							  </p:graphicImage>
-							</h:commandLink>       		
-						</p:panel>        
-						<p:panel header="Danıştay">        
-							<h:commandLink action="kanunGrid.xhtml">
-							  <p:graphicImage value="/images/danistay.jpg"
-										width="80"
-										height="90">
-							  </p:graphicImage>
-							</h:commandLink>       		
-						</p:panel>    	
-						<p:panel header="Sayıştay" >        
-							<h:commandLink action="kanunGrid.xhtml">
-							  <p:graphicImage value="/images/sayistay.jpg"
-										width="80"
-										height="90">
-							  </p:graphicImage>
-							</h:commandLink>       		
-						</p:panel>           
-					</h:panelGrid>
-				</p:fieldset> 
-			</h:form>
+			<h:form id="form">
+			    <p:dataGrid var="mevzuatIcerikTip" value="#{mevzuatMB.mevzuatIcerikTipListesi}" columns="6"
+			        rows="8" paginator="true" id="mevzuatIcerikTipleri"
+			        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+			 
+			        <f:facet name="header">
+			            Mevzuat İçerikleri
+			        </f:facet>
+			 
+			        <p:panel header="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}" style="text-align:center">
+			            <h:panelGrid columns="1" style="width:100%">			               
+			 			 
+			                <p:commandLink action="#{mevzuatMB.MevzuatIcerikSec}">
+			                	<f:setPropertyActionListener value="#{mevzuatIcerikTip}" target="#{mevzuatMB.selectedMevzuatIcerikTip}" />
+			                    <p:graphicImage value="../images/#{mevzuatIcerikTip.mevzuatIcerikTipAdi}.jpg"
+			                    				width="80"
+			                    				height="90"/> 
+			                </p:commandLink>
+			            </h:panelGrid>
+			        </p:panel>
+			      </p:dataGrid>
+			   </h:form>
+			 
+			    
+			
+			
+			
+			
+		
 			
 		</ui:define> 			 
 	</ui:decorate> 

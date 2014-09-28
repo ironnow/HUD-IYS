@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
+import hud.iys.model.KanunIcerik_TEMP;
 import hud.iys.dao.IKanunIcerikDAO;
 
 @Transactional(readOnly = true)
@@ -39,6 +40,21 @@ public class KanunIcerikService implements IKanunIcerikService {
 	 public KanunIcerik getKanunIcerikById(Long id) {
 		 return getKanunIcerikDAO().getKanunIcerikById(id);
 	 }
+	 
+	 @Override
+	 public KanunIcerik getKanunIcerikByParentId(Long parentId) {
+		 return getKanunIcerikDAO().getKanunIcerikByParentId(parentId);
+	 }
+	 
+	 @Override
+	 public KanunIcerik getKanunIcerikByParentLeftId(Long parentId) {
+		 return getKanunIcerikDAO().getKanunIcerikByParentLeftId(parentId);
+	 }
+	 
+	 @Override
+	 public KanunIcerik getKanunIcerikByParentRightId(Long parentId) {
+		 return getKanunIcerikDAO().getKanunIcerikByParentRightId(parentId);
+	 }
 	
 	 
 	 @Override
@@ -49,6 +65,11 @@ public class KanunIcerikService implements IKanunIcerikService {
 	 @Override
 	 public List<KanunIcerik> getKanunIcerikleriByKanunId(Long kanunId){
 		 return getKanunIcerikDAO().getKanunIcerikleriByKanunId(kanunId);
+	 }
+	 
+	 @Override
+	 public List<KanunIcerik_TEMP> getKanunIcerikTree(Long rootId){
+		 return getKanunIcerikDAO().getKanunIcerikTree(rootId);
 	 }
 	 
 	 public IKanunIcerikDAO getKanunIcerikDAO() {

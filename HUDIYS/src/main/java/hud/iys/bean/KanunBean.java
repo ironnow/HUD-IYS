@@ -13,6 +13,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.dao.DataAccessException;
@@ -24,6 +25,7 @@ import hud.iys.model.Mevzuat;
 import hud.iys.service.IKanunIcerikService;
 import hud.iys.service.IKanunService;
 import hud.iys.service.IMaddeIcerikService;
+import hud.iys.view.KanunDataModel;
 
 
 @ManagedBean(name="kanunMB")
@@ -48,9 +50,10 @@ public class KanunBean implements Serializable {
 	 @ManagedProperty(value="#{mevzuatMB}")
 	 private MevzuatBean mevzuatBean;
 	 
-	 List<Kanun> kanunList;
+	 private List<Kanun> mevzuatKanunList;
+	 private KanunDataModel kanunlarModel;
 	 
-	 List<KanunIcerik> selectedKanunKanunIcerikList;
+	 private List<KanunIcerik> selectedKanunKanunIcerikList;
 	
 	 private int kanunNo;
 	 private String kanunAdi;
@@ -68,6 +71,7 @@ public class KanunBean implements Serializable {
 			   kanun.setRGNo(getRGNo());
 			   kanun.setRGTarihi(getRGTarihi());
 			   kanun.setKabulTarihi(getKabulTarihi());
+			   kanun.setDurumId(1);
 			   
 			   KanunIcerik kanunIcerik = new KanunIcerik();
 			   kanunIcerik.setKanunIcerik(null);
@@ -108,11 +112,15 @@ public class KanunBean implements Serializable {
 		 this.setRGTarihi(null);
 	 }
 
-	 public List<Kanun> getKanunList() {
-		  kanunList = new ArrayList<Kanun>();
-		  kanunList.addAll(getKanunService().getKanunlar());
-		  return kanunList;
+	 public List<Kanun> getMevzuatKanunList() {
+		  mevzuatKanunList = new ArrayList<Kanun>();
+		  mevzuatKanunList.addAll(getKanunService().getKanunlarByMevzuatId(getMevzuatBean().getSelectedMevzuat().getMevzuatId()));
+		  return mevzuatKanunList;
 	 }
+	 
+	 public void setMevzuatKanunList(List<Kanun> mevzuatKanunList) {
+		this.mevzuatKanunList = mevzuatKanunList;
+	}
 
 	public IKanunService getKanunService() {
 		return kanunService;
@@ -162,11 +170,6 @@ public class KanunBean implements Serializable {
 		this.kabulTarihi = kabulTarihi;
 	}
 
-	public void setKanunList(List<Kanun> kanunList) {
-		this.kanunList = kanunList;
-	}
-
-	
 	
 	public Kanun getSelectedKanun() {
 		return selectedKanun;
@@ -185,7 +188,14 @@ public class KanunBean implements Serializable {
 		this.mevzuatBean = mevzuatBean;
 	}
 	
-		
+	public KanunDataModel getKanunlarModel() {
+		kanunlarModel = new KanunDataModel(getMevzuatKanunList());
+		return kanunlarModel;
+	}
+
+	public void setKanunlarModel(KanunDataModel kanunlarModel) {
+		this.kanunlarModel = kanunlarModel;
+	}
 
 	public List<KanunIcerik> getSelectedKanunKanunIcerikList() {
 		return selectedKanunKanunIcerikList;
@@ -231,6 +241,8 @@ public class KanunBean implements Serializable {
 
     }
  
+	
+	
     public void onRowUnselect(UnselectEvent event) throws IOException {
         //FacesMessage msg = new FacesMessage("MevzuatSeti Unselected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
  
@@ -241,6 +253,17 @@ public class KanunBean implements Serializable {
 
     }
  
-	 
+    public void updateKanun() {
+		 if (selectedKanun != null) {
+			 getKanunService().updateKanun(selectedKanun);
+			
+		 }
+	 }
 
+    public void deleteKanun() {
+    	 if (selectedKanun != null) {
+			 getKanunService().deleteKanun(selectedKanun);
+			
+		 }
+    }
 }

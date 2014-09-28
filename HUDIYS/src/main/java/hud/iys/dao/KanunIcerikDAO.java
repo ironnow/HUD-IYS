@@ -4,7 +4,9 @@ import java.util.List;
 
 import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
+import hud.iys.model.KanunIcerik_TEMP;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 
@@ -45,6 +47,36 @@ public class KanunIcerikDAO implements IKanunIcerikDAO {
 	                 .setParameter(0, id).list();
 	  	return (KanunIcerik)list.get(0);
 	 }
+	 
+	 @Override
+	 public KanunIcerik getKanunIcerikByParentId(Long parentId) {
+		 List list = getSessionFactory().getCurrentSession()
+	           .createQuery("from KanunIcerik where parentId=?")
+	                 .setParameter(0, parentId).list();
+	  	return (KanunIcerik)list.get(0);
+	 }
+	 
+	 @Override
+	 public KanunIcerik getKanunIcerikByParentLeftId(Long parentId) {
+		 Query query = getSessionFactory().getCurrentSession().createQuery("from KanunIcerik where parentId=? and leftId=null");
+		 query.setParameter(0, parentId);
+		 List list = query.list();
+		 if (list != null && list.size() != 0) {
+			 return (KanunIcerik)list.get(0);
+		 }
+		 else return null;
+	 }
+	 
+	 @Override
+	 public KanunIcerik getKanunIcerikByParentRightId(Long parentId) {
+		 Query query = getSessionFactory().getCurrentSession().createQuery("from KanunIcerik where parentId=? and rightId=null");
+		 query.setParameter(0, parentId);
+		 List list = query.list();
+		 if (list != null && list.size() != 0) {
+			 return (KanunIcerik)list.get(0);
+		 }
+		 else return null;
+	 }
 	
 	
 	 @Override
@@ -61,4 +93,12 @@ public class KanunIcerikDAO implements IKanunIcerikDAO {
 		  	 return list;
 	 }
 
+	 @Override
+	 public List<KanunIcerik_TEMP> getKanunIcerikTree(Long rootId){
+		 Query query = getSessionFactory().getCurrentSession().createSQLQuery("CALL GetTree(:GivenID, :initial)");
+		 query.setParameter("GivenID", rootId);
+		 query.setParameter("initial", 1);
+		 List list = getSessionFactory().getCurrentSession().createQuery("from KanunIcerik_TEMP").list();
+		 return list;
+	 }
 }

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>hud.iys</groupId>
-  <artifactId>HUDIYS</artifactId>
+  <artifactId>HUDIYSTEST</artifactId>
   <packaging>war</packaging>
 
   <name>HUDIYS</name>
@@ -68,20 +68,20 @@
   <dependency>
     <groupId>com.sun.faces</groupId>
     <artifactId>jsf-api</artifactId>
-    <version>2.1.6</version>
+    <version>2.2.2</version>
   </dependency>
 
   <dependency>
     <groupId>com.sun.faces</groupId>
     <artifactId>jsf-impl</artifactId>
-    <version>2.1.6</version>
+    <version>2.2.2</version>
   </dependency>
 
   <dependency>
-   <groupId>javax.servlet</groupId>
-   <artifactId>jstl</artifactId>
-   <version>1.2</version>
-  </dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.0.1</version>
+    </dependency>
 
   <!-- Primefaces dependency -->
    <dependency>
@@ -115,7 +115,18 @@
    <groupId>c3p0</groupId>
    <artifactId>c3p0</artifactId>
    <version>0.9.1.2</version>
-  </dependency>            
+  </dependency>   
+  
+  <dependency>
+      <groupId>org.primefaces.extensions</groupId>
+      <artifactId>primefaces-extensions</artifactId>
+      <version>2.0.0</version>
+   </dependency>
+   <dependency>
+       <groupId>org.primefaces.extensions</groupId>
+       <artifactId>resources-ckeditor</artifactId>
+       <version>2.0.0</version>
+   </dependency>         
 
  </dependencies>
 

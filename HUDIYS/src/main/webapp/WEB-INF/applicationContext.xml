@@ -21,11 +21,16 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="Mevzuat" class="hud.iys.model.Mevzuat"/>
  <bean id="KanunIcerik" class="hud.iys.model.KanunIcerik"/>
  <bean id="MaddeIcerik" class="hud.iys.model.MaddeIcerik"/>
- <bean id="Paragraf" class="hud.iys.model.Paragraf"/>
- <bean id="Fikra" class="hud.iys.model.Fikra"/>
- <bean id="Bent" class="hud.iys.model.Bent"/>
- <bean id="AltBent" class="hud.iys.model.AltBent"/>
- <bean id="Dipnot" class="hud.iys.model.Dipnot"/>
+ <bean id="DipnotMI" class="hud.iys.model.DipnotMI"/>
+ <bean id="DipnotKI" class="hud.iys.model.DipnotKI"/> 
+ <bean id="DipnotTI" class="hud.iys.model.DipnotTI"/> 
+ <bean id="Teblig" class="hud.iys.model.Teblig"/>
+ <bean id="TebligIcerik" class="hud.iys.model.TebligIcerik"/>
+ <bean id="TebligMaddeIcerik" class="hud.iys.model.TebligMaddeIcerik"/> 
+ <bean id="MevzuatIcerikTip" class="hud.iys.model.MevzuatIcerikTip"/>
+ <bean id="MevzuatIcerikEsleme" class="hud.iys.model.MevzuatIcerikEsleme"/>
+ <bean id="Link" class="hud.iys.model.Link"/>
+  
  <!-- Service Declarations -->
  
  <bean id="KanunService" class="hud.iys.service.KanunService">
@@ -43,21 +48,34 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="MaddeIcerikService" class="hud.iys.service.MaddeIcerikService">
   <property name="maddeIcerikDAO" ref="MaddeIcerikDAO" />
  </bean>
- <bean id="ParagrafService" class="hud.iys.service.ParagrafService">
-  <property name="ParagrafDAO" ref="ParagrafDAO" />
+ <bean id="DipnotMIService" class="hud.iys.service.DipnotMIService">
+  <property name="DipnotMIDAO" ref="DipnotMIDAO" />
  </bean>
- <bean id="FikraService" class="hud.iys.service.FikraService">
-  <property name="FikraDAO" ref="FikraDAO" />
+ <bean id="DipnotKIService" class="hud.iys.service.DipnotKIService">
+  <property name="DipnotKIDAO" ref="DipnotKIDAO" />
  </bean>
- <bean id="BentService" class="hud.iys.service.BentService">
-  <property name="BentDAO" ref="BentDAO" />
+ <bean id="DipnotTIService" class="hud.iys.service.DipnotTIService">
+  <property name="DipnotTIDAO" ref="DipnotTIDAO" />
  </bean>
- <bean id="AltBentService" class="hud.iys.service.AltBentService">
-  <property name="AltBentDAO" ref="AltBentDAO" />
+ <bean id="TebligService" class="hud.iys.service.TebligService">
+  <property name="tebligDAO" ref="TebligDAO" />
  </bean>
- <bean id="DipnotService" class="hud.iys.service.DipnotService">
-  <property name="DipnotDAO" ref="DipnotDAO" />
+ <bean id="TebligIcerikService" class="hud.iys.service.TebligIcerikService">
+  <property name="tebligIcerikDAO" ref="TebligIcerikDAO" />
  </bean>
+ <bean id="TebligMaddeIcerikService" class="hud.iys.service.TebligMaddeIcerikService">
+  <property name="tebligMaddeIcerikDAO" ref="TebligMaddeIcerikDAO" />
+ </bean>
+ <bean id="MevzuatIcerikTipService" class="hud.iys.service.MevzuatIcerikTipService">
+  <property name="mevzuatIcerikTipDAO" ref="MevzuatIcerikTipDAO" />
+ </bean>
+ <bean id="MevzuatIcerikEslemeService" class="hud.iys.service.MevzuatIcerikEslemeService">
+  <property name="mevzuatIcerikEslemeDAO" ref="MevzuatIcerikEslemeDAO" />
+ </bean>
+ <bean id="LinkService" class="hud.iys.service.LinkService">
+  <property name="linkDAO" ref="LinkDAO" />
+ </bean>
+ 
  <!-- DAO Declarations -->
 
  <bean id="KanunDAO" class="hud.iys.dao.KanunDAO">
@@ -75,30 +93,41 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="MaddeIcerikDAO" class="hud.iys.dao.MaddeIcerikDAO">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean>
- <bean id="ParagrafDAO" class="hud.iys.dao.ParagrafDAO">
-  <property name="sessionFactory" ref="SessionFactory" />
- </bean>
- <bean id="FikraDAO" class="hud.iys.dao.FikraDAO">
-  <property name="sessionFactory" ref="SessionFactory" />
- </bean>
- <bean id="BentDAO" class="hud.iys.dao.BentDAO">
-  <property name="sessionFactory" ref="SessionFactory" />
- </bean>
- <bean id="AltBentDAO" class="hud.iys.dao.AltBentDAO">
-  <property name="sessionFactory" ref="SessionFactory" />
- </bean>
- <bean id="DipnotDAO" class="hud.iys.dao.DipnotDAO">
+ <bean id="DipnotMIDAO" class="hud.iys.dao.DipnotMIDAO">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean> 
+ <bean id="DipnotKIDAO" class="hud.iys.dao.DipnotKIDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean> 
+ <bean id="DipnotTIDAO" class="hud.iys.dao.DipnotTIDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean> 
+ <bean id="TebligDAO" class="hud.iys.dao.TebligDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="TebligIcerikDAO" class="hud.iys.dao.TebligIcerikDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="TebligMaddeIcerikDAO" class="hud.iys.dao.TebligMaddeIcerikDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="MevzuatIcerikTipDAO" class="hud.iys.dao.MevzuatIcerikTipDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="MevzuatIcerikEslemeDAO" class="hud.iys.dao.MevzuatIcerikEslemeDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="LinkDAO" class="hud.iys.dao.LinkDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ 
  <!-- Data Source Declaration -->
- 
- 
 
 <bean id="DataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="com.mysql.jdbc.Driver" />
     <property name="url" value="jdbc:mysql://localhost:3306/testdb?autoReconnect=true&amp;useUnicode=true&amp;characterSetResults=UTF-8&amp;characterEncoding=UTF-8" />
     <property name="username" value="root" />
-    <property name="password" value="Hud1234" />
+    <property name="password" value="admin" />
 </bean>
 
  <!-- Session Factory Declaration -->
@@ -109,19 +138,24 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <value>hud.iys.model.Kanun</value>
     <value>hud.iys.model.MevzuatSeti</value>
     <value>hud.iys.model.Mevzuat</value>
-    <value>hud.iys.model.KanunIcerik</value>    
+    <value>hud.iys.model.KanunIcerik</value>
+    <value>hud.iys.model.KanunIcerik_TEMP</value>        
     <value>hud.iys.model.MaddeIcerik</value>
-    <value>hud.iys.model.Paragraf</value>
-    <value>hud.iys.model.Fikra</value>
-    <value>hud.iys.model.Bent</value>
-    <value>hud.iys.model.AltBent</value>
-    <value>hud.iys.model.Dipnot</value>
+    <value>hud.iys.model.DipnotMI</value>
+    <value>hud.iys.model.DipnotKI</value>
+    <value>hud.iys.model.DipnotTI</value>
+    <value>hud.iys.model.Teblig</value>
+    <value>hud.iys.model.TebligIcerik</value>    
+    <value>hud.iys.model.TebligMaddeIcerik</value>
+    <value>hud.iys.model.MevzuatIcerikTip</value>
+    <value>hud.iys.model.MevzuatIcerikEsleme</value>
+    <value>hud.iys.model.Link</value>
    </list>
   </property>
   <property name="hibernateProperties">
    <props>
     <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-    <prop key="hibernate.show_sql">true</prop>
+    <prop key="hibernate.show_sql">false</prop>
     <prop key="hibernate.connection.useUnicode">true</prop>
 	<prop key="hibernate.connection.characterEncoding">utf8</prop>
    </props>

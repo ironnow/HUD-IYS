@@ -50,14 +50,17 @@ public class KanunIcerik {
 	 @JoinColumn(name = "KanunID", nullable = false)	 
 	 private Kanun kanun;
 	 
-	 @OneToMany(mappedBy = "kanunIcerik")
-	 Set<Fikra> fikralar; 
-	 
-	 @OneToMany(mappedBy = "kanunIcerik")
-	 Set<Paragraf> paragraflar;
-
-	 
 	 private Long maddeIcerikRoot;
+	 
+	 private Long leftId;
+	 
+	 private Long rightId;
+	 
+	 @Column(name="ChildPosition")	
+	 private Long childPosition;
+	 
+	 @OneToMany(fetch = FetchType.EAGER, mappedBy = "kanunIcerik")
+	 Set<DipnotKI> dipnotlar; 
 	 
 	 public Long getKanunIcerikId() {
 		 return kanunIcerikId;
@@ -122,22 +125,7 @@ public class KanunIcerik {
 	 }
 	 
 
-	 public Set<Fikra> getFikralar() {
-	 	 return fikralar;
-	 }
-
-	 public void setFikralar(Set<Fikra> fikralar) {
-	 	 this.fikralar = fikralar;
-	 }
-	 
-	 
-	 public Set<Paragraf> getParagraflar() {
-	 	 return paragraflar;
-	 }
-
-	 public void setParagraflar(Set<Paragraf> paragraflar) {
-	 	 this.paragraflar = paragraflar;
-	 }
+	
 	 
 	 	 
 	 public Long getMaddeIcerikRoot() {
@@ -146,7 +134,43 @@ public class KanunIcerik {
 
 	 public void setMaddeIcerikRoot(Long maddeIcerikRoot) {
 		 this.maddeIcerikRoot = maddeIcerikRoot;
- 	 }
+ 	 }	 
+
+	public Set<DipnotKI> getDipnotlar() {
+		return dipnotlar;
+	}
+
+	public void setDipnotlar(Set<DipnotKI> dipnotlar) {
+		this.dipnotlar = dipnotlar;
+	}
+	
+	
+
+	public Long getLeftId() {
+		return leftId;
+	}
+
+	public void setLeftId(Long leftId) {
+		this.leftId = leftId;
+	}
+
+	public Long getRightId() {
+		return rightId;
+	}
+
+	public void setRightId(Long rightId) {
+		this.rightId = rightId;
+	}
+	
+	
+
+	public Long getChildPosition() {
+		return childPosition;
+	}
+
+	public void setChildPosition(Long childPosition) {
+		this.childPosition = childPosition;
+	}
 
 	@Override
 	 public String toString() {

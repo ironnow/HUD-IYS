@@ -44,7 +44,7 @@ public class MevzuatSetiBean implements Serializable {
 	
 	 List<MevzuatSeti> mevzuatSetiList;
 	 
-	 List<Mevzuat> selectedMevzuatSetiMevzuatList;
+	 
 	
 	 private String mevzuatSetiAdi;
 	 private String mevzuatSetiAciklama;
@@ -53,7 +53,7 @@ public class MevzuatSetiBean implements Serializable {
 	 
 	 private MevzuatSetiDataModel mevzuatSetleriModel;
 	 
-	 private MevzuatDataModel mevzuatlarModel;
+	
 	 
 	 
 	 public String addMevzuatSeti() {
@@ -83,15 +83,6 @@ public class MevzuatSetiBean implements Serializable {
 	 }
 	 
 	
-
-	public List<Mevzuat> getSelectedMevzuatSetiMevzuatList() {
-		 return selectedMevzuatSetiMevzuatList;
-	}
-
-	public void setSelectedMevzuatSetiMevzuatList(
-			List<Mevzuat> selectedMevzuatSetiMevzuatList) {
-		this.selectedMevzuatSetiMevzuatList = selectedMevzuatSetiMevzuatList;
-	}
 
 	public IMevzuatSetiService getMevzuatSetiService() {
 		return mevzuatSetiService;
@@ -152,14 +143,7 @@ public class MevzuatSetiBean implements Serializable {
 	}
 	
 	
-	public MevzuatDataModel getMevzuatlarModel() {
-		mevzuatlarModel = new MevzuatDataModel(getSelectedMevzuatSetiMevzuatList());
-		return mevzuatlarModel;
-	}
-
-	public void setMevzuatlarModel(MevzuatDataModel mevzuatlarModel) {
-		this.mevzuatlarModel = mevzuatlarModel;
-	}
+	
 	
 	
 
@@ -167,11 +151,7 @@ public class MevzuatSetiBean implements Serializable {
         //FacesMessage msg = new FacesMessage("MevzuatSeti Selected", ((MevzuatSeti) event.getObject()).getMevzuatSetiAdi());
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
-        
-        this.selectedMevzuatSetiMevzuatList = new ArrayList<Mevzuat>();
-		this.selectedMevzuatSetiMevzuatList.addAll(getMevzuatService().getMevzuatlarByMevzuatSetiId(((MevzuatSeti) event.getObject()).getMevzuatSetiId()));
-		  
-		setSelectedMevzuatSetiMevzuatList(this.selectedMevzuatSetiMevzuatList);
+       
 		
         //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
 		FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());

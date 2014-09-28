@@ -7,7 +7,9 @@
       xmlns:p="http://primefaces.org/ui" 
 	  xmlns:ui="http://java.sun.com/jsf/facelets">
 	  
-<h:head><title>Hesap Uzmanlari Dernegi</title>
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
         .ui-widget,.ui-widget .ui-widget 
         {
@@ -19,7 +21,7 @@
 	<ui:decorate template="templates/template.xhtml">			 
 		<ui:define name="content"> 
 		
-			<table style="width:100%; margin:0px; min-width:1000px; max-width:1400px">
+			<table style="width:100%;margin:0px; min-width:100%;">
 				<tr>
 					<td style="idth:80%">
 						<h3 style="font-family:arial"><h:outputText value="#{mevzuatSetiMB.selectedMevzuatSeti.mevzuatSetiAdi}" /> Mevzuat Seti</h3>	
@@ -32,8 +34,7 @@
 				</tr>
 			</table>		
 			
-			<p:dialog header="Yeni Mevzuat Oluştur" widgetVar="dlg" resizable="false">
-			
+			<p:dialog header="Yeni Mevzuat Oluştur" widgetVar="dlg" resizable="false">		
 			  	    
 				<h:form>
 					<p:panel header="Yeni Mevzuat Ekle">
@@ -44,7 +45,7 @@
 							<p:inputTextarea rows="5" id="mevzuatAciklama" value="#{mevzuatMB.mevzuatAciklama}"></p:inputTextarea>
 							<h:outputText value="Mevzuat Seti " />
 							<p:inputText disabled="true" id="mevzuatSeti" value="#{mevzuatSetiMB.selectedMevzuatSeti.mevzuatSetiAdi}"></p:inputText>
-							<p:commandButton id="addMevzuat" value="Ekle" action="#{mevzuatMB.addMevzuat}" ajax="false"/>
+							<p:commandButton id="addMevzuat" update="mevzuatlar" value="Ekle" action="#{mevzuatMB.addMevzuat}" ajax="false"/>
 							<p:commandButton id="reset" value="Iptal" action="#{mevzuatMB.reset}" ajax="false"/>
 						</h:panelGrid>
 					</p:panel>
@@ -52,15 +53,14 @@
 			</p:dialog>		
 			
  			<h:form id="form" styleClass="form-style">
-				<p:growl id="growl" showDetail="true"/>
-				<p:dataTable id="display" var="mevzuat" value="#{mevzuatSetiMB.mevzuatlarModel}" sortMode="multiple" rows="10" paginator="true"
+				<p:dataTable id="mevzuatlar" var="mevzuat" value="#{mevzuatMB.mevzuatlarModel}" sortMode="multiple" rows="10" paginator="true"
 						selection="#{mevzuatMB.selectedMevzuat}" selectionMode="single" >
-					<p:ajax event="rowSelect" listener="#{mevzuatMB.onRowSelect}" update=":form:display :form:growl" />
-					<p:ajax event="rowUnselect" listener="#{mevzuatMB.onRowUnselect}" update=":form:growl"/>
-					<p:column style="width:30%" sortBy="mevzuatAdi" headerText="Mevzuat">
+					<p:ajax event="rowSelect" listener="#{mevzuatMB.onRowSelect}" update=":form:mevzuatlar" />
+					<p:ajax event="rowUnselect" listener="#{mevzuatMB.onRowUnselect}" />
+					<p:column style="width:30%" sortBy="#{mevzuat.mevzuatAdi}" headerText="Mevzuat">
 						<h:outputText value="#{mevzuat.mevzuatAdi}" />
 					</p:column>
-					<p:column style="width:70%" sortBy="mevzuatAciklama" headerText="Açıklama">
+					<p:column style="width:70%" sortBy="#{mevzuat.mevzuatAciklama}" headerText="Açıklama">
 						<h:outputText value="#{mevzuat.mevzuatAciklama}" />
 					</p:column>
 				</p:dataTable>

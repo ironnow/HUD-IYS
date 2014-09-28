@@ -7,7 +7,9 @@
       xmlns:p="http://primefaces.org/ui" 
 	  xmlns:ui="http://java.sun.com/jsf/facelets">
 	  
-<h:head><title>Hesap Uzmanlari Dernegi</title>
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
         .ui-widget,.ui-widget .ui-widget 
         {
@@ -19,9 +21,9 @@
 	<ui:decorate template="templates/template.xhtml">			 
 		<ui:define name="content"> 
 		
-			<table style="width:100%; margin:0px; min-width:1000px; max-width:1400px">
+			<table style="width:100%; margin:0px; min-width:100%;">
 				<tr>
-					<td style="idth:80%">
+					<td style="width:80%">
 						<h3 style="font-family:arial">Mevzuat Setleri</h3>		
 					</td>
 					<td style="text-align:right; width:20%">
@@ -56,11 +58,11 @@
 					<p:ajax event="rowSelect" listener="#{mevzuatSetiMB.onRowSelect}" update=":form:growl"/>
        				<p:ajax event="rowUnselect" listener="#{mevzuatSetiMB.onRowUnselect}" update=":form:growl"/>
 	
-       				<p:column style="width:30%" sortBy="mevzuatSetiAdi" headerText="Mevzuat Seti">
+       				<p:column style="width:30%" sortBy="#{mevzuatSeti.mevzuatSetiAdi}" headerText="Mevzuat Seti">
            				<h:outputText value="#{mevzuatSeti.mevzuatSetiAdi}" />
       					</p:column>
 
-			        <p:column style="width:70%" sortBy="mevzuatSetiAciklama" headerText="Açıklama">
+			        <p:column style="width:70%" sortBy="#{mevzuatSeti.mevzuatSetiAciklama}" headerText="Açıklama">
 			            <h:outputText value="#{mevzuatSeti.mevzuatSetiAciklama}" />
 			        </p:column>
    				</p:dataTable>

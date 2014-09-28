@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13998315341960" configfile="/HUDIYS/src/main/webapp/WEB-INF/faces-config.xml">
   <nodes xsi:type="pageflow:PFPage" name="pages/index.xhtml" x="122" y="764" id="pf13998495169221" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" outlinks="pf14028837824260 pf14028837824261" inlinks="pf14028837824261" path="/pages/login.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/error.xhtml" x="554" y="764" id="pf13998495169245" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf14004004856803 pf14009043286151 pf14009043286152 pf14013960817820" path="/pages/error.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/kanunGrid.xhtml" id="pf14004004856806" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" outlinks="pf14004004856803 pf14004004856807" inlinks="pf14004004856807" path="/pages/kanunGrid.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/M.xhtml" id="pf14009043286153" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf14009043286155 pf14009043286152" inlinks="pf14009043286155" path="/pages/mevzuat.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/mevzuatS.xhtml" id="pf14009043286166" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14009043286151 pf14009043286167" inlinks="pf14009043286167" path="/pages/mevzuatSeti.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/k.xhtml" id="pf14013960817831" referenceLink="//@navigationRule.4/@fromViewId|" outlinks="pf14013960817820 pf14013960817832" inlinks="pf14013960817832" path="/pages/kanunIcerik.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/error.xhtml" x="554" y="764" id="pf13998495169245" referenceLink="//@navigationRule.5/@navigationCase.1/@toViewId|" inlinks="pf14009043286151 pf14009043286152 pf14013960817820 pf14088064238720 pf14088064238721" path="/pages/error.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/kanunGrid.xhtml" id="pf14004004856806" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14088064238720 pf14088064238722" inlinks="pf14088064238722" path="/pages/Kanunlar.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/M.xhtml" id="pf14009043286153" referenceLink="//@navigationRule.4/@fromViewId|" outlinks="pf14009043286155 pf14009043286152" inlinks="pf14009043286155" path="/pages/mevzuat.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/mevzuatS.xhtml" id="pf14009043286166" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf14009043286151 pf14009043286167" inlinks="pf14009043286167" path="/pages/mevzuatSeti.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/k.xhtml" id="pf14013960817831" referenceLink="//@navigationRule.5/@fromViewId|" outlinks="pf14013960817820 pf14013960817832" inlinks="pf14013960817832" path="/pages/kanunIcerik.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/index.xhtml" id="pf14028837824282" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf14028837824260" path="/pages/index.xhtml"/>
-  <links id="pf14004004856803" target="pf13998495169245" source="pf14004004856806" outcome="error"/>
-  <links id="pf14004004856807" target="pf14004004856806" source="pf14004004856806" outcome="success"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/tGrid.xhtml" id="pf14042086200211" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14088064238721 pf14088064238733" inlinks="pf14088064238733" path="/pages/Tebligler.xhtml"/>
   <links id="pf14009043286151" target="pf13998495169245" source="pf14009043286166" outcome="error"/>
   <links id="pf14009043286167" target="pf14009043286166" source="pf14009043286166" outcome="success"/>
   <links id="pf14009043286155" target="pf14009043286153" source="pf14009043286153" outcome="success"/>
@@ -17,4 +16,8 @@
   <links id="pf14013960817832" target="pf14013960817831" source="pf14013960817831" outcome="success"/>
   <links id="pf14028837824260" target="pf14028837824282" source="pf13998495169221" outcome="success"/>
   <links id="pf14028837824261" target="pf13998495169221" source="pf13998495169221" outcome="error"/>
+  <links id="pf14088064238720" target="pf13998495169245" source="pf14004004856806" outcome="error"/>
+  <links id="pf14088064238722" target="pf14004004856806" source="pf14004004856806" outcome="success"/>
+  <links id="pf14088064238721" target="pf13998495169245" source="pf14042086200211" outcome="error"/>
+  <links id="pf14088064238733" target="pf14042086200211" source="pf14042086200211" outcome="success"/>
 </pageflow:Pageflow>
