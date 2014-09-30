@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Id;
@@ -20,6 +22,8 @@ import java.util.Set;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.OrderBy;
 
 @Entity
 @Table(name="KANUNICERIK")
@@ -43,7 +47,8 @@ public class KanunIcerik {
 	 @JoinColumn(name = "parentID", referencedColumnName = "kanunIcerikID")	 
 	 private KanunIcerik parent;
 	 
-	 @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "parent")	 
+	 @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "parent")	
+	 @OrderBy(clause = "ChildPosition ASC")
 	 private Collection<KanunIcerik> children;	 
 	 
 	 @ManyToOne(fetch = FetchType.LAZY)

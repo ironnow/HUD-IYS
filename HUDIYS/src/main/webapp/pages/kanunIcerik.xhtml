@@ -94,7 +94,7 @@
 			<p:dialog header="Kanun Metni" widgetVar="dlgReadMode" height="800" width="1200" resizable="true">
 				<h:form>					
 					<p:outputPanel id="readModePanel">										
-					     <p:treeTable id="kanunFullMetin" style="white-space: normal" width="600" value="#{kanunIcerikMB.icerikRootNode}" var="node">
+					     <p:treeTable id="kanunFullMetin" style="white-space: normal" width="600" value="#{kanunIcerikMB.kanunMetniRootNode}" var="node">
 					       			        
 					        <p:column width="200" style="white-space: normal" > 
 					            <h:outputText escape="false" value="#{node.icerikMetin}" />					            
@@ -108,10 +108,10 @@
 			
 			
 			
-			<p:dialog header="Detay" widgetVar="dlgBentDetay" width="1200" height="450" resizable="false">
+			<p:dialog header="Madde İçerik İlişkilendirme" widgetVar="dlgLinkMI" width="1200" height="450" resizable="false">
 				<p:layout style="min-width:900px; height:400px" id="layoutBentDetay">
 					<p:layoutUnit position="north" size="100" style="border:none">
-					 	<p:panel id="BentDetayPanel" header="Detay" widgetVar="panel" >
+					 	<p:panel id="BentDetayPanel" header="Açıklama" widgetVar="panel" >
 							<h:outputText id="outputBentDetay1" value="#{maddeIcerikMB.selectedMaddeIcerik.maddeIcerikAdi}" />
 							<h:outputText id="outputBentDetay2" value="#{maddeIcerikMB.selectedMaddeIcerik.maddeIcerikMetin}" escape="false"/>
 					       	
@@ -163,17 +163,34 @@
 						       
 						    </p:panel>
 						    <p:separator />
-						    <p:commandButton id="linkButton" value="Göster" action="#{linkMB.link}" ajax="false"/>
+						    <p:commandButton id="viewMIButton" update=":linkMITreeForm:linkMITree" render=":linkMITreeForm:linkMITree" value="Göster" action="#{linkMB.showLinkTree}" />
+						  
 						</h:form>
 					</p:layoutUnit>
 					<p:layoutUnit position="east" resizable="true" height="300" size="300" minSize="200" maxSize="400" style="border:none">
+						<p:panel render="#{linkMB.renderLinkTree}">
+						<h:form id="linkMITreeForm">
+							<p:tree id="linkMITree" style="width:99%;height:99%" height="250" value="#{linkMB.rootNode}" var="node" dynamic="true" cache="false"
+									selectionMode="single"  selection="#{linkMB.selectedNode}" >	 
+								<p:ajax event="select" listener="#{linkMB.onNodeSelect}"/>											
+								<p:treeNode type="node"
+	                                expandedIcon="folder-open"
+	                                collapsedIcon="folder-collapsed">
+			                        <h:outputText value="#{((node.tebligIcerikNo).concat(':')).concat(node.tebligIcerikAdi)}"/>
+			                    </p:treeNode>
+			                    <p:treeNode type="leaf" icon="document-node">
+			                        <h:outputText value="#{((node.tebligIcerikNo).concat(':')).concat(node.tebligIcerikAdi)}" />
+			                    </p:treeNode>
+							</p:tree>	 
 						
+						</h:form>
+						</p:panel>
 					</p:layoutUnit>
 					
 				</p:layout>
 				<p:separator />
 				<h:form>
-					<p:commandButton id="linkButton" value="İlişkilendir" action="#{linkMB.link}" ajax="false"/>
+					<p:commandButton id="linkButton" value="İlişkilendir" action="#{linkMB.createLink}" ajax="false"/>
 					<p:commandButton id="reset" value="Iptal" action="#{linkMB.reset}" ajax="false"/>
 				</h:form>
 			</p:dialog>	
@@ -191,7 +208,7 @@
 							<h:outputText value="Metin " />
 							<p:inputTextarea id="kanunIcerikMetin" value="#{kanunIcerikMB.kanunIcerikMetin}"></p:inputTextarea>
 							<p:commandButton id="addKanunIcerik" update=":formTree:tree" onclick="PF('dlgYeni').hide()" value="Ekle" action="#{kanunIcerikMB.addKanunIcerik}" />
-							<p:commandButton id="reset" value="Iptal" action="#{mevzuatMB.reset}" ajax="false"/>
+							<p:commandButton id="reset" value="Iptal" action="#{mevzuatMB.reset}" onclick="PF('dlgYeni').hide()"/>
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
@@ -214,7 +231,7 @@
 				</h:form>
 			</p:dialog>	
 				
-			<p:dialog header="İçerik İlişkilendirme" widgetVar="dlgLink" width="930" height="450" resizable="false">
+			<p:dialog header="Kanun İçerik İlişkilendirme" widgetVar="dlgLinkKI" width="930" height="450" resizable="false">
 				<p:layout style="min-width:900px; height:400px" id="layoutLink">
 					<p:layoutUnit position="north" size="100" style="width:99%;height:99%;border:0">
 						<p:panel header="Açıklama" size="100" style="width:99%;height:90%">
@@ -278,7 +295,7 @@
 						<h:form id="linkTreeForm">
 							<p:tree id="linkTree" style="width:99%;height:99%" height="250" value="#{linkMB.rootNode}" var="node" dynamic="true" cache="false"
 									selectionMode="single"  selection="#{linkMB.selectedNode}" >	 
-																	
+								<p:ajax event="select" listener="#{linkMB.onNodeSelect}"/>									
 								<p:treeNode type="node"
 	                                expandedIcon="folder-open"
 	                                collapsedIcon="folder-collapsed">
@@ -296,7 +313,7 @@
 				</p:layout>
 				<p:separator />
 				<h:form>
-					<p:commandButton id="linkButton" onclick="PF('dlgLink').hide()" value="İlişkilendir" action="#{linkMB.createLink}" ajax="false"/>
+					<p:commandButton id="linkButton" onclick="PF('dlgLinkKI').hide()" value="İlişkilendir" action="#{linkMB.createLink}" ajax="false"/>
 					<p:commandButton id="reset" value="Iptal" action="#{linkMB.reset}" ajax="false"/>
 				</h:form>
 			</p:dialog>	
@@ -317,7 +334,7 @@
 	                        <h:outputText value="#{((node.kanunIcerikNo).concat(':')).concat(node.kanunIcerikAdi)}" />
 	                    </p:treeNode>
 					</p:tree>
-					<p:commandButton id="reorderKanunIcerik" update=":formTree:tree" onclick="PF('dlgReorderKanunIcerik').hide()" value="Kaydet" action="#{kanunIcerikMB.saveReorderKanunIcerik}" />
+					<p:commandButton id="reorderKanunIcerik" update=":formTree:tree" onclick="PF('dlgReorderKanunIcerik').hide()" value="Kaydet" />
 					<p:commandButton id="reset" value="Iptal" action="#{kanunIcerikMB.reset}"/>	 
 				</h:form>
 			</p:dialog>	
@@ -328,7 +345,7 @@
 							selectionMode="single" id="reorderMITree"
 							draggable="true" droppable="true" >	 
 							       
-						<p:ajax event="dragdrop" listener="#{maddeIcerikMB.onDragDrop}"/>
+						<p:ajax event="dragdrop" listener="#{maddeIcerikMB.onDragDrop}" update="reorderMITree"/>
 						<p:treeNode type="node"
                                expandedIcon="folder-open"
                                collapsedIcon="folder-collapsed">
@@ -338,8 +355,8 @@
 	                        <h:outputText value="#{((node.maddeIcerikAdi).concat(' ')).concat(node.maddeIcerikMetin)}" escape="false" />
 	                    </p:treeNode>
 					</p:tree>
-					<p:commandButton id="reorderMaddeIcerik" update=":formTree:tree" onclick="PF('dlgReorderMaddeIcerik').hide()" value="Kaydet" action="#{maddeIcerikMB.onDragDrop}" />
-					<p:commandButton id="reset" value="Iptal" action="#{maddeIcerikMB.reset}" ajax="false"/>	 
+					<p:commandButton id="reorderMaddeIcerik" update=":outputIcerik:maddeIcerikleri" onclick="PF('dlgReorderMaddeIcerik').hide()" value="Kaydet" />
+					<p:commandButton id="reset" value="Iptal" action="#{maddeIcerikMB.reset}"/>	 
 					 
 				</h:form>
 			</p:dialog>	
@@ -367,7 +384,7 @@
 					          	<p:commandButton id="ajax2" onclick="PF('dlgYeni').show()" styleClass="ui-priority-primary" icon="ui-icon-plus" title="Yeni" />
 	 							<p:commandButton id="ajax7"  onclick="PF('dlgReorderKanunIcerik').show()" styleClass="ui-priority-primary" icon="ui-icon-note" title="Sırala" />
 					          	<p:commandButton id="ajax4" onclick="PF('dlgDuzenle').show()" styleClass="ui-priority-primary" icon="ui-icon-pencil" title="Düzenle" />
-	 							<p:commandButton id="ajax5" onclick="PF('dlgLink').show()" styleClass="ui-priority-primary" icon="ui-icon-link" title="İlişkilendir" />	 							
+	 							<p:commandButton id="ajax5" onclick="PF('dlgLinkKI').show()" styleClass="ui-priority-primary" icon="ui-icon-link" title="İlişkilendir" />	 							
 	 							<p:commandButton id="ajax3" update="tree" title="Sil" action="#{kanunIcerikMB.deleteNode}" icon="ui-icon-trash" />
 	 							<p:commandButton id="addDipnotKI" title="Dipnot Ekle" onclick="PF('dlgDipnotKI').show()" update=":outputDipnotTab:maddeIcerikDipnotlar" action="#{kanunIcerikMB.addDipnot}" icon="ui-icon-comment" />
 					            
@@ -414,8 +431,8 @@
 								<p:inputText id="maddeIcerikNo" value="#{maddeIcerikMB.maddeIcerikAdi}"></p:inputText>
 								<h:outputText value="Metin " />
 								<pe:ckEditor id="editor" value="#{maddeIcerikMB.maddeIcerikMetin}"/>							
-								<p:commandButton id="addMaddeIcerik" value="Ekle" action="#{maddeIcerikMB.addMaddeIcerik}" ajax="false"/>
-								<p:commandButton id="reset" value="Iptal" action="#{maddeIcerikMB.reset}" ajax="false"/>
+								<p:commandButton id="addMaddeIcerik" update=":outputIcerik:maddeIcerikleri" value="Ekle" onclick="PF('dlgYeniMetin').hide()" action="#{maddeIcerikMB.addMaddeIcerik}"/>
+								<p:commandButton id="reset" value="Iptal" action="#{maddeIcerikMB.reset}" onclick="PF('dlgYeniMetin').hide()"/>
 							</h:panelGrid>
 						</p:panel>
 					</h:form>
@@ -496,18 +513,18 @@
 								
 								<h:form id="outputIcerik" styleClass="form-style">
 									
-<!-- 									<p:contextMenu for="maddeIcerikleri"> -->
-<!-- 										<p:menuitem value="Alt Metin" icon="ui-icon-document" oncomplete="PF('dlgYeniMetin').show()"/> -->
-<!-- 										<p:menuitem value="Dipnot Ekle" icon="ui-icon-comment" oncomplete="PF('dlgDipnotMI').show()"/> -->
-<!-- 								        <p:menuitem value="Düzenle" update=":maddeIcerikDuzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenleMetin').show()"/> -->
-<!-- 								        <p:menuitem value="Sil" update="maddeIcerikleri" icon="ui-icon-trash" actionListener="#{maddeIcerikMB.deleteMaddeIcerik}"/> -->
-<!-- 								    </p:contextMenu> -->
+									<p:contextMenu for="maddeIcerikleri">
+										<p:menuitem value="Alt Metin" icon="ui-icon-document" oncomplete="PF('dlgYeniMetin').show()"/>
+										<p:menuitem value="İlişkilendir" icon="ui-icon-link" oncomplete="PF('dlgLinkMI').show()"/>
+										<p:menuitem value="Dipnot Ekle" icon="ui-icon-comment" oncomplete="PF('dlgDipnotMI').show()"/>
+								        <p:menuitem value="Düzenle" update=":maddeIcerikDuzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenleMetin').show()"/>
+								        <p:menuitem value="Sil" update="maddeIcerikleri" icon="ui-icon-trash" actionListener="#{maddeIcerikMB.deleteMaddeIcerik}"/>
+								    </p:contextMenu>
 									
 									<p:outputPanel id="centerPanel">
 										
 									     <p:treeTable id="maddeIcerikleri" style="white-space: normal" width="220" value="#{maddeIcerikMB.rootNode}" var="node" selectionMode="single"  selection="#{maddeIcerikMB.selectedNode}" >
 									       <p:ajax event="select" 									       
-									       oncomplete="PF('dlgBentDetay').show()" 
 									       update=":outputBentDetay1,:outputBentDetay2" 
 									       listener="#{maddeIcerikMB.onNodeSelect}" />	       
 														        
