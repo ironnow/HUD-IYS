@@ -153,8 +153,8 @@ public class MevzuatSetiBean implements Serializable {
         //FacesContext.getCurrentInstance().addMessage(null, msg);
        
 		
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
-		FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuat.xhtml?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
 
 
     }
@@ -164,7 +164,7 @@ public class MevzuatSetiBean implements Serializable {
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
         
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
 
 
     }

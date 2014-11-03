@@ -11,10 +11,7 @@
 <title>HUD İYS</title>
 <link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
-        .ui-widget,.ui-widget .ui-widget 
-        {
-            font-size: 90% !important;
-        }
+      
 	</style>
 	
 	<script type="text/javascript">  
@@ -57,7 +54,7 @@
 					</td>
 					<td style="text-align:right; width:20%">
 						<h:form>
-							<p:commandButton align="right" id="showDialogButton" type="button" value="Yeni Tebliğ" onclick="PF('dlgYeni').show()" />
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" id="showDialogButton" update="yeniForm" action="#{tebligMB.reset}" type="button" value="Yeni Tebliğ" onclick="PF('dlgYeni').show()" />
 						</h:form>
 					</td>
 				</tr>
@@ -73,7 +70,7 @@
    			</p:dialog>
             
 			<p:dialog header="Yeni Tebliğ" widgetVar="dlgYeni" resizable="false">
-				<h:form>
+				<h:form id="yeniForm">
 					<p:panel>				
 						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
 							<h:outputText value="Tebliğ No: " />
@@ -87,8 +84,8 @@
 							<p:outputLabel for="calendar" value="RG Tarihi:" />
         					<p:calendar id="calendar" value="#{tebligMB.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
         												
-							<p:commandButton id="addTeblig" update="tebligler" value="Ekle" action="#{tebligMB.addTeblig}" ajax="false"/>
-							<p:commandButton id="reset" value="İptal" action="#{tebligMB.reset}" ajax="false"/>
+							<p:commandButton id="addTeblig" update=":form:tebligler" value="Ekle" action="#{tebligMB.addTeblig}" onclick="PF('dlgYeni').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{tebligMB.reset}" onclick="PF('dlgYeni').hide()"/>
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
@@ -109,8 +106,8 @@
 							<p:outputLabel for="calendar" value="RG Tarihi:" />
         					<p:calendar id="calendar" value="#{tebligMB.selectedTeblig.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
         												
-							<p:commandButton id="updateTeblig" update="tebligler" value="Düzenle" action="#{tebligMB.updateTeblig}" ajax="false"/>
-							<p:commandButton id="reset" value="İptal" action="#{tebligMB.reset}" ajax="false"/>
+							<p:commandButton id="updateTeblig" update=":form:tebligler" value="Düzenle" action="#{tebligMB.updateTeblig}" onclick="PF('dlgDuzenle').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{tebligMB.reset}" onclick="PF('dlgDuzenle').hide()"/>
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
@@ -119,7 +116,7 @@
  				
 			
 			<h:form id="form" styleClass="form-style">
-				<p:contextMenu for="tebligler">
+				<p:contextMenu rendered="#{userMB.isLogged and userMB.roleWriter}" for="tebligler">
 			        <p:menuitem value="Düzenle" update=":duzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenle').show()"/>
 			        <p:menuitem value="Sil" update="tebligler" icon="ui-icon-close" actionListener="#{tebligMB.deleteTeblig}"/>
 			    </p:contextMenu>

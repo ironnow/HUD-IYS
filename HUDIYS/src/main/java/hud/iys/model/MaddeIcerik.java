@@ -38,6 +38,9 @@ public class MaddeIcerik {
 	 @Column(name="MaddeIcerikMetin")	 
 	 private String maddeIcerikMetin;	
 	 
+	 @Column(name="Attachment")	 
+	 private byte[] attachment;	
+	 
 	 @ManyToOne(fetch = FetchType.LAZY, optional = true)
 	 @JoinColumn(name = "parentID", referencedColumnName = "maddeIcerikID")	 
 	 private MaddeIcerik parent;
@@ -125,6 +128,17 @@ public class MaddeIcerik {
 
 	public void setChildPosition(Long childPosition) {
 		this.childPosition = childPosition;
+	}
+	
+	
+
+	
+	public byte[] getAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(byte[] attachment) {
+		this.attachment = attachment;
 	}
 
 	@Override

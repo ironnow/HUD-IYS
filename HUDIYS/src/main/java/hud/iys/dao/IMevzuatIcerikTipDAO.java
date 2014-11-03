@@ -14,6 +14,8 @@ public interface IMevzuatIcerikTipDAO {
 	 public void deleteMevzuatIcerikTip(MevzuatIcerikTip mevzuatIcerikTip);
 	
 	 public MevzuatIcerikTip getMevzuatIcerikTipById(Long id);
+	 
+	 public MevzuatIcerikTip getMevzuatIcerikTipIdByName(String mevzuatIcerikTipName);
 	
 	 public List<MevzuatIcerikTip> getMevzuatIcerikTipleri();
 	 

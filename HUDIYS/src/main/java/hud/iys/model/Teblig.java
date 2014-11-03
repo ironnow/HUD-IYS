@@ -19,7 +19,7 @@ public class Teblig {
 	 private Long tebligId;
 	 private Long tebligNo;
 	 private String tebligAdi;
-	 private Long RGNo;
+	 private int RGNo;
 	 private Date RGTarihi;
 	 private String tebligAciklama;
 	 private Mevzuat mevzuat;
@@ -77,11 +77,11 @@ public class Teblig {
 	 }
 
 	 @Column(name="RGNo")
-	 public Long getRGNo() {
+	 public int getRGNo() {
 		 return RGNo;
 	 }
 	
-	 public void setRGNo(Long RGNo) {
+	 public void setRGNo(int RGNo) {
 		 this.RGNo = RGNo;
 	 }	 
 	

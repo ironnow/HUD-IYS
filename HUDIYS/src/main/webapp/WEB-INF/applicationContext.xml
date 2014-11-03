@@ -30,7 +30,28 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="MevzuatIcerikTip" class="hud.iys.model.MevzuatIcerikTip"/>
  <bean id="MevzuatIcerikEsleme" class="hud.iys.model.MevzuatIcerikEsleme"/>
  <bean id="Link" class="hud.iys.model.Link"/>
-  
+ 
+ <bean id="Yonetmelik" class="hud.iys.model.Yonetmelik"/>
+ <bean id="Tuzuk" class="hud.iys.model.Tuzuk"/>
+ <bean id="Cvoa" class="hud.iys.model.Cvoa"/>
+ <bean id="Vkbda" class="hud.iys.model.Vkbda"/>
+ <bean id="Gerekce" class="hud.iys.model.Gerekce"/>
+ <bean id="Khk" class="hud.iys.model.Khk"/>
+ <bean id="Bkk" class="hud.iys.model.Bkk"/>
+ <bean id="Sirkuler" class="hud.iys.model.Sirkuler"/>
+ <bean id="Mukteza" class="hud.iys.model.Mukteza"/>
+ <bean id="IcGenelge" class="hud.iys.model.IcGenelge"/>
+ 
+ <bean id="YargiKarari" class="hud.iys.model.YargiKarari" />
+ <bean id="VergiDunyasiSoru" class="hud.iys.model.VergiDunyasiSoru" />
+ <bean id="DanismaKomisyonuKarari" class="hud.iys.model.DanismaKomisyonuKarari" />
+ <bean id="Makale" class="hud.iys.model.Makale" />
+ <bean id="OlusSirkuler" class="hud.iys.model.OlusSirkuler" />
+ <bean id="OlusRehber" class="hud.iys.model.OlusRehber" />
+ 
+ <bean id="User" class="hud.iys.model.User" />
+ <bean id="Attachment" class="hud.iys.model.Attachment" />
+ 
  <!-- Service Declarations -->
  
  <bean id="KanunService" class="hud.iys.service.KanunService">
@@ -75,6 +96,62 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
  <bean id="LinkService" class="hud.iys.service.LinkService">
   <property name="linkDAO" ref="LinkDAO" />
  </bean>
+ 
+ <bean id="YonetmelikService" class="hud.iys.service.YonetmelikService">
+   <property name="yonetmelikDAO" ref="YonetmelikDAO" />
+ </bean>
+ <bean id="TuzukService" class="hud.iys.service.TuzukService">
+   <property name="tuzukDAO" ref="TuzukDAO" />
+ </bean>
+ <bean id="CvoaService" class="hud.iys.service.CvoaService">
+   <property name="cvoaDAO" ref="CvoaDAO" />
+ </bean>
+ <bean id="VkbdaService" class="hud.iys.service.VkbdaService">
+   <property name="vkbdaDAO" ref="VkbdaDAO" />
+ </bean>
+ <bean id="GerekceService" class="hud.iys.service.GerekceService">
+   <property name="gerekceDAO" ref="GerekceDAO" />
+ </bean>
+ <bean id="KhkService" class="hud.iys.service.KhkService">
+   <property name="khkDAO" ref="KhkDAO" />
+ </bean>
+ <bean id="BkkService" class="hud.iys.service.BkkService">
+   <property name="bkkDAO" ref="BkkDAO" />
+ </bean>
+ <bean id="SirkulerService" class="hud.iys.service.SirkulerService">
+   <property name="sirkulerDAO" ref="SirkulerDAO" />
+ </bean>
+ <bean id="MuktezaService" class="hud.iys.service.MuktezaService">
+   <property name="muktezaDAO" ref="MuktezaDAO" />
+ </bean>
+ <bean id="IcGenelgeService" class="hud.iys.service.IcGenelgeService">
+   <property name="icGenelgeDAO" ref="IcGenelgeDAO" />
+ </bean> 
+ <bean id="UserService" class="hud.iys.service.UserService">
+   <property name="userDAO" ref="UserDAO" />
+ </bean>	
+ <bean id="YargiKarariService" class="hud.iys.service.YargiKarariService">
+	<property name="YargiKarariDAO" ref="YargiKarariDAO" />
+ </bean>	
+ <bean id="VergiDunyasiSoruService" class="hud.iys.service.VergiDunyasiSoruService">
+	<property name="VergiDunyasiSoruDAO" ref="VergiDunyasiSoruDAO" />
+ </bean>	
+ <bean id="DanismaKomisyonuKarariService" class="hud.iys.service.DanismaKomisyonuKarariService">
+	<property name="DanismaKomisyonuKarariDAO" ref="DanismaKomisyonuKarariDAO" />
+ </bean>	
+ <bean id="MakaleService" class="hud.iys.service.MakaleService">
+	<property name="MakaleDAO" ref="MakaleDAO" />
+ </bean>	
+ <bean id="OlusSirkulerService" class="hud.iys.service.OlusSirkulerService">
+	<property name="OlusSirkulerDAO" ref="OlusSirkulerDAO" />
+ </bean>	
+ <bean id="OlusRehberService" class="hud.iys.service.OlusRehberService">
+	<property name="OlusRehberDAO" ref="OlusRehberDAO" />
+ </bean>
+ <bean id="AttachmentService" class="hud.iys.service.AttachmentService">
+	<property name="AttachmentDAO" ref="AttachmentDAO" />
+ </bean>
+ 
  
  <!-- DAO Declarations -->
 
@@ -121,6 +198,61 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
   <property name="sessionFactory" ref="SessionFactory" />
  </bean>
  
+ <bean id="YonetmelikDAO" class="hud.iys.dao.YonetmelikDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="TuzukDAO" class="hud.iys.dao.TuzukDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="CvoaDAO" class="hud.iys.dao.CvoaDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="VkbdaDAO" class="hud.iys.dao.VkbdaDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="GerekceDAO" class="hud.iys.dao.GerekceDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="KhkDAO" class="hud.iys.dao.KhkDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="BkkDAO" class="hud.iys.dao.BkkDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="SirkulerDAO" class="hud.iys.dao.SirkulerDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="MuktezaDAO" class="hud.iys.dao.MuktezaDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="IcGenelgeDAO" class="hud.iys.dao.IcGenelgeDAO">
+  <property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ 
+ <bean id="UserDAO" class="hud.iys.dao.UserDAO">
+	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>	
+ <bean id="YargiKarariDAO" class="hud.iys.dao.YargiKarariDAO">
+	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="VergiDunyasiSoruDAO" class="hud.iys.dao.VergiDunyasiSoruDAO">
+	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="DanismaKomisyonuKarariDAO" class="hud.iys.dao.DanismaKomisyonuKarariDAO">
+	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="MakaleDAO" class="hud.iys.dao.MakaleDAO">
+	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="OlusSirkulerDAO" class="hud.iys.dao.OlusSirkulerDAO">
+ 	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="OlusRehberDAO" class="hud.iys.dao.OlusRehberDAO">
+ 	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>
+ <bean id="AttachmentDAO" class="hud.iys.dao.AttachmentDAO">
+ 	<property name="sessionFactory" ref="SessionFactory" />
+ </bean>
  <!-- Data Source Declaration -->
 
 <bean id="DataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -150,6 +282,19 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <value>hud.iys.model.MevzuatIcerikTip</value>
     <value>hud.iys.model.MevzuatIcerikEsleme</value>
     <value>hud.iys.model.Link</value>
+    
+    <value>hud.iys.model.Yonetmelik</value>
+    <value>hud.iys.model.Tuzuk</value>
+    <value>hud.iys.model.Cvoa</value>
+    <value>hud.iys.model.Vkbda</value>
+    <value>hud.iys.model.Gerekce</value>
+    <value>hud.iys.model.Khk</value>
+    <value>hud.iys.model.Bkk</value>
+    <value>hud.iys.model.Sirkuler</value>
+    <value>hud.iys.model.Mukteza</value>
+    <value>hud.iys.model.IcGenelge</value>  
+    <value>hud.iys.model.Attachment</value>     
+    <value>hud.iys.model.User</value>
    </list>
   </property>
   <property name="hibernateProperties">
@@ -158,6 +303,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <prop key="hibernate.show_sql">false</prop>
     <prop key="hibernate.connection.useUnicode">true</prop>
 	<prop key="hibernate.connection.characterEncoding">utf8</prop>
+	<prop key="hibernate.connection.CharSet">utf8</prop>
    </props>
   </property>
  </bean>

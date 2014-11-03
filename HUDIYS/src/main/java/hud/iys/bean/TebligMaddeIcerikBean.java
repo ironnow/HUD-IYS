@@ -2,6 +2,7 @@ package hud.iys.bean;
 
 
 import hud.iys.model.DipnotMI;
+import hud.iys.model.MaddeIcerik;
 import hud.iys.model.TebligIcerik;
 import hud.iys.model.TebligMaddeIcerik;
 import hud.iys.model.Mevzuat;
@@ -21,7 +22,9 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.dao.DataAccessException;
@@ -56,7 +59,7 @@ public class TebligMaddeIcerikBean implements Serializable {
 	@PostConstruct
     public void init() {
 		if(getTebligIcerikBean().getSelectedTebligIcerik() != null){
-			TebligMaddeIcerik root = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getTebligIcerikBean().getSelectedTebligIcerik().getTebligMaddeIcerikRoot()); // instead get root object from database 
+			TebligMaddeIcerik root = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getTebligIcerikBean().getSelectedTebligIcerik().getMaddeIcerikRoot()); // instead get root object from database 
 			rootNode = newNodeWithChildren(root, null);
 			rootNode.setExpanded(true);
 		}
@@ -84,7 +87,7 @@ public class TebligMaddeIcerikBean implements Serializable {
 
     public TreeNode getRootNode() {   
     	if(getTebligIcerikBean().getSelectedTebligIcerik() != null){
-    		TebligMaddeIcerik root = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getTebligIcerikBean().getSelectedTebligIcerik().getTebligMaddeIcerikRoot()); // instead get root object from database 
+    		TebligMaddeIcerik root = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getTebligIcerikBean().getSelectedTebligIcerik().getMaddeIcerikRoot()); // instead get root object from database 
     		if(root !=null){
     			rootNode = newNodeWithChildren(root, null);
     		} else {
@@ -173,13 +176,36 @@ public class TebligMaddeIcerikBean implements Serializable {
 			   tebligMaddeIcerik.setTebligMaddeIcerikMetin(getTebligMaddeIcerikMetin());
 			   
 			   if(selectedTebligMaddeIcerik == null){
-				   tebligMaddeIcerik.setTebligMaddeIcerik(getTebligMaddeIcerikService().getTebligMaddeIcerikById(tebligIcerikBean.getSelectedTebligIcerik().getTebligMaddeIcerikRoot()));
+				   tebligMaddeIcerik.setTebligMaddeIcerik(getTebligMaddeIcerikService().getTebligMaddeIcerikById(tebligIcerikBean.getSelectedTebligIcerik().getMaddeIcerikRoot()));
 				   TreeNode newNode = new TreeNodeImpl(tebligMaddeIcerik, rootNode);
 				   
+				   List<TebligMaddeIcerik> children = new ArrayList<TebligMaddeIcerik>();
+				   children.addAll((getTebligMaddeIcerikService().getTebligMaddeIcerikById(tebligIcerikBean.getSelectedTebligIcerik().getMaddeIcerikRoot())).getChildren());
+				   
+				   if(children.size()>0){
+					   if(children.get(children.size()-1) != null){
+						   tebligMaddeIcerik.setChildPosition((children.get(children.size()-1)).getChildPosition()+1);
+					   }
+				   }
+				   else{
+					   tebligMaddeIcerik.setChildPosition(0L);
+				   }
 			   }
 			   else {
 				   tebligMaddeIcerik.setTebligMaddeIcerik(selectedTebligMaddeIcerik);
 				   TreeNode newNode = new TreeNodeImpl(tebligMaddeIcerik, selectedNode);
+				   
+				   List<TebligMaddeIcerik> children = new ArrayList<TebligMaddeIcerik>();
+				   children.addAll(((TebligMaddeIcerik)selectedNode.getData()).getChildren());
+				   
+				   if(children.size()>0){
+					   if(children.get(children.size()-1) != null){
+						   tebligMaddeIcerik.setChildPosition((children.get(children.size()-1)).getChildPosition()+1);
+					   }
+				   }
+				   else{
+					   tebligMaddeIcerik.setChildPosition(0L);
+				   }
 				   //selectedNode.setExpanded(true);
 			   }
 			   
@@ -240,5 +266,93 @@ public class TebligMaddeIcerikBean implements Serializable {
 		 }
     }
     
+    
+
+	public void showYeniMetinDialog(){
+		if(selectedTebligMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen alt metin eklenecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedTebligMaddeIcerik != null) {
+    		RequestContext.getCurrentInstance().execute("PF('dlgYeniMetin').show()");
+    	}
+	}
+	
+	public void showUpdateMIDialog(){
+		if(selectedTebligMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen düzenlenecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedTebligMaddeIcerik != null) {
+    		RequestContext.getCurrentInstance().execute("PF('dlgDuzenleMetin').show()");
+    	}
+	}
    
+	public void onDragDrop(TreeDragDropEvent event) {
+		TebligMaddeIcerik dragTebligMaddeIcerik = (TebligMaddeIcerik)event.getDragNode().getData();
+		TebligMaddeIcerik dropTebligMaddeIcerik = (TebligMaddeIcerik)event.getDropNode().getData();    
+		Long dropIndex = new Long(event.getDropIndex());		 
+        Long oldIndex = dragTebligMaddeIcerik.getChildPosition();
+        TebligMaddeIcerik oldParent = dragTebligMaddeIcerik.getTebligMaddeIcerik();
+        
+        if( oldParent.getTebligMaddeIcerikId().equals(dropTebligMaddeIcerik.getTebligMaddeIcerikId())) {
+        	System.out.println("------------------parentler ayni");
+        	Long index = 0L;
+	        if(oldIndex > dropIndex){ //yukari tasinmissa
+		        for(TebligMaddeIcerik child : dropTebligMaddeIcerik.getChildren()){
+		        	if(index >= dropIndex && index < oldIndex){
+		        		child.setChildPosition(child.getChildPosition()+1);
+		        		getTebligMaddeIcerikService().updateTebligMaddeIcerik(child);
+		        	}
+		        	index++;
+		        }
+	        }
+	        
+	        else if(oldIndex < dropIndex){ //asagi tasinmissa
+	        	 for(TebligMaddeIcerik child : dropTebligMaddeIcerik.getChildren()){
+	 	        	if(index <= dropIndex && index > oldIndex){
+	 	        		child.setChildPosition(child.getChildPosition()-1);
+	 	        		getTebligMaddeIcerikService().updateTebligMaddeIcerik(child);
+	 	        	}
+	 	        	index++;
+	 	        }
+	        }
+	        
+	        dragTebligMaddeIcerik.setTebligMaddeIcerik(dropTebligMaddeIcerik);
+	        dragTebligMaddeIcerik.setChildPosition(dropIndex);
+    		getTebligMaddeIcerikService().updateTebligMaddeIcerik(dragTebligMaddeIcerik);
+        }
+        else if(! oldParent.getTebligMaddeIcerikId().equals(dropTebligMaddeIcerik.getTebligMaddeIcerikId())){
+        	System.out.println("------------------parentler farkli");
+        	//change old parent child positions
+        	Long index = 0L;
+        	for(TebligMaddeIcerik child : oldParent.getChildren()){
+        		if(index >= oldIndex){
+        			child.setChildPosition(child.getChildPosition()-1);
+        			System.out.println("----------------eski parent in childi :"+child.getTebligMaddeIcerikMetin());
+ 	        		getTebligMaddeIcerikService().updateTebligMaddeIcerik(child);
+ 	        	}
+ 	        	index++;
+        	}
+        	//change new parent child positions
+        	index = 0L;	    
+        	for(TebligMaddeIcerik child : dropTebligMaddeIcerik.getChildren()){
+	        	if(index >= dropIndex){
+	        		if(child.getTebligMaddeIcerikId() != dragTebligMaddeIcerik.getTebligMaddeIcerikId()){
+	        			child.setChildPosition(child.getChildPosition()+1);
+	        			System.out.println("----------------yeni parent in childi :"+child.getTebligMaddeIcerikMetin());
+		        		getTebligMaddeIcerikService().updateTebligMaddeIcerik(child);
+	        		}	        		
+	        	}
+	        	index++;
+	        }  
+	        
+	        dragTebligMaddeIcerik.setTebligMaddeIcerik(dropTebligMaddeIcerik);	        
+	        dragTebligMaddeIcerik.setChildPosition(dropIndex);
+	        getTebligMaddeIcerikService().updateTebligMaddeIcerik(dragTebligMaddeIcerik);
+ 	        
+        }
+       
+    }
+	
 }

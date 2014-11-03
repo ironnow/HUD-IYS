@@ -3,14 +3,24 @@ package hud.iys.bean;
 import hud.iys.model.Dipnot;
 import hud.iys.model.DipnotKI;
 import hud.iys.model.DipnotMI;
+import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
+import hud.iys.model.Link;
 import hud.iys.model.MaddeIcerik;
 import hud.iys.model.Mevzuat;
 import hud.iys.model.MevzuatSeti;
+import hud.iys.model.Teblig;
+import hud.iys.model.TebligIcerik;
+import hud.iys.model.TebligMaddeIcerik;
 import hud.iys.service.IDipnotKIService;
 import hud.iys.service.IDipnotMIService;
 import hud.iys.service.IKanunIcerikService;
+import hud.iys.service.IKanunService;
+import hud.iys.service.ILinkService;
 import hud.iys.service.IMaddeIcerikService;
+import hud.iys.service.ITebligIcerikService;
+import hud.iys.service.ITebligMaddeIcerikService;
+import hud.iys.service.ITebligService;
 import hud.iys.view.KanunMetin;
 import hud.iys.view.tree.TreeNodeImpl;
 
@@ -45,24 +55,48 @@ public class KanunIcerikBean implements Serializable {
 	private static final String SUCCESS = "success";
 	private static final String ERROR   = "error";
 	
+	public final long kanunTipId = 1L;
+	public final long kanunIcerikTipId = 2L;
+	public final long kanunMaddeIcerikTipId = 3L;
+	public final long tebligTipId = 4L;
+	public final long tebligIcerikTipId = 5L;
+	public final long tebligMaddeIcerikTipId = 6L;
+	
 	private TreeNode rootNode;
+	private TreeNode hierarchyRootNode;
+	private TreeNode maddelerRootNode;
 	private TreeNode selectedNode;
 	
 	private KanunIcerik selectedKanunIcerik;
 	
-	private String kanunIcerikNo;
-	private String kanunIcerikAdi;
-	private String kanunIcerikMetin;
+	private String icerikNo;
+	private String icerikAdi;
+	private String icerikMetin;
 	
 	private String dipnotNo;
 	private String dipnotMetin;
 	
+		
 	@ManagedProperty(value="#{KanunIcerikService}")
 	IKanunIcerikService kanunIcerikService;	
 	
+	@ManagedProperty(value="#{KanunService}")
+	IKanunService kanunService;	
+	
+	@ManagedProperty(value="#{TebligService}")
+	ITebligService tebligService;	
+
+	@ManagedProperty(value="#{TebligIcerikService}")
+	ITebligIcerikService tebligIcerikService;	
 	
 	@ManagedProperty(value="#{MaddeIcerikService}")
 	IMaddeIcerikService maddeIcerikService;
+	
+	@ManagedProperty(value="#{TebligMaddeIcerikService}")
+	ITebligMaddeIcerikService tebligMaddeIcerikService;
+	
+	@ManagedProperty(value="#{LinkService}")
+	ILinkService linkService;
 	
 	@ManagedProperty(value="#{kanunMB}")
 	private KanunBean kanunBean;
@@ -77,18 +111,53 @@ public class KanunIcerikBean implements Serializable {
 	private TreeNode icerikRootNode;
 	//root node of all nodes of kanun
 	private TreeNode kanunMetniRootNode;
+	private List<KanunMetin> kanunMetinleri;
 	//root node of clicked node
 	private TreeNode maddeIcerikRootNode; 
 	
-	
+	private List<Kanun> ilgiliKanunList;
+	private List<KanunIcerik> ilgiliKanunIcerikList;
+	private List<Teblig> ilgiliTebligList;
+    private List<TebligIcerik> ilgiliTebligIcerikList;
+    
+    private KanunIcerik selectedIlgiliKanunIcerik;
+    private TreeNode rootNodeRelatedKIMI;
+    
+    private KanunIcerik selectedIlgiliTebligIcerik;
+    private TreeNode rootNodeRelatedKITMI;
+    
+    private List<DipnotKI> dipnotlarKI;
+    private List<DipnotMI> dipnotlarMI;
+    
+    private List<KanunIcerik> maddeler;
+    private boolean isShowOnlyMaddeler;
 	
     @PostConstruct
     public void init() {
     	KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
-    	
-		rootNode = newNodeWithChildren(root, null);
-		kanunMetniRootNode = newFullNodeWithChildren(root, null);
+    	maddeler = new ArrayList<KanunIcerik>();
+    	isShowOnlyMaddeler = false;
+    	hierarchyRootNode = newNodeWithChildren(root, null, maddeler);
+		rootNode = hierarchyRootNode;
 		
+		maddelerRootNode = new DefaultTreeNode(root, null);
+    	
+    	for (KanunIcerik kanunIcerik : maddeler){
+    		TreeNode newNode= new TreeNodeImpl(kanunIcerik, maddelerRootNode);
+    		System.out.println("Yeni Madde : "+kanunIcerik.getIcerikAdi());
+    	}
+		
+		if(getSelectedIlgiliKanunIcerik() != null){
+			MaddeIcerik rootKIMI = getMaddeIcerikService().getMaddeIcerikById(getSelectedIlgiliKanunIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedKIMI = newNodeWithChildren(rootKIMI, null);
+			rootNodeRelatedKIMI.setExpanded(true);
+		}
+		
+		if(getSelectedIlgiliTebligIcerik() != null){
+			TebligMaddeIcerik rootKITMI = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getSelectedIlgiliTebligIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedKITMI = newNodeWithChildren(rootKITMI, null);
+			rootNodeRelatedKITMI.setExpanded(true);
+		}
 		setSelectedKanunIcerik((KanunIcerik)rootNode.getData());
 		
 		if(getSelectedKanunIcerik() != null){
@@ -98,7 +167,8 @@ public class KanunIcerikBean implements Serializable {
 		}
 		
 		icerikRootNode = maddeIcerikRootNode;
-       
+		ilgiliKanunIcerikList = new ArrayList<KanunIcerik>();
+		ilgiliTebligIcerikList = new ArrayList<TebligIcerik>();
     }
     public TreeNode newNodeMIWithChildren(MaddeIcerik ttParent, TreeNode parent){
         TreeNode newNode= new TreeNodeImpl(ttParent, parent);
@@ -113,7 +183,7 @@ public class KanunIcerikBean implements Serializable {
     public void changeRootNode(){
     	KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
     	
-    	kanunMetniRootNode = newFullNodeWithChildren(root, null);
+    	kanunMetniRootNode = newFullNodeWithChildren(root, null,kanunMetinleri);
 		icerikRootNode = kanunMetniRootNode;
 		selectedKanunIcerik = root;
     }
@@ -122,8 +192,35 @@ public class KanunIcerikBean implements Serializable {
      *  recursive function that returns a new node with its children
     */
    
+    public void showOnlyMaddeler(){
     
-    public TreeNode newNodeWithChildren(KanunIcerik ttParent, TreeNode parent){
+    	if(isShowOnlyMaddeler == false ){
+    		KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
+        	
+    		maddeler = new ArrayList<KanunIcerik>();
+        	hierarchyRootNode = newNodeWithChildren(root, null, maddeler);
+    		//rootNode = hierarchyRootNode;
+    		
+    		maddelerRootNode = new DefaultTreeNode(root, null);
+        	
+        	for (KanunIcerik kanunIcerik : maddeler){
+        		TreeNode newNode= new TreeNodeImpl(kanunIcerik, maddelerRootNode);
+        		System.out.println("Yeni Madde : "+kanunIcerik.getIcerikAdi());
+        	}
+	    	rootNode = maddelerRootNode;
+	    	isShowOnlyMaddeler = true;
+    	}
+    	else if (isShowOnlyMaddeler == true){
+    		KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
+        	maddeler = new ArrayList<KanunIcerik>();
+        	hierarchyRootNode = newNodeWithChildren(root, null, maddeler);
+    		rootNode = hierarchyRootNode;
+    		
+    		isShowOnlyMaddeler = false;
+    	}
+    }
+    
+    public TreeNode newNodeWithChildren(KanunIcerik ttParent, TreeNode parent, List<KanunIcerik> maddeler){
     	 TreeNode newNode= new TreeNodeImpl(ttParent, parent);
 //    	 List<KanunIcerik> childList = new ArrayList<KanunIcerik>();
 //    	 childList.addAll(ttParent.getChildren());
@@ -140,59 +237,80 @@ public class KanunIcerikBean implements Serializable {
 //    		 System.out.println("sirali :" +tt.getKanunIcerikAdi());
 //    	 }
 //    	
+    	 if(ttParent.getChildren().size() <= 0){
+    		 maddeler.add(ttParent);
+    	 }
     	 for (KanunIcerik tt : ttParent.getChildren()){        	  
-              TreeNode newNode2= newNodeWithChildren(tt, newNode);              
+              TreeNode newNode2= newNodeWithChildren(tt, newNode,maddeler);              
          }
          return newNode;
     }
     
-    public TreeNode newMaddeIcerikNodeWithChildren(MaddeIcerik ttParent, TreeNode parent){
+    public TreeNode newMaddeIcerikNodeWithChildren(MaddeIcerik ttParent, TreeNode parent, List<KanunMetin> kanunMetinleri){
     	
     	KanunMetin kanunMetin = new KanunMetin(ttParent.getMaddeIcerikAdi(),ttParent.getMaddeIcerikMetin());
-    	kanunMetin.setType(2);
+    	kanunMetin.setType("metin");
     	kanunMetin.setIcerikId(ttParent.getMaddeIcerikId());
+    	kanunMetinleri.add(kanunMetin);
         TreeNode newNode= new TreeNodeImpl(kanunMetin, parent);
         newNode.setExpanded(true);
         for (MaddeIcerik tt : ttParent.getChildren()){
-             TreeNode newNode2= newMaddeIcerikNodeWithChildren(tt, newNode);
-             newNode2.setExpanded(true
-            		 );
+             TreeNode newNode2= newMaddeIcerikNodeWithChildren(tt, newNode,kanunMetinleri);
+             newNode2.setExpanded(true);
         }
         return newNode;
     }
     
-    public TreeNode newFullNodeWithChildren(KanunIcerik ttParent, TreeNode parent){
-    	String metin = ttParent.getKanunIcerikAdi();
-    	if(ttParent.getKanunIcerikMetin() != null) 
-    		metin.concat(ttParent.getKanunIcerikMetin());
-    	KanunMetin kanunMetin = new KanunMetin(ttParent.getKanunIcerikAdi(),metin);
-    	kanunMetin.setType(1); // KanunIcerik
-    	kanunMetin.setIcerikId(ttParent.getKanunIcerikId());
+    public TreeNode newFullNodeWithChildren(KanunIcerik ttParent, TreeNode parent, List<KanunMetin> kanunMetinleri){
+    	    	
+    	KanunMetin kanunMetin = new KanunMetin(); 
+    	
+    	kanunMetin.setIcerikId(ttParent.getIcerikId());
+    	
    	 	TreeNode newNode= new TreeNodeImpl(kanunMetin, parent);
    	 	newNode.setExpanded(true);
 	   	MaddeIcerik rootMaddeIcerik = getMaddeIcerikService().getMaddeIcerikById(ttParent.getMaddeIcerikRoot()); // instead get root object from database
 	   	if(rootMaddeIcerik !=null){
+	   		if((rootMaddeIcerik.getChildren()).size() > 0 ){
+	   			kanunMetin.setType("madde");
+	   			kanunMetin.setIcerikMetin(ttParent.getIcerikNo()+" - "+ttParent.getIcerikAdi());
+	   		}
+	   		else {
+	   			kanunMetin.setType("baslik"); // KanunIcerik
+	   			kanunMetin.setIcerikMetin(ttParent.getIcerikAdi());
+	   		}
+	   		
+	   		kanunMetinleri.add(kanunMetin);
+	   		
+	   		if(ttParent.getIcerikMetin() != null && !(ttParent.getIcerikMetin().equals("")) ){
+	   			KanunMetin kanunMetinMetin = new KanunMetin();
+	   			kanunMetinMetin.setIcerikMetin(ttParent.getIcerikMetin());
+	   			kanunMetinMetin.setType("metin");
+	   			kanunMetinleri.add(kanunMetinMetin);
+	   		}
+	    		
 	   		for (MaddeIcerik mi : rootMaddeIcerik.getChildren()){
 	         	  
-	             TreeNode newMaddeIcerikNode= newMaddeIcerikNodeWithChildren(mi, newNode);
+	             TreeNode newMaddeIcerikNode= newMaddeIcerikNodeWithChildren(mi, newNode, kanunMetinleri);
 	             newMaddeIcerikNode.setExpanded(true);
 	        }
 	   		
 	   		//TreeNode newMaddeIcerikNode = newMaddeIcerikNodeWithChildren(rootMaddeIcerik, newNode);
 	   		//newMaddeIcerikNode.setExpanded(true);
 		}
-		
+	   
+	   	
    	 	for (KanunIcerik tt : ttParent.getChildren()){
        	  
-             TreeNode newNode2= newFullNodeWithChildren(tt, newNode);
+             TreeNode newNode2= newFullNodeWithChildren(tt, newNode,kanunMetinleri);
              newNode2.setExpanded(true);
         }
         return newNode;
     }
    
     public TreeNode getRootNode() {    	
-    	KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
-        rootNode = newNodeWithChildren(root, null);
+    	//KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
+        //rootNode = newNodeWithChildren(root, null, maddeler);
         return rootNode;
     }
 
@@ -201,13 +319,26 @@ public class KanunIcerikBean implements Serializable {
     }
     
     
-
+    
+    public List<KanunIcerik> getMaddeler() {
+		return maddeler;
+	}
+	public void setMaddeler(List<KanunIcerik> maddeler) {
+		this.maddeler = maddeler;
+	}
+	public void createReadMode(){
+    	kanunMetinleri = new ArrayList<KanunMetin>();
+    	KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
+    	kanunMetniRootNode = newFullNodeWithChildren(root, null,kanunMetinleri);
+       
+    }
    
 
 
 	public TreeNode getKanunMetniRootNode() {
+		kanunMetinleri = new ArrayList<KanunMetin>();
 		KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
-    	kanunMetniRootNode = newFullNodeWithChildren(root, null);
+    	kanunMetniRootNode = newFullNodeWithChildren(root, null,kanunMetinleri);
         
 		return kanunMetniRootNode;
 	}
@@ -239,9 +370,9 @@ public class KanunIcerikBean implements Serializable {
 
 
 	public void reset() {
-		this.setKanunIcerikNo(null);
-		this.setKanunIcerikAdi("");
-		this.setKanunIcerikMetin("");
+		this.setIcerikNo(null);
+		this.setIcerikAdi("");
+		this.setIcerikMetin("");
 	}
 
 	public IKanunIcerikService getKanunIcerikService() {
@@ -263,32 +394,39 @@ public class KanunIcerikBean implements Serializable {
     
     
      
-    public String getKanunIcerikNo() {
-		return kanunIcerikNo;
-	}
-
-	public void setKanunIcerikNo(String kanunIcerikNo) {
-		this.kanunIcerikNo = kanunIcerikNo;
-	}
-
-	public String getKanunIcerikAdi() {
-		return kanunIcerikAdi;
-	}
-
-	public void setKanunIcerikAdi(String kanunIcerikAdi) {
-		this.kanunIcerikAdi = kanunIcerikAdi;
-	}
-	
-	public String getKanunIcerikMetin() {
-		return kanunIcerikMetin;
-	}
-
-	public void setKanunIcerikMetin(String kanunIcerikMetin) {
-		this.kanunIcerikMetin = kanunIcerikMetin;
-	}
-	
+   
 	
 
+	public IKanunService getKanunService() {
+		return kanunService;
+	}
+	public void setKanunService(IKanunService kanunService) {
+		this.kanunService = kanunService;
+	}
+	public ITebligService getTebligService() {
+		return tebligService;
+	}
+	public void setTebligService(ITebligService tebligService) {
+		this.tebligService = tebligService;
+	}
+	public String getIcerikNo() {
+		return icerikNo;
+	}
+	public void setIcerikNo(String icerikNo) {
+		this.icerikNo = icerikNo;
+	}
+	public String getIcerikAdi() {
+		return icerikAdi;
+	}
+	public void setIcerikAdi(String icerikAdi) {
+		this.icerikAdi = icerikAdi;
+	}
+	public String getIcerikMetin() {
+		return icerikMetin;
+	}
+	public void setIcerikMetin(String icerikMetin) {
+		this.icerikMetin = icerikMetin;
+	}
 	public KanunBean getKanunBean() {
 		return kanunBean;
 	}
@@ -343,6 +481,92 @@ public class KanunIcerikBean implements Serializable {
 
 
 	
+	public ITebligIcerikService getTebligIcerikService() {
+		return tebligIcerikService;
+	}
+	public void setTebligIcerikService(ITebligIcerikService tebligIcerikService) {
+		this.tebligIcerikService = tebligIcerikService;
+	}
+	public List<KanunIcerik> getIlgiliKanunIcerikList() {
+		return ilgiliKanunIcerikList;
+	}
+	public void setIlgiliKanunIcerikList(List<KanunIcerik> ilgiliKanunIcerikList) {
+		this.ilgiliKanunIcerikList = ilgiliKanunIcerikList;
+	}
+	public List<TebligIcerik> getIlgiliTebligIcerikList() {
+		return ilgiliTebligIcerikList;
+	}
+	public void setIlgiliTebligIcerikList(List<TebligIcerik> ilgiliTebligIcerikList) {
+		this.ilgiliTebligIcerikList = ilgiliTebligIcerikList;
+	}
+		
+	public List<Kanun> getIlgiliKanunList() {
+		return ilgiliKanunList;
+	}
+	public void setIlgiliKanunList(List<Kanun> ilgiliKanunList) {
+		this.ilgiliKanunList = ilgiliKanunList;
+	}
+	public List<Teblig> getIlgiliTebligList() {
+		return ilgiliTebligList;
+	}
+	public void setIlgiliTebligList(List<Teblig> ilgiliTebligList) {
+		this.ilgiliTebligList = ilgiliTebligList;
+	}
+	
+	
+	public List<DipnotKI> getDipnotlarKI() {
+		return dipnotlarKI;
+	}
+	public void setDipnotlarKI(List<DipnotKI> dipnotlarKI) {
+		this.dipnotlarKI = dipnotlarKI;
+	}
+	public List<DipnotMI> getDipnotlarMI() {
+		return dipnotlarMI;
+	}
+	public void setDipnotlarMI(List<DipnotMI> dipnotlarMI) {
+		this.dipnotlarMI = dipnotlarMI;
+	}
+	public KanunIcerik getSelectedIlgiliTebligIcerik() {
+		return selectedIlgiliTebligIcerik;
+	}
+	public void setSelectedIlgiliTebligIcerik(KanunIcerik selectedIlgiliTebligIcerik) {
+		this.selectedIlgiliTebligIcerik = selectedIlgiliTebligIcerik;
+	}
+	public TreeNode getRootNodeRelatedKITMI() {
+		if(getSelectedIlgiliTebligIcerik() != null){
+			TebligMaddeIcerik rootKITMI = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getSelectedIlgiliTebligIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedKITMI = newNodeWithChildren(rootKITMI, null);
+			rootNodeRelatedKITMI.setExpanded(true);
+		}
+		return rootNodeRelatedKITMI;
+	}
+	public void setRootNodeRelatedKITMI(TreeNode rootNodeRelatedKITMI) {
+		this.rootNodeRelatedKITMI = rootNodeRelatedKITMI;
+	}
+	public List<KanunMetin> getKanunMetinleri() {
+		kanunMetinleri = new ArrayList<KanunMetin>();
+    	KanunIcerik root = getKanunIcerikService().getKanunIcerikById(getKanunBean().getSelectedKanun().getKanunIcerikRoot()); // instead get root object from database 
+    	kanunMetniRootNode = newFullNodeWithChildren(root, null,kanunMetinleri);
+      	return kanunMetinleri;
+	}
+	public void setKanunMetinleri(List<KanunMetin> kanunMetinleri) {
+		this.kanunMetinleri = kanunMetinleri;
+	}
+	public ILinkService getLinkService() {
+		return linkService;
+	}
+	public void setLinkService(ILinkService linkService) {
+		this.linkService = linkService;
+	}
+	
+	
+	public ITebligMaddeIcerikService getTebligMaddeIcerikService() {
+		return tebligMaddeIcerikService;
+	}
+	public void setTebligMaddeIcerikService(
+			ITebligMaddeIcerikService tebligMaddeIcerikService) {
+		this.tebligMaddeIcerikService = tebligMaddeIcerikService;
+	}
 	public void displaySelectedSingle() {
         if(selectedNode != null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
@@ -367,14 +591,14 @@ public class KanunIcerikBean implements Serializable {
     	TreeNode newNode = null;  
     	try {
 			   KanunIcerik kanunIcerik = new KanunIcerik();
-			   kanunIcerik.setKanunIcerikNo(getKanunIcerikNo());
-			   kanunIcerik.setKanunIcerikAdi(getKanunIcerikAdi());
-			   kanunIcerik.setKanunIcerikMetin(getKanunIcerikMetin());
+			   kanunIcerik.setIcerikNo(getIcerikNo());
+			   kanunIcerik.setIcerikAdi(getIcerikAdi());
+			   kanunIcerik.setIcerikMetin(getIcerikMetin());
 			   
 			   
 			   MaddeIcerik maddeIcerik = new MaddeIcerik();
 			   maddeIcerik.setMaddeIcerik(null);
-			   maddeIcerik.setMaddeIcerikAdi(getKanunIcerikAdi());
+			   maddeIcerik.setMaddeIcerikAdi(getIcerikAdi());
 			   getMaddeIcerikService().addMaddeIcerik(maddeIcerik);
 			   
 			   kanunIcerik.setMaddeIcerikRoot(maddeIcerik.getMaddeIcerikId());
@@ -403,7 +627,9 @@ public class KanunIcerikBean implements Serializable {
 				   kanunIcerik.setKanunIcerik((KanunIcerik)selectedNode.getData());
 				  
 				   List<KanunIcerik> children = new ArrayList<KanunIcerik>();
-				   children.addAll(((KanunIcerik)selectedNode.getData()).getChildren());
+				   if(((KanunIcerik)selectedNode.getData()).getChildren() != null){
+					   children.addAll(((KanunIcerik)selectedNode.getData()).getChildren());
+				   }
 				   
 				   if(children.size()>0){
 					   if(children.get(children.size()-1) != null){
@@ -431,10 +657,10 @@ public class KanunIcerikBean implements Serializable {
 		   e.printStackTrace();
 		  }  
 	
-		  showExpanded(rootNode);
-		  newNode.setExpanded(true);
-		  expand(newNode);
-		  showExpanded(rootNode);
+		 // showExpanded(rootNode);
+		  //newNode.setExpanded(true);
+		 // expand(newNode);
+		 // showExpanded(rootNode);
 	 }
     
     public void addDipnot() {
@@ -472,19 +698,39 @@ public class KanunIcerikBean implements Serializable {
 		maddeIcerikRootNode.setExpanded(true);
     	icerikRootNode = maddeIcerikRootNode;
     	
+    	
     	if(selectedKanunIcerik != null){
     		
-    		ArrayList <Dipnot> dipnotlar = new ArrayList<Dipnot>();
-    		for(DipnotKI dipnotKI : selectedKanunIcerik.getDipnotlar()){
-    			Dipnot newDipnot = new Dipnot();
-    			newDipnot.setDipnotId(dipnotKI.getDipnotKIId());
-    			newDipnot.setDipnotNo(dipnotKI.getDipnotKIMetin());
-    			newDipnot.setDipnotMetin(dipnotKI.getDipnotKIMetin());
-    			dipnotlar.add(newDipnot);
+    		dipnotlarKI = new ArrayList<DipnotKI>();
+    		if(selectedKanunIcerik.getDipnotlar() != null){
+    			dipnotlarKI.addAll(selectedKanunIcerik.getDipnotlar());
     		}
+    		    		
     		
-    		dipnotBean.setDipnotlar(dipnotlar);
+    		ilgiliKanunList = new ArrayList<Kanun>();
+    		ilgiliKanunIcerikList = new ArrayList<KanunIcerik>();
+    		ilgiliTebligList = new ArrayList<Teblig>();
+    		ilgiliTebligIcerikList = new ArrayList<TebligIcerik>();
+    		List<Link> linkList = getLinkService().getLinklerByFromId(selectedKanunIcerik.getIcerikId());
     		
+    		for(Link link : linkList){
+				if(link.getToTypeId() == kanunTipId){
+					ilgiliKanunList.add(getKanunService().getKanunById(link.getToId()));
+					
+				}
+				else if(link.getToTypeId() == kanunIcerikTipId){    				
+					ilgiliKanunIcerikList.add(getKanunIcerikService().getKanunIcerikById(link.getToId()));
+					
+				}
+				else if(link.getToTypeId() == tebligTipId){
+					ilgiliTebligList.add(getTebligService().getTebligById(link.getToId()));
+					
+				}
+				else if(link.getToTypeId() == tebligIcerikTipId){    				
+					ilgiliTebligIcerikList.add(getTebligIcerikService().getTebligIcerikById(link.getToId()));
+					
+				}
+			}
     		// MaddeIcerik root = getMaddeIcerikService().getMaddeIcerikById(selectedKanunIcerik.getMaddeIcerikRoot()); // instead get root object from database 
     	    // rootNode = newNodeWithChildren(root, null);
     		
@@ -505,6 +751,62 @@ public class KanunIcerikBean implements Serializable {
 		this.selectedKanunIcerik = selectedKanunIcerik;
 	}
     
+	
+	
+	public KanunIcerik getSelectedIlgiliKanunIcerik() {
+		return selectedIlgiliKanunIcerik;
+	}
+	public void setSelectedIlgiliKanunIcerik(KanunIcerik selectedIlgiliKanunIcerik) {
+		this.selectedIlgiliKanunIcerik = selectedIlgiliKanunIcerik;
+	}
+	
+	public void setIlgiliKIMI(){
+		if(getSelectedIlgiliKanunIcerik() != null){
+			MaddeIcerik root = getMaddeIcerikService().getMaddeIcerikById(getSelectedIlgiliKanunIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedKIMI = newNodeWithChildren(root, null);
+			rootNodeRelatedKIMI.setExpanded(true);
+		}
+	}
+	public void setIlgiliKITMI(){
+		if(getSelectedIlgiliTebligIcerik() != null){
+			TebligMaddeIcerik rootKITMI = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getSelectedIlgiliTebligIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedKITMI = newNodeWithChildren(rootKITMI, null);
+			rootNodeRelatedKITMI.setExpanded(true);
+		}
+	}
+	
+	public TreeNode getRootNodeRelatedKIMI() {
+		if(getSelectedIlgiliKanunIcerik() != null){
+			MaddeIcerik root = getMaddeIcerikService().getMaddeIcerikById(getSelectedIlgiliKanunIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedKIMI = newNodeWithChildren(root, null);
+			rootNodeRelatedKIMI.setExpanded(true);
+		}
+		return rootNodeRelatedKIMI;
+	}
+	public void setRootNodeRelatedKIMI(TreeNode rootNodeRelatedKIMI) {
+		this.rootNodeRelatedKIMI = rootNodeRelatedKIMI;
+	}
+	 public TreeNode newNodeWithChildren(MaddeIcerik ttParent, TreeNode parent){
+         TreeNode newNode= new TreeNodeImpl(ttParent, parent);
+         newNode.setExpanded(true);
+         for (MaddeIcerik tt : ttParent.getChildren()){
+              TreeNode newNode2= newNodeWithChildren(tt, newNode);
+              newNode2.setExpanded(true);
+         }
+         return newNode;
+    }
+	
+	 
+	 public TreeNode newNodeWithChildren(TebligMaddeIcerik ttParent, TreeNode parent){
+         TreeNode newNode= new TreeNodeImpl(ttParent, parent);
+         newNode.setExpanded(true);
+         for (TebligMaddeIcerik tt : ttParent.getChildren()){
+              TreeNode newNode2= newNodeWithChildren(tt, newNode);
+              newNode2.setExpanded(true);
+         }
+         return newNode;
+     }
+	 
 	public void onDragDrop(TreeDragDropEvent event) {
 		KanunIcerik dragKanunIcerik = (KanunIcerik)event.getDragNode().getData();
 		KanunIcerik dropKanunIcerik = (KanunIcerik)event.getDropNode().getData();    
@@ -512,15 +814,8 @@ public class KanunIcerikBean implements Serializable {
         Long oldIndex = dragKanunIcerik.getChildPosition();
         KanunIcerik oldParent = dragKanunIcerik.getKanunIcerik();
         
-        if(oldParent.getKanunIcerikId() == dropKanunIcerik.getKanunIcerikId()) {
-        
-	        dragKanunIcerik.setKanunIcerik(dropKanunIcerik);
-	        
-	        dragKanunIcerik.setChildPosition(dropIndex);
-	        getKanunIcerikService().updateKanunIcerik(dragKanunIcerik);
-	        
-	        Long index = 0L;
-	        System.out.println("Old Parent : " + oldParent.getKanunIcerikAdi());
+        if( oldParent.getIcerikId().equals(dropKanunIcerik.getIcerikId())) {
+        	Long index = 0L;
 	        if(oldIndex > dropIndex){ //yukari tasinmissa
 		        for(KanunIcerik child : dropKanunIcerik.getChildren()){
 		        	if(index >= dropIndex && index < oldIndex){
@@ -530,6 +825,7 @@ public class KanunIcerikBean implements Serializable {
 		        	index++;
 		        }
 	        }
+	        
 	        else if(oldIndex < dropIndex){ //asagi tasinmissa
 	        	 for(KanunIcerik child : dropKanunIcerik.getChildren()){
 	 	        	if(index <= dropIndex && index > oldIndex){
@@ -539,38 +835,36 @@ public class KanunIcerikBean implements Serializable {
 	 	        	index++;
 	 	        }
 	        }
-        }
-        else if(oldParent.getKanunIcerikId() != dropKanunIcerik.getKanunIcerikId()){
-        	
-        	dragKanunIcerik.setKanunIcerik(dropKanunIcerik);	        
-	        dragKanunIcerik.setChildPosition(dropIndex);
-	        getKanunIcerikService().updateKanunIcerik(dragKanunIcerik);
 	        
+	        dragKanunIcerik.setKanunIcerik(dropKanunIcerik);
+	        dragKanunIcerik.setChildPosition(dropIndex);
+    		getKanunIcerikService().updateKanunIcerik(dragKanunIcerik);
+        }
+        else if(! oldParent.getIcerikId().equals(dropKanunIcerik.getIcerikId())){
         	//change old parent child positions
         	Long index = 0L;
-        	System.out.println("Old Parent : " + oldParent.getKanunIcerikAdi());
         	for(KanunIcerik child : oldParent.getChildren()){
-        		
         		if(index >= oldIndex){
-        			System.out.println("old Parent child : "+ child.getKanunIcerikAdi());
         			child.setChildPosition(child.getChildPosition()-1);
- 	        		getKanunIcerikService().updateKanunIcerik(child);
+        			getKanunIcerikService().updateKanunIcerik(child);
  	        	}
  	        	index++;
         	}
         	//change new parent child positions
         	index = 0L;	    
-        	System.out.println("New Parent : " + dropKanunIcerik.getKanunIcerikAdi());
-	        for(KanunIcerik child : dropKanunIcerik.getChildren()){
+        	for(KanunIcerik child : dropKanunIcerik.getChildren()){
 	        	if(index >= dropIndex){
-	        		if(child.getKanunIcerikId() != dragKanunIcerik.getKanunIcerikId()){
-	        			System.out.println("new Parent child : "+ child.getKanunIcerikAdi());
+	        		if(child.getIcerikId() != dragKanunIcerik.getIcerikId()){
 	        			child.setChildPosition(child.getChildPosition()+1);
-		        		getKanunIcerikService().updateKanunIcerik(child);
+	        			getKanunIcerikService().updateKanunIcerik(child);
 	        		}	        		
 	        	}
 	        	index++;
-	        }        
+	        }  
+	        
+	        dragKanunIcerik.setKanunIcerik(dropKanunIcerik);	        
+	        dragKanunIcerik.setChildPosition(dropIndex);
+	        getKanunIcerikService().updateKanunIcerik(dragKanunIcerik);
  	        
         }
        
@@ -586,7 +880,7 @@ public class KanunIcerikBean implements Serializable {
 
 	 public void showExpanded(TreeNode root){
 		 root.setExpanded(true);
-		 System.out.println(((KanunIcerik)(root.getData())).getKanunIcerikAdi() + " is Expanded : " + root.isExpanded());
+		 System.out.println(((KanunIcerik)(root.getData())).getIcerikAdi() + " is Expanded : " + root.isExpanded());
 		 
 		 for(TreeNode treeNode : root.getChildren()){
 			 showExpanded(treeNode);

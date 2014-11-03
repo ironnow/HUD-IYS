@@ -32,16 +32,16 @@ public class KanunIcerik {
 	 @Id
 	 @GeneratedValue(strategy = IDENTITY)
 	 @Column(name = "KanunIcerikID", unique = true, nullable = false)	 
-	 private Long kanunIcerikId;	
+	 private Long icerikId;	
 	 
 	 @Column(name="KanunIcerikNo")	 
-	 private String kanunIcerikNo;
+	 private String icerikNo;
 	 
 	 @Column(name="KanunIcerikAdi")	 
-	 private String kanunIcerikAdi;
+	 private String icerikAdi;
 	 
 	 @Column(name="KanunIcerikMetin")	 
-	 private String kanunIcerikMetin;	
+	 private String icerikMetin;	
 	 
 	 @ManyToOne(fetch = FetchType.LAZY, optional = true)
 	 @JoinColumn(name = "parentID", referencedColumnName = "kanunIcerikID")	 
@@ -51,7 +51,7 @@ public class KanunIcerik {
 	 @OrderBy(clause = "ChildPosition ASC")
 	 private Collection<KanunIcerik> children;	 
 	 
-	 @ManyToOne(fetch = FetchType.LAZY)
+	 @ManyToOne(fetch = FetchType.EAGER)
 	 @JoinColumn(name = "KanunID", nullable = false)	 
 	 private Kanun kanun;
 	 
@@ -67,39 +67,39 @@ public class KanunIcerik {
 	 @OneToMany(fetch = FetchType.EAGER, mappedBy = "kanunIcerik")
 	 Set<DipnotKI> dipnotlar; 
 	 
-	 public Long getKanunIcerikId() {
-		 return kanunIcerikId;
+	 public Long getIcerikId() {
+		 return icerikId;
 	 }
 	
-	 public void setKanunIcerikId(Long id) {
-		 this.kanunIcerikId = id;
+	 public void setIcerikId(Long id) {
+		 this.icerikId = id;
 	 }
 	
 	 
 	 
-	 public String getKanunIcerikNo() {
-		 return kanunIcerikNo;
+	 public String getIcerikNo() {
+		 return icerikNo;
 	 }
 
-	 public void setKanunIcerikNo(String kanunIcerikNo) {
-		 this.kanunIcerikNo = kanunIcerikNo;
+	 public void setIcerikNo(String icerikNo) {
+		 this.icerikNo = icerikNo;
    	 }
 
-	 public String getKanunIcerikAdi() {
-		 return kanunIcerikAdi;
+	 public String getIcerikAdi() {
+		 return icerikAdi;
 	 }
 		
-	 public void setKanunIcerikAdi(String kanunIcerikAdi) {
-		 this.kanunIcerikAdi = kanunIcerikAdi;
+	 public void setIcerikAdi(String icerikAdi) {
+		 this.icerikAdi = icerikAdi;
 	 }
 	
 	 
-	 public String getKanunIcerikMetin() {
-		return kanunIcerikMetin;
+	 public String getIcerikMetin() {
+		return icerikMetin;
 	 }
 
-	 public void setKanunIcerikMetin(String kanunIcerikMetin) {
-		this.kanunIcerikMetin = kanunIcerikMetin;
+	 public void setIcerikMetin(String icerikMetin) {
+		this.icerikMetin = icerikMetin;
 	 }
 
 	
@@ -180,8 +180,8 @@ public class KanunIcerik {
 	@Override
 	 public String toString() {
 		  StringBuffer strBuff = new StringBuffer();
-		  strBuff.append("id : ").append(getKanunIcerikId());
-		  strBuff.append(", mevzuatSetiAdi : ").append(getKanunIcerikAdi());
+		  strBuff.append("id : ").append(getIcerikId());
+		  strBuff.append(", mevzuatSetiAdi : ").append(getIcerikAdi());
 		  return strBuff.toString();
 	 }
 }

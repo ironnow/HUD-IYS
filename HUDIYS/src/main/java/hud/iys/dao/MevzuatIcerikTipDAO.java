@@ -53,5 +53,12 @@ public class MevzuatIcerikTipDAO implements IMevzuatIcerikTipDAO {
 		 return list;
 	 }
 	 
+	 @Override
+	 public MevzuatIcerikTip getMevzuatIcerikTipIdByName(String mevzuatIcerikTipName){
+		 List list = getSessionFactory().getCurrentSession()
+		           .createQuery("from MevzuatIcerikTip where mevzuatIcerikTipAdi=?")
+		                 .setParameter(0, mevzuatIcerikTipName).list();
+		  	return (MevzuatIcerikTip)list.get(0);
+	 }
 
 }

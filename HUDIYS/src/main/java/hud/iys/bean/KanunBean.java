@@ -55,7 +55,7 @@ public class KanunBean implements Serializable {
 	 
 	 private List<KanunIcerik> selectedKanunKanunIcerikList;
 	
-	 private int kanunNo;
+	 private Long kanunNo;
 	 private String kanunAdi;
 	 private int RGNo;
 	 private Date RGTarihi;
@@ -75,10 +75,10 @@ public class KanunBean implements Serializable {
 			   
 			   KanunIcerik kanunIcerik = new KanunIcerik();
 			   kanunIcerik.setKanunIcerik(null);
-			   kanunIcerik.setKanunIcerikAdi(getKanunAdi());
+			   kanunIcerik.setIcerikAdi(getKanunAdi());
 			   getKanunIcerikService().addKanunIcerik(kanunIcerik);
 			   
-			   kanun.setKanunIcerikRoot(kanunIcerik.getKanunIcerikId());
+			   kanun.setKanunIcerikRoot(kanunIcerik.getIcerikId());
 			   
 			   kanun.setMevzuat(mevzuatBean.getSelectedMevzuat());
 			   getKanunService().addKanun(kanun);
@@ -87,7 +87,7 @@ public class KanunBean implements Serializable {
 			   
 			   MaddeIcerik maddeIcerik = new MaddeIcerik();
 			   maddeIcerik.setMaddeIcerik(null);
-			   maddeIcerik.setMaddeIcerikAdi(kanunIcerik.getKanunIcerikAdi());
+			   maddeIcerik.setMaddeIcerikAdi(kanunIcerik.getIcerikAdi());
 			   getMaddeIcerikService().addMaddeIcerik(maddeIcerik);
 			   
 			   kanunIcerik.setMaddeIcerikRoot(maddeIcerik.getMaddeIcerikId());
@@ -106,7 +106,7 @@ public class KanunBean implements Serializable {
 	 }
 
 	 public void reset() {
-		 this.setKanunNo(0);
+		 this.setKanunNo(0L);
 		 this.setKanunAdi("");
 		 this.setRGNo(0);
 		 this.setRGTarihi(null);
@@ -130,11 +130,11 @@ public class KanunBean implements Serializable {
 		this.kanunService = kanunService;
 	}
 
-	public int getKanunNo() {
+	public Long getKanunNo() {
 		return kanunNo;
 	}
 
-	public void setKanunNo(int kanunNo) {
+	public void setKanunNo(Long kanunNo) {
 		this.kanunNo = kanunNo;
 	}
 
@@ -235,8 +235,8 @@ public class KanunBean implements Serializable {
 		setSelectedKanunKanunIcerikList(this.selectedKanunKanunIcerikList);
 			
 		
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
-		FacesContext.getCurrentInstance().getExternalContext().redirect("kanunIcerik.jsf?id=" +((Kanun) event.getObject()).getKanunId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("kanunIcerik.xhtml?id=" +((Kanun) event.getObject()).getKanunId());
 
 
     }
@@ -248,7 +248,7 @@ public class KanunBean implements Serializable {
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
         
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
 
 
     }

@@ -1,57 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui" 
-	  xmlns:ui="http://java.sun.com/jsf/facelets">
-	  
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
 <h:head>
-<title>HUD İYS</title>
-<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<title>HUD İYS</title>
+	<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
-        .ui-widget,.ui-widget .ui-widget 
-        {
-            font-size: 90% !important;
-        }
-	</style>
-	
+.ui-widget, .ui-widget .ui-widget {
+	font-size: 90% !important;
+}
+</style>
+
 	<script type="text/javascript">
-	    function handleLoginRequest(xhr, status, args) {
-	        if(args.validationFailed || !args.loggedIn) {
-	            PF('dlg').jq.effect("shake", {times:5}, 100);
-	        }
-	        else {
-	            PF('dlg').hide();
-	            $('#loginLink').fadeOut();
-	        }
-	    }
+		function handleLoginRequest(xhr, status, args) {
+
+			if (args.validationFailed || !args.loggedIn) {
+				PF('dlg').jq.effect("shake", {
+					times : 5
+				}, 100);
+			} else {
+				PF('dlg').hide();
+				$('#loginLink').fadeOut();
+			}
+		}
+
+		$('#sehir').puidropdown();
 	</script>
- </h:head>
-	 <h:body> 
-	 	<ui:decorate template="templates/template.xhtml">			 
-			<ui:define name="content"> 
+</h:head>
+<h:body>
+	<ui:decorate template="templates/template.xhtml">
+		<ui:define name="content">
+		
 			
 			<h:form>
-				<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
- 
-				
-				<h:panelGrid style="margin: 0 auto;" columns="2" cellpadding="5">
-		            <h:outputLabel for="username" value="Kullanıcı Adı: " />
-		            <p:inputText id="username" value="#{userLoginMB.username}" required="true" label="username" />
-		 
-		            <h:outputLabel for="password" value="Şifre: " />
-		            <p:password id="password" value="#{userLoginMB.password}" required="true" label="password" />
-		 
-		            <f:facet name="footer" align="center">
-		                <p:commandButton align="center" value="Login" update="growl" actionListener="#{userLoginMB.login}"
-		                                 ajax="false" />
-		            </f:facet>   
-		        </h:panelGrid>
-		        </h:form>
-	 		
-			</ui:define> 			 
-		</ui:decorate> 
-	</h:body> 
+				<p:growl id="messages" showDetail="true"/>
+				<p:panel header="Giriş Bilgileri" style="width:600px;margin: 0 auto">
+					<h:panelGrid style="margin: 0 auto;" columns="3" cellpadding="5">
+						<h:outputLabel for="username" value="Kullanıcı Adı: " />
+						<p:inputText id="username" value="#{userMB.username}"
+							required="true" requiredMessage="Lütfen kullanıcı adınızı giriniz." label="username" />
+						<p:message for="username" class="error_message"/>
+	
+						<h:outputLabel for="password" value="Şifre: " />
+						<p:password id="password" value="#{userMB.password}"
+							required="true" requiredMessage="Lütfen şifrenizi giriniz." label="password" />
+						<p:message for="password" class="error_message"/>
+					</h:panelGrid>
+					
+					<h:panelGrid style="margin: 0 auto;" columns="1" >
+						<p:commandButton align="center" value="Giriş" update="messages" action="#{userMB.login}"/>
+						
+					</h:panelGrid>
+					
+				</p:panel>
+			</h:form>
+
+		</ui:define>
+	</ui:decorate>
+</h:body>
 </html>

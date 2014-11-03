@@ -11,10 +11,11 @@
 <title>HUD İYS</title>
 <link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
-        .ui-widget,.ui-widget .ui-widget 
-        {
-            font-size: 90% !important;
-        }
+        .ui-picklist-source, .ui-picklist-target 
+	   {
+	      height: 350px !important;
+	      width: 300px !important;
+	   }
 	</style>
 </h:head>
 <h:body> 
@@ -28,37 +29,38 @@
 					</td>
 					<td style="text-align:right; width:20%">
 						<h:form>
-							<p:commandButton align="right" update="icerikTipPickList" id="showDialogButton" type="button" value="İçerik Tipleri" action="#{mevzuatMB.mevzuatIcerikDuzenleClick}" onclick="PF('dlgIcerikTip').show()" />
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" update="icerikTipPickList" id="showDialogButton" type="button" value="İçerik Tipleri" action="#{mevzuatMB.mevzuatIcerikDuzenleClick}" onclick="PF('dlgIcerikTip').show()" />
 						</h:form>
 					</td>
 				</tr>
 			</table>		
 			
-			<p:dialog header="İçerikleri Düzenle" widgetVar="dlgIcerikTip" resizable="false">
+			<p:dialog header="İçerikleri Düzenle" widgetVar="dlgIcerikTip" resizable="false" height="400" width="690">
 				<h:form>
 					 <p:pickList id="icerikTipPickList" value="#{mevzuatMB.icerikTipleri}" var="mevzuatIcerikTip" itemLabel="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}" itemValue="#{mevzuatIcerikTip.mevzuatIcerikTipId}" >
 					 	 <p:ajax event="transfer" listener="#{mevzuatMB.onTransfer}" update=":form:mevzuatIcerikTipleri" />
  					 </p:pickList>
-    				 <p:commandButton id="icerikleriDuzenle" action="#{mevzuatMB.mevzuatIcerikDuzenleClick}" onclick="PF('dlgIcerikTip').hide()" value="Tamam" update=":form:mevzuatIcerikTipleri" style="margin-left:200px;margin-right:auto;margin-top:5px" />
+    				 <p:commandButton id="icerikleriDuzenle" action="#{mevzuatMB.mevzuatIcerikDuzenleClick}" onclick="PF('dlgIcerikTip').hide()" value="Tamam" update=":form:mevzuatIcerikTipleri" style="margin-left:300px;margin-right:auto;margin-top:5px" />
 				</h:form>
 			</p:dialog>
 			
 			<h:form id="form">
 			    <p:dataGrid var="mevzuatIcerikTip" value="#{mevzuatMB.mevzuatIcerikTipListesi}" columns="6"
-			        rows="8" paginator="true" id="mevzuatIcerikTipleri"
-			        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+			        id="mevzuatIcerikTipleri"
+			        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			        style="text-align:center;">
 			 
 			        <f:facet name="header">
 			            Mevzuat İçerikleri
 			        </f:facet>
 			 
-			        <p:panel header="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}" style="text-align:center">
+			        <p:panel header="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}" style="text-align:center;width:250px">
 			            <h:panelGrid columns="1" style="width:100%">			               
 			 			 
 			                <p:commandLink action="#{mevzuatMB.MevzuatIcerikSec}">
 			                	<f:setPropertyActionListener value="#{mevzuatIcerikTip}" target="#{mevzuatMB.selectedMevzuatIcerikTip}" />
-			                    <p:graphicImage value="../images/#{mevzuatIcerikTip.mevzuatIcerikTipAdi}.jpg"
-			                    				width="80"
+			                    <p:graphicImage value="../images/#{mevzuatIcerikTip.mevzuatIcerikTipId}.jpg"
+			                    				width="90"
 			                    				height="90"/> 
 			                </p:commandLink>
 			            </h:panelGrid>

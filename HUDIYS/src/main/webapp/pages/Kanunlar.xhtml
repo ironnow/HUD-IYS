@@ -11,10 +11,7 @@
 <title>HUD İYS</title>
 <link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
-        .ui-widget,.ui-widget .ui-widget 
-        {
-            font-size: 90% !important;
-        }
+       
 	</style>
 	
 	<script type="text/javascript">  
@@ -58,7 +55,7 @@
 					</td>
 					<td style="text-align:right; width:20%">
 						<h:form>
-							<p:commandButton align="right" id="showDialogButton" type="button" value="Yeni Kanun" onclick="PF('dlgYeni').show()" />
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" id="showDialogButton" update="yeniForm" action="#{kanunMB.reset}" type="button" value="Yeni Kanun" onclick="PF('dlgYeni').show()" />
 						</h:form>
 					</td>
 				</tr>
@@ -74,7 +71,7 @@
    			</p:dialog>
             
 			<p:dialog header="Yeni Kanun" widgetVar="dlgYeni" resizable="false">
-				<h:form>
+				<h:form id="yeniForm">
 					<p:panel>				
 						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
 							<h:outputText value="Kanun No: "/>
@@ -91,8 +88,8 @@
         					<p:calendar id="calendarKT" value="#{kanunMB.kabulTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
  
 							
-							<p:commandButton id="addKanun" update="kanunlar" value="Ekle" action="#{kanunMB.addKanun}" ajax="false"/>
-							<p:commandButton id="reset" value="İptal" action="#{kanunMB.reset}" ajax="false"/>
+							<p:commandButton id="addKanun" update=":form:kanunlar" value="Ekle" action="#{kanunMB.addKanun}" onclick="PF('dlgYeni').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{kanunMB.reset}" onclick="PF('dlgYeni').hide()"/>
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
@@ -116,8 +113,8 @@
         					<p:calendar id="calendarKT" value="#{kanunMB.selectedKanun.kabulTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
  
 							
-							<p:commandButton id="updateKanun" value="Düzenle" action="#{kanunMB.updateKanun}" ajax="false"/>
-							<p:commandButton id="reset" value="İptal" action="#{kanunMB.reset}" ajax="false"/>
+							<p:commandButton id="updateKanun" update=":form:kanunlar" value="Düzenle" action="#{kanunMB.updateKanun}" onclick="PF('dlgDuzenle').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{kanunMB.reset}" onclick="PF('dlgDuzenle').hide()"/>
 						</h:panelGrid>
 					</p:panel>
 				</h:form>
@@ -127,7 +124,7 @@
  			
 			
 			<h:form id="form" styleClass="form-style">
-				<p:contextMenu for="kanunlar">
+				<p:contextMenu rendered="#{userMB.isLogged and userMB.roleWriter}" for="kanunlar">
 			        <p:menuitem value="Düzenle" update=":duzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenle').show()"/>
 			        <p:menuitem value="Sil" update="kanunlar" icon="ui-icon-close" actionListener="#{kanunMB.deleteKanun}"/>
 			    </p:contextMenu>

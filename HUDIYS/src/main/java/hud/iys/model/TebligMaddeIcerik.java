@@ -21,6 +21,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.OrderBy;
+
 @Entity
 @Table(name="TEBLIGMADDEICERIK")
 public class TebligMaddeIcerik {
@@ -41,11 +43,15 @@ public class TebligMaddeIcerik {
 	 private TebligMaddeIcerik parent;
 	 
 	 @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "parent")	 
+	 @OrderBy(clause = "ChildPosition ASC")
 	 private Collection<TebligMaddeIcerik> children;	 
 	 
 	 @ManyToOne(fetch = FetchType.LAZY)
 	 @JoinColumn(name = "TebligIcerikID", nullable = false)	 
 	 private TebligIcerik tebligIcerik;
+	 
+	 @Column(name="ChildPosition")	
+	 private Long childPosition;
 	 
 	
 	 public Long getTebligMaddeIcerikId() {
@@ -94,11 +100,18 @@ public class TebligMaddeIcerik {
 	
 	 
 	 public TebligIcerik getTebligIcerik() {
-		return tebligIcerik;
+		 return tebligIcerik;
 	 }
 
 	 public void setTebligIcerik(TebligIcerik tebligIcerik) {
-		this.tebligIcerik = tebligIcerik;
+		 this.tebligIcerik = tebligIcerik;
 	 }	 
-	
+	 
+	 public Long getChildPosition() {
+		 return childPosition;
+	 }
+
+	 public void setChildPosition(Long childPosition) {
+	 	 this.childPosition = childPosition;
+	 }
 }

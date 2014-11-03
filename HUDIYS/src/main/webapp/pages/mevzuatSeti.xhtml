@@ -6,15 +6,12 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui" 
 	  xmlns:ui="http://java.sun.com/jsf/facelets">
-	  
+
 <h:head>
 <title>HUD İYS</title>
 <link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
-        .ui-widget,.ui-widget .ui-widget 
-        {
-            font-size: 90% !important;
-        }
+       
 	</style>
 </h:head>
 <h:body> 
@@ -28,7 +25,7 @@
 					</td>
 					<td style="text-align:right; width:20%">
 						<h:form>				
-							<p:commandButton align="right" id="showDialogButton" type="button" value="Yeni Mevzuat Seti" onclick="PF('dlg').show()" />
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" id="showDialogButton" type="button" value="Yeni Mevzuat Seti" onclick="PF('dlg').show()" />
 						</h:form>
 					</td>
 				</tr>
@@ -52,15 +49,16 @@
 			
 			
  			<h:form id="form" styleClass="form-style"> 
-  				<p:growl id="growl" showDetail="true"/>
-   				<p:dataTable id="dataTable" var="mevzuatSeti" value="#{mevzuatSetiMB.mevzuatSetleriModel}" sortMode="multiple" rows="15" paginator="true"
+  				<p:dataTable id="dataTable" var="mevzuatSeti" value="#{mevzuatSetiMB.mevzuatSetleriModel}" sortMode="multiple" 
 					selection="#{mevzuatSetiMB.selectedMevzuatSeti}" selectionMode="single" >        
-					<p:ajax event="rowSelect" listener="#{mevzuatSetiMB.onRowSelect}" update=":form:growl"/>
-       				<p:ajax event="rowUnselect" listener="#{mevzuatSetiMB.onRowUnselect}" update=":form:growl"/>
+					<p:ajax event="rowSelect" listener="#{mevzuatSetiMB.onRowSelect}">
+						<f:setPropertyActionListener target="#{mevzuatMB.mevzuatSetiId}" value="#{mevzuatSetiMB.selectedMevzuatSeti.mevzuatSetiId}" />
+					</p:ajax>
+       				<p:ajax event="rowUnselect" listener="#{mevzuatSetiMB.onRowUnselect}"/>
 	
        				<p:column style="width:30%" sortBy="#{mevzuatSeti.mevzuatSetiAdi}" headerText="Mevzuat Seti">
            				<h:outputText value="#{mevzuatSeti.mevzuatSetiAdi}" />
-      					</p:column>
+      				</p:column>
 
 			        <p:column style="width:70%" sortBy="#{mevzuatSeti.mevzuatSetiAciklama}" headerText="Açıklama">
 			            <h:outputText value="#{mevzuatSeti.mevzuatSetiAciklama}" />

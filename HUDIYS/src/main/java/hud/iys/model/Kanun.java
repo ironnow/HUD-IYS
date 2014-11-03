@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class Kanun {
 
 	 private Long kanunId;
-	 private int kanunNo;
+	 private Long kanunNo;
 	 private String kanunAdi;
 	 private int RGNo;
 	 private Date RGTarihi;
@@ -42,11 +42,11 @@ public class Kanun {
 	
 	 
 	 @Column(name="KanunNo")
-	 public int getKanunNo() {
+	 public Long getKanunNo() {
 		 return kanunNo;
 	 }
 	
-	 public void setKanunNo(int kanunNo) {
+	 public void setKanunNo(Long kanunNo) {
 		 this.kanunNo = kanunNo;
 	 }	 
 	

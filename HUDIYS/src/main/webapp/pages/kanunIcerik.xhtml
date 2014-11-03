@@ -11,11 +11,14 @@
 <h:head>
 <title>HUD İYS</title>
 <link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
-	<style type="text/css">
-        .ui-widget,.ui-widget .ui-widget 
-        {
-            font-size: 90% !important;
-        }
+	<style type="text/css">     
+
+		.attachment{
+			background: url('#{facesContext.externalContext.requestContextPath}/images/icons/attachment.png')!important;
+		    height: 15px;
+		    width: 15px;
+		}
+		
         
         .folder-open {
 		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/open-folder.png')!important;
@@ -46,8 +49,21 @@
        .ui-datatable tbody td.wrap {
 		    white-space: normal;
 		}
+		.ui-datatable td,.ui-datatable th {
+		    white-space: normal;
+		    background-color: white;
+		    border-style: hidden !important;
+		}
+		.ui-datatable table {
+		    border-style: hidden !important;			     
+		}
+		
+		.ui-datatable .ui-datatable-header {
+		    border-bottom: 0px none;
+		}
         
         .fixed-size {
+        
 		    table-layout: fixed;
 		    white-space: normal;
 		    word-wrap: break-word;
@@ -58,20 +74,88 @@
 		}
 		
 		.ui-treetable table {
-		    border-style: hidden !important;	
-		     
+		    border-style: hidden !important;			     
 		}
 		
 		.ui-treetable .ui-treetable-header {
 		    border-bottom: 0px none;
+		    
 		}
 		
 		.ui-treetable .ui-treetable-data td,
 		.ui-treetable .ui-treetable-data-empty td {
 		   border-style: hidden !important;
-		   font-size: 8pt;
+		   font-size: 9pt;
 		}
 		
+		.ui-datatable .ui-datatable-data td,
+		.ui-datatable .ui-datatable-data-empty td {
+		   border-style: hidden !important;
+		   font-size: 9pt;
+		}
+		
+		.ui-datalist .ui-datalist-header,
+		.ui-datalist .ui-datalist-footer {
+		    text-align:center;
+		    padding:4px 10px;
+		}
+		
+		.ui-datalist .ui-datalist-header {
+		    border-bottom: 0px none;
+		}
+		
+		.ui-datalist .ui-datalist-footer {
+		    border-top: 0px none;
+		}
+		
+		.ui-datalist .ui-paginator-top {
+		    border-bottom: 0px none;
+		}
+		
+		.ui-datalist .ui-paginator-bottom {
+		    border-top: 0px none;
+		}
+		
+		.ui-datalist .ui-datalist-empty-message {
+		    padding: 4px 10px;
+		}
+		
+		.ui-datalist .ui-datalist-nobullets {
+		    list-style-type: none;
+		}
+		.ui-datalist .ui-datalist-list{
+		   border-style: hidden !important;
+           width: 600px;
+           height : 400px;
+        }   
+        
+        .ui-datalist-item:empty {
+	        display: none;
+	        empty-cells: none;
+	        
+	    }    
+	    .ui-datalist-item{
+	        background: none;
+	        font-family: cursive;
+	        border: none !important;
+	        background-image: none;
+	        border-style: hidden !important;	
+	    }
+	    .datalist-noborder .ui-widget-content {
+			border: none;
+		}
+	
+		.ui-datatable td.baslik { 
+		    text-align: center;
+		    font-weight: bold;
+		}
+		.ui-datatable td.madde{ 
+		    text-align: left;
+		    font-weight: bold;
+		}
+		.ui-datatable td.metin{ 
+		    text-align: left;
+		}
 		
 	</style>
 	
@@ -85,48 +169,123 @@
 	    	} 
 	        
 	    }
+	    
+	    
 	</script>
 </h:head>
 <h:body> 
 	<ui:decorate template="templates/template.xhtml">			 
 		<ui:define name="content"> 
 		
-			<p:dialog header="Kanun Metni" widgetVar="dlgReadMode" height="800" width="1200" resizable="true">
-				<h:form>					
-					<p:outputPanel id="readModePanel">										
-					     <p:treeTable id="kanunFullMetin" style="white-space: normal" width="600" value="#{kanunIcerikMB.kanunMetniRootNode}" var="node">
-					       			        
-					        <p:column width="200" style="white-space: normal" > 
-					            <h:outputText escape="false" value="#{node.icerikMetin}" />					            
-					        </p:column>		
-					        					       					       
-					    </p:treeTable>
-					</p:outputPanel>					
+			<p:dialog header="Kanun Metni" widgetVar="dlgReadMode" height="600" width="900" resizable="true">
+				<h:form id="readModeForm">					
+					<p:outputPanel>					
+<!-- 					    <h:commandLink> -->
+<!-- 					        <p:graphicImage name="../images/icons/hudicon.png" /> -->
+<!-- 					        <p:dataExporter type="pdf" target="readModeDataTable" fileName="#{kanunMB.selectedKanun.kanunAdi}" pageOnly="false"  -->
+<!-- 					        				encoding="iso-8859-1"/> -->
+<!-- 					    </h:commandLink> -->
+					    
+						<p:dataTable id="readModeDataTable" var="kanunMetin" value="#{kanunIcerikMB.kanunMetinleri}">
+						   
+						    <p:column styleClass="#{kanunMetin.type}" >						    
+						        <h:outputText escape="false" value="#{kanunMetin.icerikMetin}" />
+						    </p:column>
+						    
+						</p:dataTable>
+						
+					
+					</p:outputPanel>		
+				</h:form>
+			</p:dialog>	
+			
+			<p:dialog header="İlişkili İçerik" widgetVar="dlgRelatedKIMI" height="400" width="600" resizable="true">
+				<h:form id="relatedKIMIForm">					
+					<h3><h:outputText id="outputRelatedKIMIKanun" value="#{kanunIcerikMB.selectedIlgiliKanunIcerik.kanun.kanunAdi}" /></h3> 
+					<h4><h:outputText id="outputRelatedKIMIKanunIcerik" value="#{kanunIcerikMB.selectedIlgiliKanunIcerik.icerikNo} - #{kanunIcerikMB.selectedIlgiliKanunIcerik.icerikAdi}" /></h4>
+				    <p> <h:outputText id="outputRelatedKIMIKanunIcerikMetin" value="#{kanunIcerikMB.selectedIlgiliKanunIcerik.icerikMetin}" /></p>
+					
+				     <p:treeTable id="ilgiliKIMIMaddeIcerikleri" style="white-space: normal" width="220" 
+				     			  value="#{kanunIcerikMB.rootNodeRelatedKIMI}" var="node" 
+				     			  rendered="#{kanunIcerikMB.rootNodeRelatedKIMI != null}">
+				        <p:column width="200" style="white-space: normal" > 
+				            <h:outputText escape="false" value="#{node.maddeIcerikMetin}" />				            
+				        </p:column>			       
+				    </p:treeTable>						
+									
+				</h:form>
+			</p:dialog>	
+			
+			<p:dialog header="İlişkili İçerik" widgetVar="dlgRelatedMIMI" height="400" width="600" resizable="true">
+				<h:form id="relatedMIMIForm">					
+					<h3><h:outputText id="outputRelatedMIMIKanun" value="#{maddeIcerikMB.selectedIlgiliKanunIcerik.kanun.kanunAdi}" /></h3> 
+					<h4><h:outputText id="outputRelatedMIMIKanunIcerik" value="#{maddeIcerikMB.selectedIlgiliKanunIcerik.icerikNo} - #{maddeIcerikMB.selectedIlgiliKanunIcerik.icerikAdi}" /></h4>
+				    <p> <h:outputText id="outputRelatedMIMIKanunIcerikMetin" value="#{maddeIcerikMB.selectedIlgiliKanunIcerik.icerikMetin}" /></p>
+					
+				     <p:treeTable id="ilgiliMIMIMaddeIcerikleri" style="white-space: normal" width="220" 
+				     			  value="#{maddeIcerikMB.rootNodeRelatedMIMI}" var="node" 
+				     			  rendered="#{maddeIcerikMB.rootNodeRelatedMIMI != null}">
+				        <p:column width="200" style="white-space: normal" > 
+				            <h:outputText escape="false" value="#{node.maddeIcerikMetin}" />				            
+				        </p:column>			       
+				    </p:treeTable>						
+									
+				</h:form>
+			</p:dialog>	
+			
+			<p:dialog header="İlişkili İçerik" widgetVar="dlgRelatedKITMI" height="400" width="600" resizable="true">
+				<h:form id="relatedKITMIForm">					
+					<h3><h:outputText id="outputRelatedKITMIKanun" value="#{kanunIcerikMB.selectedIlgiliTebligIcerik.teblig.tebligAdi}" /></h3> 
+					<h4><h:outputText id="outputRelatedKITMIKanunIcerik" value="#{kanunIcerikMB.selectedIlgiliTebligIcerik.icerikNo} - #{kanunIcerikMB.selectedIlgiliTebligIcerik.icerikAdi}" /></h4>
+				    <p> <h:outputText id="outputRelatedKITMIKanunIcerikMetin" value="#{kanunIcerikMB.selectedIlgiliTebligIcerik.icerikMetin}" /></p>
+					
+				     <p:treeTable id="ilgiliKITMIMaddeIcerikleri" style="white-space: normal" width="220" 
+				     			  value="#{kanunIcerikMB.rootNodeRelatedKITMI}" var="node" 
+				     			  rendered="#{kanunIcerikMB.rootNodeRelatedKITMI != null}">
+				        <p:column width="200" style="white-space: normal" > 
+				            <h:outputText escape="false" value="#{node.tebligMaddeIcerikMetin}" />				            
+				        </p:column>			       
+				    </p:treeTable>						
+									
+				</h:form>
+			</p:dialog>	
+			
+			<p:dialog header="İlişkili İçerik" widgetVar="dlgRelatedMITMI" height="400" width="600" resizable="true">
+				<h:form id="relatedMITMIForm">					
+					<h3><h:outputText id="outputRelatedMITMIKanun" value="#{maddeIcerikMB.selectedIlgiliTebligIcerik.teblig.tebligAdi}" /></h3> 
+					<h4><h:outputText id="outputRelatedMITMIKanunIcerik" value="#{maddeIcerikMB.selectedIlgiliTebligIcerik.icerikNo} - #{maddeIcerikMB.selectedIlgiliTebligIcerik.icerikAdi}" /></h4>
+				    <p> <h:outputText id="outputRelatedMITMIKanunIcerikMetin" value="#{maddeIcerikMB.selectedIlgiliTebligIcerik.icerikMetin}" /></p>
+					
+				    <p:treeTable id="ilgiliMITMIMaddeIcerikleri" style="white-space: normal" width="220" 
+				     			  value="#{maddeIcerikMB.rootNodeRelatedMITMI}" var="node" 
+				     			  rendered="#{maddeIcerikMB.rootNodeRelatedMITMI != null}">
+				        <p:column width="200" style="white-space: normal" > 
+				            <h:outputText escape="false" value="#{node.tebligMaddeIcerikMetin}" />				            
+				        </p:column>			       
+				    </p:treeTable>						
+									
 				</h:form>
 			</p:dialog>	
 			
 			
+			<p:dialog header="Madde İçerik İlişkilendirme" widgetVar="dlgLinkMI" width="930" height="450" resizable="false">
 			
-			
-			<p:dialog header="Madde İçerik İlişkilendirme" widgetVar="dlgLinkMI" width="1200" height="450" resizable="false">
 				<p:layout style="min-width:900px; height:400px" id="layoutBentDetay">
 					<p:layoutUnit position="north" size="100" style="border:none">
 					 	<p:panel id="BentDetayPanel" header="Açıklama" widgetVar="panel" >
-							<h:outputText id="outputBentDetay1" value="#{maddeIcerikMB.selectedMaddeIcerik.maddeIcerikAdi}" />
-							<h:outputText id="outputBentDetay2" value="#{maddeIcerikMB.selectedMaddeIcerik.maddeIcerikMetin}" escape="false"/>
-					       	
+							<h:outputText id="outputBentDetay" value="#{maddeIcerikMB.selectedMaddeIcerik.maddeIcerikMetin}" escape="false"/>				       	
 					       	
 					    </p:panel>					 
 						
 				     </p:layoutUnit>				     
 					
-					<p:layoutUnit position="center" resizable="true" height="300" size="300" minSize="200" maxSize="400" style="width:99%;height:99%;border:none">
+					<p:layoutUnit position="center" resizable="true" height="300" width="450px" size="300" minSize="200" maxSize="400" style="width:99%;height:99%;border:0">
 						<h:form>
-						    <p:panel header="İçerik Seç" style="margin-bottom:10px;">
-						        <h:panelGrid columns="2" cellpadding="5">
+						    <p:panel header="İçerik Seç">
+						                <h:panelGrid columns="2" cellpadding="5">
 						            <p:outputLabel for="mevzuatSeti" value="Mevzuat Seti: " />
 						            <p:selectOneMenu id="mevzuatSeti" value="#{linkMB.mevzuatSetiId}" style="width:200px">
-						                <f:ajax listener="#{linkMB.onMevzuatSetiChange}" update="mevzuat" />
+						                <p:ajax listener="#{linkMB.onMevzuatSetiChange}" update="mevzuat" />
 						                <f:selectItem itemLabel="Mevzuat Seti Seç" itemValue="" noSelectionOption="true" />
 						                <f:selectItems value="#{linkMB.mevzuatSetiList}"
 						                			   var="mevzuatSeti"
@@ -136,8 +295,8 @@
 						 
 						            <p:outputLabel for="mevzuat" value="Mevzuat: " />
 						            <p:selectOneMenu id="mevzuat" value="#{linkMB.mevzuatId}" style="width:200px">
-						            	<f:ajax listener="#{linkMB.onMevzuatChange}" update="teblig" />						                
-						                <f:selectItem itemLabel="Mevzuat Seç" itemValue="" noSelectionOption="true"/>
+						            	<p:ajax event="change" listener="#{linkMB.onMevzuatChange}" update="mevzuatIcerikTip" />						                
+						                <f:selectItem itemLabel="Mevzuat Seç" itemValue="" noSelectionOption="true" />
 						                <f:selectItems value="#{linkMB.mevzuatList}" 
 						                  			   var="mevzuat"
         											   itemValue="#{mevzuat.mevzuatId}" 
@@ -146,51 +305,54 @@
 						            
 						            <p:outputLabel for="mevzuatIcerikTip" value="İçerik Tipi: " />
 						            <p:selectOneMenu id="mevzuatIcerikTip" value="#{linkMB.mevzuatIcerikTipId}" style="width:200px">
-						                <f:selectItem itemLabel="Tebliğler" itemValue="" noSelectionOption="true" />
-						               
+						            	<p:ajax event="change" listener="#{linkMB.onMevzuatIcerikTipChange}" update="icerik" />		
+						                <f:selectItem itemLabel="İçerik Tipi Seç" itemValue="" noSelectionOption="true" />
+						                <f:selectItems value="#{linkMB.mevzuatIcerikTipList}" 
+						                  			   var="mevzuatIcerikTip"
+        											   itemValue="#{mevzuatIcerikTip.mevzuatIcerikTipId}" 
+        											   itemLabel="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}"  />
 						            </p:selectOneMenu>
 						            
-						            <p:outputLabel for="teblig" value="İçerik: " />
-						            <p:selectOneMenu id="teblig" value="#{linkMB.tebligId}" style="width:200px">
+						            <p:outputLabel for="icerik" value="İçerik: " />
+						            <p:selectOneMenu id="icerik" value="#{linkMB.icerikId}" style="width:200px">
+						            <p:ajax event="change" listener="#{linkMB.onIcerikChange}" />
 						                <f:selectItem itemLabel="İçerik Seç" itemValue="" noSelectionOption="true" />
-						                <f:selectItems value="#{linkMB.tebligList}" 
-						                  			   var="teblig"
-        											   itemValue="#{teblig.tebligId}" 
-        											   itemLabel="#{teblig.tebligAdi}"  />
+						                <f:selectItems value="#{linkMB.icerikList}" 
+						                  			   var="icerik"
+        											   itemValue="#{icerik.icerikId}" 
+        											   itemLabel="#{icerik.icerikAdi}"  />
 						            </p:selectOneMenu>
 						        </h:panelGrid>
 						 
-						       
+						       <p:separator />
+						      		<p:commandButton id="viewButton" update=":linkTreeFormMI:linkTreeMI" render=":linkTreeFormMI:linkTree" value="Göster" action="#{linkMB.showLinkTree}" />
 						    </p:panel>
-						    <p:separator />
-						    <p:commandButton id="viewMIButton" update=":linkMITreeForm:linkMITree" render=":linkMITreeForm:linkMITree" value="Göster" action="#{linkMB.showLinkTree}" />
-						  
 						</h:form>
 					</p:layoutUnit>
-					<p:layoutUnit position="east" resizable="true" height="300" size="300" minSize="200" maxSize="400" style="border:none">
-						<p:panel render="#{linkMB.renderLinkTree}">
-						<h:form id="linkMITreeForm">
-							<p:tree id="linkMITree" style="width:99%;height:99%" height="250" value="#{linkMB.rootNode}" var="node" dynamic="true" cache="false"
-									selectionMode="single"  selection="#{linkMB.selectedNode}" >	 
-								<p:ajax event="select" listener="#{linkMB.onNodeSelect}"/>											
+				
+					
+					<p:layoutUnit position="east" resizable="true" height="300" width="450px" size="300" minSize="200" maxSize="400" style="width:99%;height:99%;border:0">
+						<h:form id="linkTreeFormMI">
+							<p:tree id="linkTreeMI" style="width:99%;height:99%" height="250" value="#{linkMB.rootNode}" var="node" dynamic="true" cache="false"
+									selectionMode="single"  selection="#{linkMB.selectedNode}" 
+									rendered="#{linkMB.renderLinkTree}">	 
+								<p:ajax event="select" listener="#{linkMB.onNodeSelect}"/>									
 								<p:treeNode type="node"
 	                                expandedIcon="folder-open"
 	                                collapsedIcon="folder-collapsed">
-			                        <h:outputText value="#{((node.tebligIcerikNo).concat(':')).concat(node.tebligIcerikAdi)}"/>
+			                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}"/>
 			                    </p:treeNode>
 			                    <p:treeNode type="leaf" icon="document-node">
-			                        <h:outputText value="#{((node.tebligIcerikNo).concat(':')).concat(node.tebligIcerikAdi)}" />
+			                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}" />
 			                    </p:treeNode>
-							</p:tree>	 
-						
-						</h:form>
-						</p:panel>
+							</p:tree>	
+						</h:form>					
 					</p:layoutUnit>
 					
 				</p:layout>
 				<p:separator />
 				<h:form>
-					<p:commandButton id="linkButton" value="İlişkilendir" action="#{linkMB.createLink}" ajax="false"/>
+					<p:commandButton id="linkButton" update=":ilgiliIcerikPanel" onclick="PF('dlgLinkMI').hide()" value="İlişkilendir" action="#{linkMB.createKMILink}" ajax="false"/>
 					<p:commandButton id="reset" value="Iptal" action="#{linkMB.reset}" ajax="false"/>
 				</h:form>
 			</p:dialog>	
@@ -202,11 +364,11 @@
 					<p:panel>
 						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
 						    <h:outputText value="İçerik No " />
-							<p:inputText id="kanunIcerikNo" value="#{kanunIcerikMB.kanunIcerikNo}"></p:inputText>
+							<p:inputText id="kanunIcerikNo" value="#{kanunIcerikMB.icerikNo}"></p:inputText>
 							<h:outputText value="İçerik Adı " />
-							<p:inputText id="kanunIcerikAdi" value="#{kanunIcerikMB.kanunIcerikAdi}"></p:inputText>
+							<p:inputText id="kanunIcerikAdi" value="#{kanunIcerikMB.icerikAdi}"></p:inputText>
 							<h:outputText value="Metin " />
-							<p:inputTextarea id="kanunIcerikMetin" value="#{kanunIcerikMB.kanunIcerikMetin}"></p:inputTextarea>
+							<p:inputTextarea id="kanunIcerikMetin" value="#{kanunIcerikMB.icerikMetin}"></p:inputTextarea>
 							<p:commandButton id="addKanunIcerik" update=":formTree:tree" onclick="PF('dlgYeni').hide()" value="Ekle" action="#{kanunIcerikMB.addKanunIcerik}" />
 							<p:commandButton id="reset" value="Iptal" action="#{mevzuatMB.reset}" onclick="PF('dlgYeni').hide()"/>
 						</h:panelGrid>
@@ -219,11 +381,11 @@
 					<p:panel>
 						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
 						    <h:outputText value="İçerik No " />
-							<p:inputText id="kanunIcerikNo" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikNo}"></p:inputText>
+							<p:inputText id="kanunIcerikNo" value="#{kanunIcerikMB.selectedKanunIcerik.icerikNo}"></p:inputText>
 							<h:outputText value="İçerik Adı " />
-							<p:inputText id="kanunIcerikAdi" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}"></p:inputText>
+							<p:inputText id="kanunIcerikAdi" value="#{kanunIcerikMB.selectedKanunIcerik.icerikAdi}"></p:inputText>
 							<h:outputText value="Metin " />
-							<p:inputTextarea id="kanunIcerikMetin" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}"></p:inputTextarea>
+							<p:inputTextarea id="kanunIcerikMetin" value="#{kanunIcerikMB.selectedKanunIcerik.icerikMetin}"></p:inputTextarea>
 							<p:commandButton id="updateKanunIcerik"  update=":formTree:tree" onclick="PF('dlgDuzenle').hide()" value="Düzenle" action="#{kanunIcerikMB.updateKanunIcerik}"/>
 							<p:commandButton id="reset" value="Iptal" action="#{mevzuatMB.reset}" ajax="false"/>
 						</h:panelGrid>
@@ -236,10 +398,10 @@
 					<p:layoutUnit position="north" size="100" style="width:99%;height:99%;border:0">
 						<p:panel header="Açıklama" size="100" style="width:99%;height:90%">
 							<h:form id="outputMaddeDetay">
-						 		<h:outputText id="outputMaddeNo" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikNo}" /> : 
-								<h:outputText id="outputMaddeAdi" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi}" />
+						 		<h:outputText id="outputMaddeNo" value="#{kanunIcerikMB.selectedKanunIcerik.icerikNo}" /> : 
+								<h:outputText id="outputMaddeAdi" value="#{kanunIcerikMB.selectedKanunIcerik.icerikAdi}" />
 								<br/>
-								<h:outputText id="outputMaddeMetin" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}"/>  		       	
+								<h:outputText id="outputMaddeMetin" value="#{kanunIcerikMB.selectedKanunIcerik.icerikMetin}"/>  		       	
 						    </h:form>
 						</p:panel>
 				    </p:layoutUnit>
@@ -261,7 +423,7 @@
 						 
 						            <p:outputLabel for="mevzuat" value="Mevzuat: " />
 						            <p:selectOneMenu id="mevzuat" value="#{linkMB.mevzuatId}" style="width:200px">
-						            	<p:ajax event="change" listener="#{linkMB.onMevzuatChange}" update="teblig" />						                
+						            	<p:ajax event="change" listener="#{linkMB.onMevzuatChange}" update="mevzuatIcerikTip" />						                
 						                <f:selectItem itemLabel="Mevzuat Seç" itemValue="" noSelectionOption="true" />
 						                <f:selectItems value="#{linkMB.mevzuatList}" 
 						                  			   var="mevzuat"
@@ -271,56 +433,59 @@
 						            
 						            <p:outputLabel for="mevzuatIcerikTip" value="İçerik Tipi: " />
 						            <p:selectOneMenu id="mevzuatIcerikTip" value="#{linkMB.mevzuatIcerikTipId}" style="width:200px">
-						                <f:selectItem itemLabel="Tebliğler" itemValue="" noSelectionOption="true" />
-						               
+						            	<p:ajax event="change" listener="#{linkMB.onMevzuatIcerikTipChange}" update="icerik" />		
+						                <f:selectItem itemLabel="İçerik Tipi Seç" itemValue="" noSelectionOption="true" />
+						                <f:selectItems value="#{linkMB.mevzuatIcerikTipList}" 
+						                  			   var="mevzuatIcerikTip"
+        											   itemValue="#{mevzuatIcerikTip.mevzuatIcerikTipId}" 
+        											   itemLabel="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}"  />
 						            </p:selectOneMenu>
 						            
-						            <p:outputLabel for="teblig" value="İçerik: " />
-						            <p:selectOneMenu id="teblig" value="#{linkMB.tebligId}" style="width:200px">
+						            <p:outputLabel for="icerik" value="İçerik: " />
+						            <p:selectOneMenu id="icerik" value="#{linkMB.icerikId}" style="width:200px">
+						            <p:ajax event="change" listener="#{linkMB.onIcerikChange}" />
 						                <f:selectItem itemLabel="İçerik Seç" itemValue="" noSelectionOption="true" />
-						                <f:selectItems value="#{linkMB.tebligList}" 
-						                  			   var="teblig"
-        											   itemValue="#{teblig.tebligId}" 
-        											   itemLabel="#{teblig.tebligAdi}"  />
+						                <f:selectItems value="#{linkMB.icerikList}" 
+						                  			   var="icerik"
+        											   itemValue="#{icerik.icerikId}" 
+        											   itemLabel="#{icerik.icerikAdi}"  />
 						            </p:selectOneMenu>
 						        </h:panelGrid>
 						 
 						       <p:separator />
-						      		<p:commandButton id="viewButton" update=":linkTreeForm:linkTree" render=":linkTreeForm:linkTree" value="Göster" action="#{linkMB.showLinkTree}" />
+						      		<p:commandButton id="viewButton" update=":linkTreeForm:linkTree" value="Göster" action="#{linkMB.showLinkTree}" />
 						    </p:panel>
 						</h:form>
 					</p:layoutUnit>
 					<p:layoutUnit position="east" resizable="true" height="300" width="450px" size="300" minSize="200" maxSize="400" style="width:99%;height:99%;border:0">
-						<p:panel render="#{linkMB.renderLinkTree}">
 						<h:form id="linkTreeForm">
 							<p:tree id="linkTree" style="width:99%;height:99%" height="250" value="#{linkMB.rootNode}" var="node" dynamic="true" cache="false"
-									selectionMode="single"  selection="#{linkMB.selectedNode}" >	 
+									selectionMode="single"  selection="#{linkMB.selectedNode}" 
+									rendered="#{linkMB.renderLinkTree}">	 
 								<p:ajax event="select" listener="#{linkMB.onNodeSelect}"/>									
 								<p:treeNode type="node"
 	                                expandedIcon="folder-open"
 	                                collapsedIcon="folder-collapsed">
-			                        <h:outputText value="#{((node.tebligIcerikNo).concat(':')).concat(node.tebligIcerikAdi)}"/>
+			                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}"/>
 			                    </p:treeNode>
 			                    <p:treeNode type="leaf" icon="document-node">
-			                        <h:outputText value="#{((node.tebligIcerikNo).concat(':')).concat(node.tebligIcerikAdi)}" />
+			                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}" />
 			                    </p:treeNode>
-							</p:tree>	 
-						
-						</h:form>
-						</p:panel>
+							</p:tree>	
+						</h:form>					
 					</p:layoutUnit>
 					
 				</p:layout>
 				<p:separator />
 				<h:form>
-					<p:commandButton id="linkButton" onclick="PF('dlgLinkKI').hide()" value="İlişkilendir" action="#{linkMB.createLink}" ajax="false"/>
+					<p:commandButton id="linkButton" update=":ilgiliIcerikPanel" onclick="PF('dlgLinkKI').hide()" value="İlişkilendir" action="#{linkMB.createKILink}" ajax="false"/>
 					<p:commandButton id="reset" value="Iptal" action="#{linkMB.reset}" ajax="false"/>
 				</h:form>
 			</p:dialog>	
 				
 			<p:dialog header="Kanun İçeriklerini Sırala" widgetVar="dlgReorderKanunIcerik" width="500" resizable="false">			  	    
-				<h:form>
-					<p:tree style="width:99%;height:699px" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
+				<h:form id="reorderTreeForm">
+					<p:tree style="width:99%;height:600px" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
 							selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="reorderTree"
 							draggable="true" droppable="true" >	 
 							       
@@ -328,35 +493,33 @@
 						<p:treeNode type="node"
                                expandedIcon="folder-open"
                                collapsedIcon="folder-collapsed">
-	                        <h:outputText value="#{((node.kanunIcerikNo).concat(':')).concat(node.kanunIcerikAdi)}"/>
+	                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}"/>
 	                    </p:treeNode>
 	                    <p:treeNode type="leaf" icon="document-node">
-	                        <h:outputText value="#{((node.kanunIcerikNo).concat(':')).concat(node.kanunIcerikAdi)}" />
+	                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}" />
 	                    </p:treeNode>
 					</p:tree>
 					<p:commandButton id="reorderKanunIcerik" update=":formTree:tree" onclick="PF('dlgReorderKanunIcerik').hide()" value="Kaydet" />
-					<p:commandButton id="reset" value="Iptal" action="#{kanunIcerikMB.reset}"/>	 
+					<p:commandButton id="reset" value="Iptal" action="#{kanunIcerikMB.reset}" onclick="PF('dlgReorderKanunIcerik').hide()"/>	 
 				</h:form>
 			</p:dialog>	
 			
 			<p:dialog header="Madde İçeriklerini Sırala" widgetVar="dlgReorderMaddeIcerik"  width="700" resizable="true">			  	    
 				<h:form id="reorderMIForm">
-					<p:tree style="width:99%;height:700px" value="#{kanunIcerikMB.maddeIcerikRootNode}" var="node" dynamic="true" cache="false"
+					<p:tree style="width:99%;height:600px" value="#{kanunIcerikMB.maddeIcerikRootNode}" var="node" dynamic="true" cache="false"
 							selectionMode="single" id="reorderMITree"
 							draggable="true" droppable="true" >	 
 							       
 						<p:ajax event="dragdrop" listener="#{maddeIcerikMB.onDragDrop}" update="reorderMITree"/>
-						<p:treeNode type="node"
-                               expandedIcon="folder-open"
-                               collapsedIcon="folder-collapsed">
-	                        <h:outputText value="#{((node.maddeIcerikAdi).concat(' ')).concat(node.maddeIcerikMetin)}" escape="false" />
+						<p:treeNode type="node">
+	                        <h:outputText value="#{node.maddeIcerikMetin}" escape="false" />
 	                    </p:treeNode>
-	                    <p:treeNode type="leaf" icon="document-node">
-	                        <h:outputText value="#{((node.maddeIcerikAdi).concat(' ')).concat(node.maddeIcerikMetin)}" escape="false" />
+	                    <p:treeNode type="leaf">
+	                        <h:outputText value="#{node.maddeIcerikMetin}" escape="false" />
 	                    </p:treeNode>
 					</p:tree>
 					<p:commandButton id="reorderMaddeIcerik" update=":outputIcerik:maddeIcerikleri" onclick="PF('dlgReorderMaddeIcerik').hide()" value="Kaydet" />
-					<p:commandButton id="reset" value="Iptal" action="#{maddeIcerikMB.reset}"/>	 
+					<p:commandButton id="reset" value="Iptal" action="#{maddeIcerikMB.reset}" onclick="PF('dlgReorderMaddeIcerik').hide()"/>	 
 					 
 				</h:form>
 			</p:dialog>	
@@ -380,14 +543,14 @@
 					                <span class="ui-icon ui-icon-grip-dotted-vertical" />
 					            </span>
 					            
-					          	<p:commandButton id="ajax6"  onclick="PF('dlgReadMode').show()" styleClass="ui-priority-primary" icon="ui-icon-note" title="Tüm Kanun Metni" />
-					          	<p:commandButton id="ajax2" onclick="PF('dlgYeni').show()" styleClass="ui-priority-primary" icon="ui-icon-plus" title="Yeni" />
-	 							<p:commandButton id="ajax7"  onclick="PF('dlgReorderKanunIcerik').show()" styleClass="ui-priority-primary" icon="ui-icon-note" title="Sırala" />
-					          	<p:commandButton id="ajax4" onclick="PF('dlgDuzenle').show()" styleClass="ui-priority-primary" icon="ui-icon-pencil" title="Düzenle" />
-	 							<p:commandButton id="ajax5" onclick="PF('dlgLinkKI').show()" styleClass="ui-priority-primary" icon="ui-icon-link" title="İlişkilendir" />	 							
-	 							<p:commandButton id="ajax3" update="tree" title="Sil" action="#{kanunIcerikMB.deleteNode}" icon="ui-icon-trash" />
-	 							<p:commandButton id="addDipnotKI" title="Dipnot Ekle" onclick="PF('dlgDipnotKI').show()" update=":outputDipnotTab:maddeIcerikDipnotlar" action="#{kanunIcerikMB.addDipnot}" icon="ui-icon-comment" />
-					            
+					            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" styleClass="ui-priority-primary" icon="ui-icon-note" title="Maddeler" action="#{kanunIcerikMB.showOnlyMaddeler}" update="tree" />
+								<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="ajax2" onclick="PF('dlgYeni').show()" styleClass="ui-priority-primary" icon="ui-icon-plus" title="Yeni" />
+	 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="ajax5" onclick="PF('dlgLinkKI').show()" styleClass="ui-priority-primary" icon="ui-icon-link" title="İlişkilendir" />	 							
+	 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="addDipnotKI" title="Dipnot Ekle" onclick="PF('dlgDipnotKI').show()" update=":outputDipnotTab:maddeIcerikDipnotlar" action="#{kanunIcerikMB.addDipnot}" icon="ui-icon-comment" />
+					            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="ajax4" onclick="PF('dlgDuzenle').show()" styleClass="ui-priority-primary" icon="ui-icon-pencil" title="Düzenle" />
+	 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="ajax3" update="tree" title="Sil" action="#{kanunIcerikMB.deleteNode}" icon="ui-icon-trash" />
+	 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="ajax7" update=":reorderTreeForm:reorderTree" onclick="PF('dlgReorderKanunIcerik').show()" styleClass="ui-priority-primary" icon="ui-icon-arrowrefresh-1-w" title="Sırala" />
+					          	
 					           
 					        </f:facet>
 						</p:toolbar>
@@ -396,16 +559,16 @@
 							<p:tree style="width:99%;height:699px" value="#{kanunIcerikMB.rootNode}" var="node" dynamic="true" cache="false"
 								selectionMode="single"  selection="#{kanunIcerikMB.selectedNode}" id="tree">	 
 								<p:ajax event="select" 
-										update=":output2,:output3,:outputIcerik,:outputIcerik:centerPanel,:outputDipnotTab:maddeIcerikDipnotlar,:update,:outputMaddeDetay,:reorderMIForm:reorderMITree" 
+										update=":output2,:output3,:outputIcerik,:outputIcerik:centerPanel,:outputDipnotTab:maddeIcerikDipnotlar,:update,:outputMaddeDetay,:reorderMIForm:reorderMITree,:ilgiliIcerikPanel" 
 										listener="#{kanunIcerikMB.onNodeSelect}" 
 										onevent="makeDipnotEnabled(addDipnotKI);"/>	       
 								<p:treeNode type="node"
 	                                expandedIcon="folder-open"
 	                                collapsedIcon="folder-collapsed">
-			                        <h:outputText value="#{((node.kanunIcerikNo).concat(':')).concat(node.kanunIcerikAdi)}"/>
+			                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}"/>
 			                    </p:treeNode>
 			                    <p:treeNode type="leaf" icon="document-node">
-			                        <h:outputText value="#{((node.kanunIcerikNo).concat(':')).concat(node.kanunIcerikAdi)}" />
+			                        <h:outputText value="#{((node.icerikNo).concat(':')).concat(node.icerikAdi)}" />
 			                    </p:treeNode>
 							</p:tree>	 
 						
@@ -486,29 +649,109 @@
 				</p:dialog>	
 				
 				
+				<p:dialog header="Ek Dosyalar" widgetVar="dlgAttachment" style="width:600px; height:600px" resizable="false">						
+		            
+		            <p:layout id="layoutEkDosyalar" style="width:600px; height:600px">
+						<p:layoutUnit position="north" size="160" style="border:none">
+						 	<h:form enctype="multipart/form-data">
+	
+				                <p:fileUpload fileUploadListener="#{maddeIcerikMB.addAttachment}"
+										        label="Dosya Seç" uploadLabel="Yükle" cancelLabel="İptal" 
+										        mode="advanced" 
+										        update="messages,:attachmentDataTable"
+										        sizeLimit="1000000" 
+										        width="600" height="200"
+										        allowTypes="/(\.|\/)(doc|docx|xls|xlsx|ppt|pptx|pdf|gif|jpe?g|png)$/"/>
+										        
+				                <p:growl id="messages" showDetail="true"/>
+				
+				            </h:form>			 
+							
+					     </p:layoutUnit>				     
+					
+						 <p:layoutUnit header="Dosyalar" position="center" size="300" style="border:none">
+						 	<p:dataTable id="attachmentDataTable" var="attachment" value="#{maddeIcerikMB.attachmentList}">
+							    <p:column style="width:85%">
+							        <h:outputText value="#{attachment.attachmentAdi}" />
+							    </p:column>
+							 
+							    <p:column>
+							       <h:form>
+									    <p:commandButton value="İndir" ajax="false" icon="ui-icon-arrowthick-1-s">
+									        <p:fileDownload value="#{attachment.file}" />
+									    </p:commandButton>
+									</h:form>
+							    </p:column>
+							 
+							</p:dataTable>
+						 </p:layoutUnit>
+						 
+					 </p:layout>
+					 
+				</p:dialog>	
+				
+				
 				<p:layoutUnit position="center">
 					<p:layout>
 						
-						<p:layoutUnit position="center" header="İçerik" resizable="true">
-							<table style="width:100%;margin:0px; min-width:100%;">
-								<tr>
-									<td style="width:80%">
-									</td>
-									<td style="padding:5px; text-align:right; width:10%">
-										<h:form>				
-											<p:commandButton align="right" id="showDialogFikra" type="button" value="Yeni Icerik" onclick="PF('dlgYeniMetin').show()" />
-											<p:commandButton align="right" id="showReorder" type="button" value="Sırala" onclick="PF('dlgReorderMaddeIcerik').show()" />
-										</h:form>
-									</td>
-								</tr>
-							</table>    
+						<p:layoutUnit position="center" resizable="true">
+<!-- 							<table style="width:100%;margin:0px; min-width:100%;"> -->
+<!-- 								<tr> -->
+<!-- 									<td style="width:80%"> -->
+<!-- 									</td> -->
+<!-- 									<td style="padding:5px; text-align:right; width:10%"> -->
+<!-- 										<h:form> -->
+<!-- 										    <p:growl id="messages" showDetail="true"/> -->
+										 
+<!-- 										    <p:menuButton value="Seçenekler"> -->
+<!-- 										        <p:menuitem value="Yeni İçerik" icon="ui-icon-plus" oncomplete="PF('dlgYeniMetin').show()" update="messages"/> -->
+<!-- 										        <p:menuitem value="Alt Metin" icon="ui-icon-document" actionListener="#{maddeIcerikMB.showYeniMetinDialog}" update="messages"/> -->
+<!-- 												<p:menuitem value="İlişkilendir" icon="ui-icon-link" actionListener="#{maddeIcerikMB.showLinkMIDialog}" update="messages"/> -->
+<!-- 												<p:menuitem value="Dipnot Ekle" icon="ui-icon-comment" actionListener="#{maddeIcerikMB.showDipnotMIDialog}" update="messages"/> -->
+<!-- 										        <p:menuitem value="Düzenle" icon="ui-icon-pencil" actionListener="#{maddeIcerikMB.showUpdateMIDialog}" update=":maddeIcerikDuzenleForm" /> -->
+<!-- 										        <p:menuitem value="Sil" icon="ui-icon-trash" actionListener="#{maddeIcerikMB.deleteMaddeIcerik}" update=":outputIcerik:maddeIcerikleri,messages" /> -->
+<!-- 										        <p:separator /> -->
+<!-- 										        <p:menuitem value="Sırala" icon="ui-icon-arrowrefresh-1-w" oncomplete="PF('dlgReorderMaddeIcerik').show()"/> -->
+<!-- 										    </p:menuButton> -->
+<!-- 										</h:form> -->
+										
+										
+<!-- 									</td> -->
+<!-- 								</tr> -->
+<!-- 							</table>     -->
+
 							<p:outputPanel>
+								<h:form>
+									<p:growl id="messages" showDetail="true"/>
+									<p:toolbar>						
+										<f:facet name="left" style="font-size: 100%">
+											<h:outputText value="#{kanunMB.selectedKanun.kanunAdi}" />    
+								            
+								        </f:facet>
+								 
+								        <f:facet name="right">
+								        	<span class="ui-separator">
+								                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+								            </span>
+								            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" onclick="PF('dlgReadMode').show()" styleClass="ui-priority-primary" icon="ui-icon-note" title="Tüm Kanun Metni" action="#{kanunIcerikMB.createReadMode}" update=":readModeForm:readModeDataTable"/>
+								          	<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" onclick="PF('dlgYeniMetin').show()" styleClass="ui-priority-primary" icon="ui-icon-plus" title="Yeni İçerik" />
+								          	<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" action="#{maddeIcerikMB.showYeniMetinDialog}" styleClass="ui-priority-primary" icon="ui-icon-document" title="Alt Metin" update="messages"/>
+								          	<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" action="#{maddeIcerikMB.showLinkMIDialog}" styleClass="ui-priority-primary" icon="ui-icon-link" title="İlişkilendir" update="messages"/>	 							
+				 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" action="#{maddeIcerikMB.showDipnotMIDialog}" styleClass="ui-priority-primary" icon="ui-icon-comment" title="Dipnot Ekle" update="messages" />
+								            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" action="#{maddeIcerikMB.showAttachmentDialog}" styleClass="ui-priority-primary" icon="attachment" title="Ek Dosyalar" update="messages,:attachmentDataTable" />
+								            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" action="#{maddeIcerikMB.showUpdateMIDialog}" styleClass="ui-priority-primary" icon="ui-icon-pencil" title="Düzenle" update="messages,:maddeIcerikDuzenleForm" />
+								            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" action="#{maddeIcerikMB.deleteMaddeIcerik}" styleClass="ui-priority-primary" icon="ui-icon-trash" title="Sil" update=":outputIcerik:maddeIcerikleri,messages"  />
+				 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" onclick="PF('dlgReorderMaddeIcerik').show()" styleClass="ui-priority-primary" icon="ui-icon-arrowrefresh-1-w" title="Sırala"  update=":reorderMIForm:reorderMITree" />
+								          									           
+								        </f:facet>
+									</p:toolbar>
+								</h:form>
 								
 								<h3>
-									<h:outputText id="output2" value="#{((kanunIcerikMB.selectedKanunIcerik.kanunIcerikNo).concat('.')).concat(kanunIcerikMB.selectedKanunIcerik.kanunIcerikAdi)}" />
+									<h:outputText id="output2" value="#{((kanunIcerikMB.selectedKanunIcerik.icerikNo).concat('.')).concat(kanunIcerikMB.selectedKanunIcerik.icerikAdi)}" />
 								</h3>
 								<p>									
-									<h:outputText id="output3" value="#{kanunIcerikMB.selectedKanunIcerik.kanunIcerikMetin}" />	 
+									<h:outputText id="output3" value="#{kanunIcerikMB.selectedKanunIcerik.icerikMetin}" />	 
 								</p>
 								
 								<h:form id="outputIcerik" styleClass="form-style">
@@ -523,15 +766,17 @@
 									
 									<p:outputPanel id="centerPanel">
 										
-									     <p:treeTable id="maddeIcerikleri" style="white-space: normal" width="220" value="#{maddeIcerikMB.rootNode}" var="node" selectionMode="single"  selection="#{maddeIcerikMB.selectedNode}" >
+									     <p:treeTable id="maddeIcerikleri" style="white-space: normal" width="220" value="#{maddeIcerikMB.rootNode}" 
+									     			  var="node" selectionMode="single"  selection="#{maddeIcerikMB.selectedNode}"
+									     			  rendered="#{maddeIcerikMB.rootNode != null}" >
 									       <p:ajax event="select" 									       
-									       update=":outputBentDetay1,:outputBentDetay2" 
+									       update=":outputBentDetay,:ilgiliIcerikPanel" 
 									       listener="#{maddeIcerikMB.onNodeSelect}" />	       
 														        
-									        <p:column width="200" style="white-space: normal" > 
+									        <p:column width="210" style="white-space: normal" > 
 									            <h:outputText escape="false" value="#{node.maddeIcerikMetin}" />
 									            
-									        </p:column>							       
+									        </p:column>	
 									       
 									    </p:treeTable>
 									</p:outputPanel>
@@ -552,13 +797,13 @@
 							        
 							        <p:tab title="Dip Notlar">
 							           <p:outputPanel id="maddeIcerikDipnotlar">
-								            <p:dataTable var="dipnot" value="#{dipnotMB.dipnotlar}">
+								            <p:dataTable var="dipnotKI" value="#{kanunIcerikMB.dipnotlarKI}">
 											    <p:column style="width:10%">
-											        <h:outputText value="#{dipnot.dipnotNo}" />
+											        <h:outputText value="#{dipnotKI.dipnotKINo}" />
 											    </p:column>
 											 
 											    <p:column style="width:90%">
-											        <h:outputText value="#{dipnot.dipnotMetin}" />
+											        <h:outputText value="#{dipnotKI.dipnotKIMetin}" />
 											    </p:column>
 											 
 											</p:dataTable>
@@ -580,41 +825,121 @@
 				
 				
 				<p:layoutUnit position="east" header="İlgili İçerikler" resizable="true" size="200" minSize="200" maxSize="400">    
-					<p:accordionPanel dynamic="true" cache="true">
-				        <p:tab title="İlgili Kanunlar">
-				            <h:panelGrid>
-				                <p:link outcome="Kanunlar" value="Vergi Kanunu">
-								    <f:param name="kanunId" value="10" />
-								</p:link>
-				            </h:panelGrid>
+				<div class="datalist-noborder">
+					<p:accordionPanel id="ilgiliIcerikPanel" dynamic="true" cache="true">
+						
+				        <p:tab title="İlgili Kanunlar" rendered="#{not empty kanunIcerikMB.ilgiliKanunList or not empty kanunIcerikMB.ilgiliKanunIcerikList
+				        										or not empty maddeIcerikMB.ilgiliKanunList or not empty maddeIcerikMB.ilgiliKanunIcerikList}">
+				           <p:dataList value="#{kanunIcerikMB.ilgiliKanunList}" var="kanun" type="definition"
+				           			rendered="#{not empty kanunIcerikMB.ilgiliKanunList}">
+				           			<h:form>
+					           			<p:link outcome="kanunIcerik.jsf" value="#{kanun.kanunAdi}">
+										    <f:param name="id" value="#{kanun.kanunId}" />
+										</p:link>
+					           			
+						       		</h:form>				        
+						    </p:dataList>
+			                <p:dataList value="#{kanunIcerikMB.ilgiliKanunIcerikList}" var="kanunIcerik" type="definition"
+			                		rendered="#{not empty kanunIcerikMB.ilgiliKanunIcerikList}">
+			                		<h:form>
+				                		<p:commandLink action="#{kanunIcerikMB.setIlgiliKIMI}" onclick="PF('dlgRelatedKIMI').show()" update=":relatedKIMIForm:outputRelatedKIMIKanun,:relatedKIMIForm:outputRelatedKIMIKanunIcerik,
+				                																	      					             :relatedKIMIForm:outputRelatedKIMIKanunIcerikMetin,:relatedKIMIForm:ilgiliKIMIMaddeIcerikleri">
+				                		 	<f:setPropertyActionListener value="#{kanunIcerik}" target="#{kanunIcerikMB.selectedIlgiliKanunIcerik}" />                   
+	   
+									        <h:outputText value="#{kanunIcerik.kanun.kanunAdi} > #{kanunIcerik.icerikNo} - #{kanunIcerik.icerikAdi}" />
+									    </p:commandLink>
+						       		</h:form>					        
+						    </p:dataList>
+						    
+						     <p:dataList value="#{maddeIcerikMB.ilgiliKanunList}" var="kanun" type="definition"
+				           			rendered="#{not empty maddeIcerikMB.ilgiliKanunList}">
+				           			<h:form>
+					           			<p:link outcome="kanunIcerik.jsf" value="#{kanun.kanunAdi}">
+										    <f:param name="id" value="#{kanun.kanunId}" />
+										</p:link>
+					           			
+						       		</h:form>				        
+						    </p:dataList>
+			                <p:dataList value="#{maddeIcerikMB.ilgiliKanunIcerikList}" var="kanunIcerik" type="definition"
+			                		rendered="#{not empty maddeIcerikMB.ilgiliKanunIcerikList}">
+			                		<h:form>
+			                			<p:commandLink action="#{maddeIcerikMB.setIlgiliMIMI}" onclick="PF('dlgRelatedMIMI').show()" update=":relatedMIMIForm:outputRelatedMIMIKanun,:relatedMIMIForm:outputRelatedMIMIKanunIcerik,
+				                																	      					             :relatedMIMIForm:outputRelatedMIMIKanunIcerikMetin,:relatedMIMIForm:ilgiliMIMIMaddeIcerikleri">
+				                		 	<f:setPropertyActionListener value="#{kanunIcerik}" target="#{maddeIcerikMB.selectedIlgiliKanunIcerik}" />                   
+	   										<h:outputText value="#{kanunIcerik.kanun.kanunAdi} > #{kanunIcerik.icerikNo} - #{kanunIcerik.icerikAdi}" />
+									    </p:commandLink>
+						       		</h:form>					        
+						    </p:dataList>
+				           
 				        </p:tab>
-				        <p:tab title="İlgili Tebliğler">
+				        <p:tab title="İlgili Tebliğler" rendered="#{not empty kanunIcerikMB.ilgiliTebligList or not empty kanunIcerikMB.ilgiliTebligIcerikList
+				        										 or not empty maddeIcerikMB.ilgiliTebligList or not empty maddeIcerikMB.ilgiliTebligIcerikList}">
+				           
+				            	<p:dataList value="#{kanunIcerikMB.ilgiliTebligList}" var="teblig" type="definition"
+				            			rendered="#{not empty kanunIcerikMB.ilgiliTebligList}">							       				
+							       	<h:form>
+					           			<p:link outcome="tebligIcerik.jsf" value="#{teblig.tebligAdi}">
+										    <f:param name="id" value="#{teblig.tebligId}" />
+										</p:link>
+					           			
+						       		</h:form>		        
+							    </p:dataList>
+				               <p:dataList value="#{kanunIcerikMB.ilgiliTebligIcerikList}" var="tebligIcerik" type="definition"
+				               			rendered="#{not empty kanunIcerikMB.ilgiliTebligIcerikList}">
+				               			<h:form>
+			                			<p:commandLink action="#{kanunIcerikMB.setIlgiliKITMI}" onclick="PF('dlgRelatedKITMI').show()" update=":relatedKITMIForm:outputRelatedKITMIKanun,:relatedKITMIForm:outputRelatedKITMIKanunIcerik,
+				                																	      					             :relatedKITMIForm:outputRelatedKITMIKanunIcerikMetin,:relatedKITMIForm:ilgiliKITMIMaddeIcerikleri">
+				                		 	<f:setPropertyActionListener value="#{tebligIcerik}" target="#{kanunIcerikMB.selectedIlgiliTebligIcerik}" />                   
+	   										<h:outputText value="#{tebligIcerik.teblig.tebligAdi} > #{tebligIcerik.icerikNo} - #{tebligIcerik.icerikAdi}" />
+									    </p:commandLink>
+						       		</h:form>				
+							   </p:dataList>
+							    
+							    <p:dataList value="#{maddeIcerikMB.ilgiliTebligList}" var="teblig" type="definition"
+				            			rendered="#{not empty maddeIcerikMB.ilgiliTebligList}">							       				
+							       	<h:form>
+					           			<p:link outcome="tebligIcerik.jsf" value="#{teblig.tebligAdi}">
+										    <f:param name="id" value="#{teblig.tebligId}" />
+										</p:link>
+					           			
+						       		</h:form>		        
+							    </p:dataList>
+				               <p:dataList value="#{maddeIcerikMB.ilgiliTebligIcerikList}" var="tebligIcerik" type="definition"
+				               			rendered="#{not empty maddeIcerikMB.ilgiliTebligIcerikList}">
+				               			<h:form>
+				                			<p:commandLink action="#{maddeIcerikMB.setIlgiliMITMI}" onclick="PF('dlgRelatedMITMI').show()" update=":relatedMITMIForm:outputRelatedMITMIKanun,:relatedMITMIForm:outputRelatedMITMIKanunIcerik,
+				                																	      					             :relatedMITMIForm:outputRelatedMITMIKanunIcerikMetin,:relatedMITMIForm:ilgiliMITMIMaddeIcerikleri">
+					                		 	<f:setPropertyActionListener value="#{tebligIcerik}" target="#{maddeIcerikMB.selectedIlgiliTebligIcerik}" />                   
+		   										<h:outputText value="#{tebligIcerik.teblig.tebligAdi} > #{tebligIcerik.icerikNo}: #{tebligIcerik.icerikAdi}" />
+										    </p:commandLink>
+							       		</h:form>	
+							       						        
+							    </p:dataList>
+				          
+				        </p:tab>
+				        <p:tab title="İlgili Genelgeler" rendered="false">
 				            <h:panelGrid>
 				                <h:outputText value="" />
 				            </h:panelGrid>
 				        </p:tab>
-				        <p:tab title="İlgili Genelgeler">
+				        <p:tab title="İlgili Tüzükler" rendered="false">
 				            <h:panelGrid>
 				                <h:outputText value="" />
 				            </h:panelGrid>
 				        </p:tab>
-				        <p:tab title="İlgili Tüzükler">
+				        <p:tab title="İlgili Yönetmelikler" rendered="false">
 				            <h:panelGrid>
 				                <h:outputText value="" />
 				            </h:panelGrid>
 				        </p:tab>
-				        <p:tab title="İlgili Yönetmelikler">
+				        <p:tab title="İlgili Özelgeler" rendered="false">
 				            <h:panelGrid>
 				                <h:outputText value="" />
 				            </h:panelGrid>
 				        </p:tab>
-				        <p:tab title="İlgili Özelgeler">
-				            <h:panelGrid>
-				                <h:outputText value="" />
-				            </h:panelGrid>
-				        </p:tab>
+				       
 				    </p:accordionPanel>	     
-				
+				</div>
 				</p:layoutUnit>
 			</p:layout>
 			

@@ -1,15 +1,34 @@
 package hud.iys.bean;
 
+import hud.iys.model.Attachment;
 import hud.iys.model.Dipnot;
 import hud.iys.model.DipnotMI;
+import hud.iys.model.Kanun;
 import hud.iys.model.KanunIcerik;
+import hud.iys.model.Link;
 import hud.iys.model.MaddeIcerik;
 import hud.iys.model.Mevzuat;
 import hud.iys.model.MevzuatSeti;
+import hud.iys.model.Teblig;
+import hud.iys.model.TebligIcerik;
+import hud.iys.model.TebligMaddeIcerik;
+import hud.iys.service.IAttachmentService;
 import hud.iys.service.IDipnotMIService;
+import hud.iys.service.IKanunIcerikService;
+import hud.iys.service.IKanunService;
+import hud.iys.service.ILinkService;
 import hud.iys.service.IMaddeIcerikService;
+import hud.iys.service.ITebligIcerikService;
+import hud.iys.service.ITebligMaddeIcerikService;
+import hud.iys.service.ITebligService;
 import hud.iys.view.tree.TreeNodeImpl;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +42,14 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TreeDragDropEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.UploadedFile;
 import org.springframework.dao.DataAccessException;
 
 
@@ -37,6 +60,14 @@ public class MaddeIcerikBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String SUCCESS = "success";
 	private static final String ERROR   = "error";
+	
+
+	public final long kanunTipId = 1L;
+	public final long kanunIcerikTipId = 2L;
+	public final long kanunMaddeIcerikTipId = 3L;
+	public final long tebligTipId = 4L;
+	public final long tebligIcerikTipId = 5L;
+	public final long tebligMaddeIcerikTipId = 6L;
 	
 	private TreeNode rootNode;
 	private TreeNode selectedNode;
@@ -49,8 +80,8 @@ public class MaddeIcerikBean implements Serializable {
 	private String dipnotNo;
 	private String dipnotMetin;
 	
-	@ManagedProperty(value="#{MaddeIcerikService}")
-	IMaddeIcerikService maddeIcerikService;
+	private UploadedFile file;
+	private List<Attachment> attachmentList;
 	
 	@ManagedProperty(value="#{DipnotMIService}")
 	IDipnotMIService dipnotMIService;
@@ -61,6 +92,40 @@ public class MaddeIcerikBean implements Serializable {
 	@ManagedProperty(value="#{dipnotMB}")
 	private DipnotBean dipnotBean;
 	
+	@ManagedProperty(value="#{AttachmentService}")
+	IAttachmentService attachmentService;
+	
+	@ManagedProperty(value="#{KanunService}")
+	IKanunService kanunService;	
+	
+	@ManagedProperty(value="#{KanunIcerikService}")
+	IKanunIcerikService kanunIcerikService;	
+	
+	@ManagedProperty(value="#{TebligService}")
+	ITebligService tebligService;	
+
+	@ManagedProperty(value="#{TebligIcerikService}")
+	ITebligIcerikService tebligIcerikService;	
+	
+	@ManagedProperty(value="#{MaddeIcerikService}")
+	IMaddeIcerikService maddeIcerikService;
+	
+	@ManagedProperty(value="#{TebligMaddeIcerikService}")
+	ITebligMaddeIcerikService tebligMaddeIcerikService;
+	
+	@ManagedProperty(value="#{LinkService}")
+	ILinkService linkService;
+	
+	private List<Kanun> ilgiliKanunList;
+	private List<KanunIcerik> ilgiliKanunIcerikList;
+	private List<Teblig> ilgiliTebligList;
+    private List<TebligIcerik> ilgiliTebligIcerikList;
+    
+    private KanunIcerik selectedIlgiliKanunIcerik;
+    private TreeNode rootNodeRelatedMIMI;
+    
+    private KanunIcerik selectedIlgiliTebligIcerik;
+    private TreeNode rootNodeRelatedMITMI;
 	
 	@PostConstruct
     public void init() {
@@ -70,6 +135,13 @@ public class MaddeIcerikBean implements Serializable {
 			rootNode = newNodeWithChildren(root, null);
 			rootNode.setExpanded(true);
 		}
+		
+		if(getSelectedIlgiliKanunIcerik() != null){
+			MaddeIcerik rootKIMI = getMaddeIcerikService().getMaddeIcerikById(getSelectedIlgiliKanunIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedMIMI = newNodeWithChildren(rootKIMI, null);
+			rootNodeRelatedMIMI.setExpanded(true);
+		}
+		
        //rootNode = null;
     }
     
@@ -91,6 +163,16 @@ public class MaddeIcerikBean implements Serializable {
          }
          return newNode;
     }
+    
+    public TreeNode newNodeWithChildren(TebligMaddeIcerik ttParent, TreeNode parent){
+        TreeNode newNode= new TreeNodeImpl(ttParent, parent);
+        newNode.setExpanded(true);
+        for (TebligMaddeIcerik tt : ttParent.getChildren()){
+             TreeNode newNode2= newNodeWithChildren(tt, newNode);
+             newNode2.setExpanded(true);
+        }
+        return newNode;
+   }
 
     public TreeNode getRootNode() {   
     	if(getKanunIcerikBean().getSelectedKanunIcerik() != null){
@@ -194,6 +276,176 @@ public class MaddeIcerikBean implements Serializable {
 		this.selectedMaddeIcerik = selectedMaddeIcerik;
 	}
 	
+	
+	
+	public List<Kanun> getIlgiliKanunList() {
+		return ilgiliKanunList;
+	}
+
+	public void setIlgiliKanunList(List<Kanun> ilgiliKanunList) {
+		this.ilgiliKanunList = ilgiliKanunList;
+	}
+
+	public List<KanunIcerik> getIlgiliKanunIcerikList() {
+		return ilgiliKanunIcerikList;
+	}
+
+	public void setIlgiliKanunIcerikList(List<KanunIcerik> ilgiliKanunIcerikList) {
+		this.ilgiliKanunIcerikList = ilgiliKanunIcerikList;
+	}
+
+	public List<Teblig> getIlgiliTebligList() {
+		return ilgiliTebligList;
+	}
+
+	public void setIlgiliTebligList(List<Teblig> ilgiliTebligList) {
+		this.ilgiliTebligList = ilgiliTebligList;
+	}
+
+	public List<TebligIcerik> getIlgiliTebligIcerikList() {
+		return ilgiliTebligIcerikList;
+	}
+
+	public void setIlgiliTebligIcerikList(List<TebligIcerik> ilgiliTebligIcerikList) {
+		this.ilgiliTebligIcerikList = ilgiliTebligIcerikList;
+	}
+
+	
+	
+	public KanunIcerik getSelectedIlgiliKanunIcerik() {
+		return selectedIlgiliKanunIcerik;
+	}
+
+	public void setSelectedIlgiliKanunIcerik(KanunIcerik selectedIlgiliKanunIcerik) {
+		this.selectedIlgiliKanunIcerik = selectedIlgiliKanunIcerik;
+	}
+
+	
+	
+	public ITebligMaddeIcerikService getTebligMaddeIcerikService() {
+		return tebligMaddeIcerikService;
+	}
+
+	public void setTebligMaddeIcerikService(
+			ITebligMaddeIcerikService tebligMaddeIcerikService) {
+		this.tebligMaddeIcerikService = tebligMaddeIcerikService;
+	}
+
+	public void setIlgiliMIMI(){
+		if(getSelectedIlgiliKanunIcerik() != null){
+			MaddeIcerik root = getMaddeIcerikService().getMaddeIcerikById(getSelectedIlgiliKanunIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedMIMI = newNodeWithChildren(root, null);
+			rootNodeRelatedMIMI.setExpanded(true);
+		}
+	}
+
+	public void setIlgiliMITMI(){
+		if(getSelectedIlgiliTebligIcerik() != null){
+			TebligMaddeIcerik root = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getSelectedIlgiliTebligIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedMITMI = newNodeWithChildren(root, null);
+			rootNodeRelatedMITMI.setExpanded(true);
+		}
+	}
+	
+	public TreeNode getRootNodeRelatedMIMI() {
+		if(getSelectedIlgiliKanunIcerik() != null){
+			MaddeIcerik root = getMaddeIcerikService().getMaddeIcerikById(getSelectedIlgiliKanunIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedMIMI = newNodeWithChildren(root, null);
+			rootNodeRelatedMIMI.setExpanded(true);
+		}
+		return rootNodeRelatedMIMI;
+	}
+
+	public void setRootNodeRelatedMIMI(TreeNode rootNodeRelatedMIMI) {
+		this.rootNodeRelatedMIMI = rootNodeRelatedMIMI;
+	}
+
+	public KanunIcerik getSelectedIlgiliTebligIcerik() {
+		return selectedIlgiliTebligIcerik;
+	}
+
+	public void setSelectedIlgiliTebligIcerik(KanunIcerik selectedIlgiliTebligIcerik) {
+		this.selectedIlgiliTebligIcerik = selectedIlgiliTebligIcerik;
+	}
+
+	public TreeNode getRootNodeRelatedMITMI() {
+		if(getSelectedIlgiliTebligIcerik() != null){
+			TebligMaddeIcerik root = getTebligMaddeIcerikService().getTebligMaddeIcerikById(getSelectedIlgiliTebligIcerik().getMaddeIcerikRoot()); // instead get root object from database 
+			rootNodeRelatedMITMI = newNodeWithChildren(root, null);
+			rootNodeRelatedMITMI.setExpanded(true);
+		}
+		return rootNodeRelatedMITMI;
+	}
+
+	public void setRootNodeRelatedMITMI(TreeNode rootNodeRelatedMITMI) {
+		this.rootNodeRelatedMITMI = rootNodeRelatedMITMI;
+	}
+
+	public IKanunService getKanunService() {
+		return kanunService;
+	}
+
+	public void setKanunService(IKanunService kanunService) {
+		this.kanunService = kanunService;
+	}
+
+	public ITebligService getTebligService() {
+		return tebligService;
+	}
+
+	public void setTebligService(ITebligService tebligService) {
+		this.tebligService = tebligService;
+	}
+
+	public ITebligIcerikService getTebligIcerikService() {
+		return tebligIcerikService;
+	}
+
+	public void setTebligIcerikService(ITebligIcerikService tebligIcerikService) {
+		this.tebligIcerikService = tebligIcerikService;
+	}
+
+	public ILinkService getLinkService() {
+		return linkService;
+	}
+
+	public void setLinkService(ILinkService linkService) {
+		this.linkService = linkService;
+	}
+	
+	
+
+	public List<Attachment> getAttachmentList() {
+		attachmentList = new ArrayList<Attachment>();
+		if(selectedMaddeIcerik != null){			
+			if(getAttachmentService().getAttachmentlarByTypeAndFromId(3, selectedMaddeIcerik.getMaddeIcerikId()) != null){
+				attachmentList.addAll(getAttachmentService().getAttachmentlarByTypeAndFromId(3, selectedMaddeIcerik.getMaddeIcerikId()));
+			}			
+		}
+		return attachmentList;
+	}
+
+	public void setAttachmentList(List<Attachment> attachmentList) {
+		this.attachmentList = attachmentList;
+	}
+
+	public IKanunIcerikService getKanunIcerikService() {
+		return kanunIcerikService;
+	}
+
+	public void setKanunIcerikService(IKanunIcerikService kanunIcerikService) {
+		this.kanunIcerikService = kanunIcerikService;
+	}
+
+	
+	public IAttachmentService getAttachmentService() {
+		return attachmentService;
+	}
+
+	public void setAttachmentService(IAttachmentService attachmentService) {
+		this.attachmentService = attachmentService;
+	}
+
 	public void displaySelectedSingle() {
         if(selectedNode != null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
@@ -280,10 +532,14 @@ public class MaddeIcerikBean implements Serializable {
     }    
 
     public void deleteMaddeIcerik() {
-    	 if (selectedMaddeIcerik != null) {
-			 getMaddeIcerikService().deleteMaddeIcerik(selectedMaddeIcerik);
+    	if(selectedMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen silinecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedMaddeIcerik != null) {
+    		getMaddeIcerikService().deleteMaddeIcerik(selectedMaddeIcerik);
 			
-		 }
+		}
     }
     
     public void addDipnot() {
@@ -333,6 +589,37 @@ public class MaddeIcerikBean implements Serializable {
     	
     	selectedNode.setExpanded(true);
     	
+    	
+    	getKanunIcerikBean().setIlgiliKanunList(null);
+		getKanunIcerikBean().setIlgiliKanunIcerikList(null);
+		getKanunIcerikBean().setIlgiliTebligList(null);
+		getKanunIcerikBean().setIlgiliTebligIcerikList(null);
+
+		ilgiliKanunList = new ArrayList<Kanun>();
+		ilgiliKanunIcerikList = new ArrayList<KanunIcerik>();
+		ilgiliTebligList = new ArrayList<Teblig>();
+		ilgiliTebligIcerikList = new ArrayList<TebligIcerik>();
+		List<Link> linkList = getLinkService().getLinklerByFromId(selectedMaddeIcerik.getMaddeIcerikId());
+		
+		for(Link link : linkList){
+			if(link.getToTypeId() == kanunTipId){
+				ilgiliKanunList.add(getKanunService().getKanunById(link.getToId()));
+				
+			}
+			else if(link.getToTypeId() == kanunIcerikTipId){    				
+				ilgiliKanunIcerikList.add(getKanunIcerikService().getKanunIcerikById(link.getToId()));
+				
+			}
+			else if(link.getToTypeId() == tebligTipId){
+				ilgiliTebligList.add(getTebligService().getTebligById(link.getToId()));
+				
+			}
+			else if(link.getToTypeId() == tebligIcerikTipId){    				
+				ilgiliTebligIcerikList.add(getTebligIcerikService().getTebligIcerikById(link.getToId()));
+				
+			}
+		}
+    	
     }
 
     public void onDragDrop(TreeDragDropEvent event) {
@@ -342,15 +629,9 @@ public class MaddeIcerikBean implements Serializable {
         Long oldIndex = dragMaddeIcerik.getChildPosition();
         MaddeIcerik oldParent = dragMaddeIcerik.getMaddeIcerik();
         
-        if(oldParent.getMaddeIcerikId() == dropMaddeIcerik.getMaddeIcerikId()) {
-        
-	        dragMaddeIcerik.setMaddeIcerik(dropMaddeIcerik);
-	        
-	        dragMaddeIcerik.setChildPosition(dropIndex);
-	        getMaddeIcerikService().updateMaddeIcerik(dragMaddeIcerik);
-	        
-	        Long index = 0L;
-	        System.out.println("Old Parent : " + oldParent.getMaddeIcerikAdi());
+        if( oldParent.getMaddeIcerikId().equals(dropMaddeIcerik.getMaddeIcerikId())) {
+        	System.out.println("------------------parentler ayni");
+        	Long index = 0L;
 	        if(oldIndex > dropIndex){ //yukari tasinmissa
 		        for(MaddeIcerik child : dropMaddeIcerik.getChildren()){
 		        	if(index >= dropIndex && index < oldIndex){
@@ -360,6 +641,7 @@ public class MaddeIcerikBean implements Serializable {
 		        	index++;
 		        }
 	        }
+	        
 	        else if(oldIndex < dropIndex){ //asagi tasinmissa
 	        	 for(MaddeIcerik child : dropMaddeIcerik.getChildren()){
 	 	        	if(index <= dropIndex && index > oldIndex){
@@ -369,47 +651,125 @@ public class MaddeIcerikBean implements Serializable {
 	 	        	index++;
 	 	        }
 	        }
-        }
-        else if(oldParent.getMaddeIcerikId() != dropMaddeIcerik.getMaddeIcerikId()){
-        	
-        	dragMaddeIcerik.setMaddeIcerik(dropMaddeIcerik);	        
-        	dragMaddeIcerik.setChildPosition(dropIndex);
-	        getMaddeIcerikService().updateMaddeIcerik(dragMaddeIcerik);
 	        
+	        dragMaddeIcerik.setMaddeIcerik(dropMaddeIcerik);
+	        dragMaddeIcerik.setChildPosition(dropIndex);
+    		getMaddeIcerikService().updateMaddeIcerik(dragMaddeIcerik);
+        }
+        else if(! oldParent.getMaddeIcerikId().equals(dropMaddeIcerik.getMaddeIcerikId())){
+        	System.out.println("------------------parentler farkli");
         	//change old parent child positions
         	Long index = 0L;
-        	System.out.println("Old Parent : " + oldParent.getMaddeIcerikMetin());
         	for(MaddeIcerik child : oldParent.getChildren()){
-        		
         		if(index >= oldIndex){
-        			if(child.getMaddeIcerikId() != dragMaddeIcerik.getMaddeIcerikId()){
-	        			System.out.println("old Parent child : "+ child.getMaddeIcerikMetin());
-	        			child.setChildPosition(child.getChildPosition()-1);
-	 	        		getMaddeIcerikService().updateMaddeIcerik(child);
-        			}
+        			child.setChildPosition(child.getChildPosition()-1);
+        			System.out.println("----------------eski parent in childi :"+child.getMaddeIcerikMetin());
+ 	        		getMaddeIcerikService().updateMaddeIcerik(child);
  	        	}
  	        	index++;
         	}
         	//change new parent child positions
         	index = 0L;	    
-        	System.out.println("New Parent : " + dropMaddeIcerik.getMaddeIcerikMetin());
-	        for(MaddeIcerik child : dropMaddeIcerik.getChildren()){
+        	for(MaddeIcerik child : dropMaddeIcerik.getChildren()){
 	        	if(index >= dropIndex){
 	        		if(child.getMaddeIcerikId() != dragMaddeIcerik.getMaddeIcerikId()){
-	        			System.out.println("new Parent child : "+ child.getMaddeIcerikMetin());
 	        			child.setChildPosition(child.getChildPosition()+1);
+	        			System.out.println("----------------yeni parent in childi :"+child.getMaddeIcerikMetin());
 		        		getMaddeIcerikService().updateMaddeIcerik(child);
 	        		}	        		
 	        	}
 	        	index++;
-	        }        
+	        }  
+	        
+	        dragMaddeIcerik.setMaddeIcerik(dropMaddeIcerik);	        
+	        dragMaddeIcerik.setChildPosition(dropIndex);
+	        getMaddeIcerikService().updateMaddeIcerik(dragMaddeIcerik);
  	        
         }
        
     }
 	
+	public void showYeniMetinDialog(){
+		if(selectedMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen alt metin eklenecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedMaddeIcerik != null) {
+    		RequestContext.getCurrentInstance().execute("PF('dlgYeniMetin').show()");
+    	}
+	}
+    
+	public void showLinkMIDialog(){
+		if(selectedMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen ilişkilendirilecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedMaddeIcerik != null) {
+    		RequestContext.getCurrentInstance().execute("PF('dlgLinkMI').show()");
+    	}
+	}
 	
-    
-    
+	public void showDipnotMIDialog(){
+		if(selectedMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen dipnot eklenecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedMaddeIcerik != null) {
+    		RequestContext.getCurrentInstance().execute("PF('dlgDipnotMI').show()");
+    	}
+	}
 
+	public void showAttachmentDialog(){
+		if(selectedMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen dosya eklenecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedMaddeIcerik != null) {
+    		RequestContext.getCurrentInstance().execute("PF('dlgAttachment').show()");
+    	}
+	}
+	
+	public void showUpdateMIDialog(){
+		if(selectedMaddeIcerik == null){
+    		FacesContext context = FacesContext.getCurrentInstance();            
+            context.addMessage(null, new FacesMessage("Uyarı!",  "Lütfen düzenlenecek içeriği seçiniz!") );            
+    	}
+    	else if (selectedMaddeIcerik != null) {
+    		RequestContext.getCurrentInstance().execute("PF('dlgDuzenleMetin').show()");
+    	}
+	}
+	
+	
+	public UploadedFile getFile() {
+        return file;
+    }
+ 
+    public void setFile(UploadedFile file) {
+    	this.file = file;
+    }
+     
+    public void addAttachment(FileUploadEvent event) throws IOException {
+    	
+    	file = event.getFile();         
+          
+        byte[] fileContent = IOUtils.toByteArray(file.getInputstream());         
+          
+        if(file != null) {
+            FacesMessage message = new FacesMessage("Başarılı", file.getFileName() + " sisteme yüklendi.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            
+            if(selectedMaddeIcerik != null) {
+            	Attachment newAttachment = new Attachment();
+            	newAttachment.setAttachmentAdi(file.getFileName());
+            	newAttachment.setFromTypeId(3);
+            	newAttachment.setFromId(selectedMaddeIcerik.getMaddeIcerikId());
+            	newAttachment.setContent(fileContent);
+            	
+            	
+            	getAttachmentService().addAttachment(newAttachment);
+            	
+            }             
+        }
+       
+    }
 }

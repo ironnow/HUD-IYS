@@ -21,6 +21,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.OrderBy;
+
 @Entity
 @Table(name="TEBLIGICERIK")
 public class TebligIcerik {
@@ -28,74 +30,78 @@ public class TebligIcerik {
 	 @Id
 	 @GeneratedValue(strategy = IDENTITY)
 	 @Column(name = "TebligIcerikID", unique = true, nullable = false)	 
-	 private Long tebligIcerikId;	
+	 private Long icerikId;	
 	 
 	 @Column(name="TebligIcerikNo")	 
-	 private String tebligIcerikNo;
+	 private String icerikNo;
 	 
 	 @Column(name="TebligIcerikAdi")	 
-	 private String tebligIcerikAdi;
+	 private String icerikAdi;
 	 
 	 @Column(name="TebligIcerikAyraci")	 
-	 private String tebligIcerikAyraci;
+	 private String icerikAyraci;
 	 
 	 @Column(name="TebligIcerikMetin")	 
-	 private String tebligIcerikMetin;	
+	 private String icerikMetin;	
 	 
 	 @ManyToOne(fetch = FetchType.LAZY, optional = true)
 	 @JoinColumn(name = "parentID", referencedColumnName = "tebligIcerikID")	 
 	 private TebligIcerik parent;
 	 
 	 @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "parent")	 
+	 @OrderBy(clause = "ChildPosition ASC")
 	 private Collection<TebligIcerik> children;	 
 	 
-	 @ManyToOne(fetch = FetchType.LAZY)
+	 @ManyToOne(fetch = FetchType.EAGER)
 	 @JoinColumn(name = "TebligID", nullable = false)	 
 	 private Teblig teblig;
 	 
-		 
-	 private Long tebligMaddeIcerikRoot;
+	 @Column(name="TebligMaddeIcerikRoot")	 	 
+	 private Long maddeIcerikRoot;
 	 
-	 public Long getTebligIcerikId() {
-		 return tebligIcerikId;
+	 @Column(name="ChildPosition")	
+	 private Long childPosition;
+	
+	 public Long getIcerikId() {
+		 return icerikId;
 	 }
 	
-	 public void setTebligIcerikId(Long id) {
-		 this.tebligIcerikId = id;
+	 public void setIcerikId(Long id) {
+		 this.icerikId = id;
 	 }
 	
 	 
-	 public String getTebligIcerikNo() {
-		 return tebligIcerikNo;
+	 public String getIcerikNo() {
+		 return icerikNo;
 	 }
 
-	 public void setTebligIcerikNo(String tebligIcerikNo) {
-		 this.tebligIcerikNo = tebligIcerikNo;
+	 public void setIcerikNo(String icerikNo) {
+		 this.icerikNo = icerikNo;
    	 }
 
-	 public String getTebligIcerikAdi() {
-		 return tebligIcerikAdi;
+	 public String getIcerikAdi() {
+		 return icerikAdi;
 	 }
 		
-	 public void setTebligIcerikAdi(String tebligIcerikAdi) {
-		 this.tebligIcerikAdi = tebligIcerikAdi;
+	 public void setIcerikAdi(String icerikAdi) {
+		 this.icerikAdi = icerikAdi;
 	 }
 	
 	 
-	 public String getTebligIcerikAyraci() {
-		return tebligIcerikAyraci;
+	 public String getIcerikAyraci() {
+		return icerikAyraci;
 	}
 
-	public void setTebligIcerikAyraci(String tebligIcerikAyraci) {
-		this.tebligIcerikAyraci = tebligIcerikAyraci;
+	public void setIcerikAyraci(String icerikAyraci) {
+		this.icerikAyraci = icerikAyraci;
 	}
 
-	public String getTebligIcerikMetin() {
-		return tebligIcerikMetin;
+	public String getIcerikMetin() {
+		return icerikMetin;
 	 }
 
-	 public void setTebligIcerikMetin(String tebligIcerikMetin) {
-		this.tebligIcerikMetin = tebligIcerikMetin;
+	 public void setIcerikMetin(String icerikMetin) {
+		this.icerikMetin = icerikMetin;
 	 }
 
 	
@@ -126,12 +132,19 @@ public class TebligIcerik {
 	 }
 	 
 	 	 
-	 public Long getTebligMaddeIcerikRoot() {
-	 	 return tebligMaddeIcerikRoot;
+	 public Long getMaddeIcerikRoot() {
+	 	 return maddeIcerikRoot;
 	 }
 
-	 public void setTebligMaddeIcerikRoot(Long tebligMaddeIcerikRoot) {
-		 this.tebligMaddeIcerikRoot = tebligMaddeIcerikRoot;
+	 public void setMaddeIcerikRoot(Long maddeIcerikRoot) {
+		 this.maddeIcerikRoot = maddeIcerikRoot;
  	 }
 
+	 public Long getChildPosition() {
+		 return childPosition;
+	 }
+
+	 public void setChildPosition(Long childPosition) {
+		 this.childPosition = childPosition;
+	 }
 }

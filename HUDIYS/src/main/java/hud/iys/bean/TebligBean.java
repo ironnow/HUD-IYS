@@ -58,7 +58,7 @@ public class TebligBean implements Serializable {
 	 private Long tebligNo;
 	 private String tebligAdi;
 	 private String tebligAciklama;
-	 private Long RGNo;
+	 private int RGNo;
 	 private Date RGTarihi;
 		 
 	 private Teblig selectedTeblig;
@@ -75,10 +75,10 @@ public class TebligBean implements Serializable {
 			   
 			   TebligIcerik tebligIcerik = new TebligIcerik();
 			   tebligIcerik.setTebligIcerik(null);
-			   tebligIcerik.setTebligIcerikAdi(getTebligAdi());
+			   tebligIcerik.setIcerikAdi(getTebligAdi());
 			   getTebligIcerikService().addTebligIcerik(tebligIcerik);
 			   
-			   teblig.setTebligIcerikRoot(tebligIcerik.getTebligIcerikId());
+			   teblig.setTebligIcerikRoot(tebligIcerik.getIcerikId());
 			   
 			   teblig.setMevzuat(mevzuatBean.getSelectedMevzuat());
 			   getTebligService().addTeblig(teblig);
@@ -87,10 +87,10 @@ public class TebligBean implements Serializable {
 			   
 			   TebligMaddeIcerik tebligMaddeIcerik = new TebligMaddeIcerik();
 			   tebligMaddeIcerik.setTebligMaddeIcerik(null);
-			   tebligMaddeIcerik.setTebligMaddeIcerikAdi(tebligIcerik.getTebligIcerikAdi());
+			   tebligMaddeIcerik.setTebligMaddeIcerikAdi(tebligIcerik.getIcerikAdi());
 			   getTebligMaddeIcerikService().addTebligMaddeIcerik(tebligMaddeIcerik);
 			   
-			   tebligIcerik.setTebligMaddeIcerikRoot(tebligMaddeIcerik.getTebligMaddeIcerikId());
+			   tebligIcerik.setMaddeIcerikRoot(tebligMaddeIcerik.getTebligMaddeIcerikId());
 			   
 			   getTebligIcerikService().updateTebligIcerik(tebligIcerik);
 			   tebligMaddeIcerik.setTebligIcerik(tebligIcerik);
@@ -107,7 +107,7 @@ public class TebligBean implements Serializable {
 
 	 public void reset() {
 		 this.setTebligNo((long) 0);
-		 this.setRGNo((long) 0);
+		 this.setRGNo(0);
 		 this.setTebligAdi("");
 		 this.setTebligAciklama("");		
 	 }
@@ -153,11 +153,11 @@ public class TebligBean implements Serializable {
 		this.tebligAciklama = tebligAciklama;
 	}
 
-	public Long getRGNo() {
+	public int getRGNo() {
 		return RGNo;
 	}
 
-	public void setRGNo(Long rGNo) {
+	public void setRGNo(int rGNo) {
 		RGNo = rGNo;
 	}
 
@@ -252,8 +252,8 @@ public class TebligBean implements Serializable {
 		setSelectedTebligTebligIcerikList(this.selectedTebligTebligIcerikList);
 			
 		
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
-		FacesContext.getCurrentInstance().getExternalContext().redirect("tebligIcerik.jsf?id=" +((Teblig) event.getObject()).getTebligId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("tebligIcerik.xhtml?id=" +((Teblig) event.getObject()).getTebligId());
 
 
     }
@@ -263,7 +263,7 @@ public class TebligBean implements Serializable {
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
         
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
 
     }
     

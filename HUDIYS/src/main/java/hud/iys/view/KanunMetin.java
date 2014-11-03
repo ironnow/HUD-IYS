@@ -6,7 +6,7 @@ public class KanunMetin {
 	
 	private String icerikMetin;
 	
-	private int type;
+	private String type;
 	
 	private Long icerikId;
 
@@ -32,12 +32,14 @@ public class KanunMetin {
 		this.icerikAdi = icerikAdi;
 		this.icerikMetin = icerikMetni;
 	}
+	public KanunMetin() {		
+	}
 
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

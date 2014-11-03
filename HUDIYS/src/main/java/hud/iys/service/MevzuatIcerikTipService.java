@@ -46,6 +46,10 @@ public class MevzuatIcerikTipService implements IMevzuatIcerikTipService {
 		 return getMevzuatIcerikTipDAO().getMevzuatIcerikTipleri();
 	 }
 	
+	 @Override
+	 public MevzuatIcerikTip getMevzuatIcerikTipIdByName(String mevzuatIcerikTipName){
+		 return getMevzuatIcerikTipDAO().getMevzuatIcerikTipIdByName(mevzuatIcerikTipName);
+	 }
 	
 	 public IMevzuatIcerikTipDAO getMevzuatIcerikTipDAO() {
 		 return mevzuatIcerikTipDAO;

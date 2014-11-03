@@ -11,18 +11,89 @@
 <title>HUD İYS</title>
 <link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
 	<style type="text/css">
-        .ui-widget,.ui-widget .ui-widget 
-        {
-            font-size: 90% !important;
-        }
+    	.ui-dashboard-column {
+		   width: 33%;
+		}
 	</style>
  </h:head>
 	 <h:body> 
 	 	<ui:decorate template="templates/template.xhtml">			 
 			<ui:define name="content"> 
+				<div style="height:500px">
+				    <h:form>
+				        <p:growl id="msgs" showDetail="true" />
+				 
+				        <p:dashboard id="board" model="#{dashboardMB.model}">
+				            <p:ajax event="reorder" listener="#{dashboardMB.handleReorder}" update="msgs" />
+				 
+				            <p:panel id="mevzuatSetleri" header="Mevzuat Setleri" style="height:200px" toggleable="true" closable="true" >
+				                <p:dataTable id="dataTable" var="mevzuatSeti" value="#{mevzuatSetiMB.mevzuatSetleriModel}" sortMode="multiple" 
+									selection="#{mevzuatSetiMB.selectedMevzuatSeti}" selectionMode="single">        
+									<p:ajax event="rowSelect" listener="#{mevzuatSetiMB.onRowSelect}">
+										<f:setPropertyActionListener target="#{mevzuatMB.mevzuatSetiId}" value="#{mevzuatSetiMB.selectedMevzuatSeti.mevzuatSetiId}" />
+									</p:ajax>
+				       				<p:ajax event="rowUnselect" listener="#{mevzuatSetiMB.onRowUnselect}"/>
+					
+				       				<p:column>
+				           				<h:outputText value="#{mevzuatSeti.mevzuatSetiAdi}" />
+				      				</p:column>
 				
-				<h3 class="title ui-widget-header ui-corner-all">Hesap Uzmanları Derneği</h3>
-	 			
+				   				</p:dataTable>
+				            </p:panel>
+				 
+				            <p:panel id="duyurular" header="Duyurular" style="height:200px" toggleable="true" closable="true">				               
+				                <a href="http://www.hud.org.tr/icerik/2013-beyanname-duzenleme-kilavuzu-bdk-cikti.">2013 Beyanname Düzenleme Kılavuzu (BDK) çıktı. Ayrıntılar için tıklayınız.</a>
+								<br/>
+								<br/>
+								<a href="http://www.hud.org.tr/icerik/dernegimiz-tarafindan-organize-edilen-piknik-15-eylul-pazar-gunu-gerceklestirildi">Derneğimiz tarafından organize edilen piknik 15 Eylül Pazar günü gerçekleştirildi</a>
+								<br/>
+								<br/>
+								<a href="http://www.hud.org.tr/icerik/hesap-uzmanlari-kuruluve8217;nun-67.-kurulus-yildonumu-etkinlikleri-">Hesap Uzmanları Kurulu’nun 67. Kuruluş Yıldönümü etkinlikleri</a>
+								<br/>
+								<br/>
+								<a href="http://www.hud.org.tr/icerik/dernegimizin-adinin-kullanilmasi-">Derneğimizin Adının Kullanılması</a>
+								<br/>
+				            </p:panel>
+				 
+				            <p:panel id="makaleler" header="Makaleler" style="height:200px" toggleable="true" closable="true" >
+				            	<a href="http://www.hud.org.tr/makale/44.pdf">Hesap Uzmanları Kurulu’nun Ardından</a>
+								<br/>				            	
+				            	<br/>
+				                <a href="http://www.hud.org.tr/makale/45.pdf">Vergi Denetiminde Yeniden Yapılanmaya Şimdi Daha Fazla İhtiyaç Var</a>
+								<br/>				            	
+				            	<br/>
+				            	<a href="http://www.hud.org.tr/icerik/66-nci-kurulus-yildonumunde-hesap-uzmanlari-kurulu">66’ncı Kuruluş Yıldönümünde Hesap Uzmanları Kurulu</a>
+								<br/>				            	
+				            	<br/>
+				            	
+				            </p:panel>
+				
+				            <p:panel id="yayinlar" header="Yayınlar" style="height:200px" toggleable="true" closable="true" >
+				                <a href="http://www.vergidunyasi.com.tr/yayinlar.php?id=156">Katma Değer Vergisinde Tevkifatın Nedenleri, Gelişimi ve Uygulama Esasları</a>
+								<br/>				            	
+				            	<br/>
+				                <a href="http://www.vergidunyasi.com.tr/yayinlar.php?id=159">Finansal Tabloları Bağımsız Denetime Hazırlama Kılavuzu</a>
+								<br/>				            	
+				            	<br/>
+				            	<a href="http://www.vergidunyasi.com.tr/yayinlar.php?id=140">TFRS İlk Geçiş Uygulaması</a>
+								<br/>				            	
+				            	<br/>
+				            	<a href="http://www.vergidunyasi.com.tr/yayinlar.php?id=153">Vergi Muhasebesi</a>
+								<br/>				            	
+				            	<br/>
+				            	<a href="http://www.vergidunyasi.com.tr/yayinlar.php?id=69">Telif Kazançlarının Hukuki Mahiyeti ve Vergilendirilmesi</a>
+								<br/>				            	
+				            	<br/>
+				            </p:panel>
+				 
+				            <p:panel id="vergiDunyasiSoru" header="Vergi Dünyası Soruları" style="height:200px" toggleable="true" closable="true" >
+				                <h:outputText value="..." />
+				            </p:panel>
+				        </p:dashboard>
+				 
+				        
+				    </h:form>
+				</div>
 			</ui:define> 			 
 		</ui:decorate> 
 	</h:body> 

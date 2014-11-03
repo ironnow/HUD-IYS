@@ -11,9 +11,25 @@
 			 <h:form>
 				 <p:toolbar>
 				    <p:toolbarGroup align="left">
-				        <h:commandButton value="Ana Sayfa" icon="ui-icon-document" action ="index?faces-redirect=true" ajax="false"/>
-				    	<h:commandButton value="Mevzuat Setleri" icon="ui-icon-document" action ="mevzuatSeti?faces-redirect=true" ajax="false"/>
+				        <p:commandButton value="Ana Sayfa" icon="ui-icon-home" action ="index?faces-redirect=true" ajax="false"/>				    	
+				    	<p:commandButton rendered="#{userMB.isLogged}" value="Mevzuat Setleri" icon="ui-icon-folder-collapsed" action ="mevzuatSeti?faces-redirect=true" ajax="false"/>
 				    	
+				    </p:toolbarGroup>
+				    <p:toolbarGroup align="right">
+				    	<p:outputLabel rendered="#{userMB.isLogged}" value="Hoşgeldiniz, "/>
+				    	<p:outputLabel rendered="#{userMB.isLogged}" value="#{userMB.username}   "/>
+				    	
+				    	 <p:menuButton rendered="#{userMB.isLogged}" value="Ayarlar">
+					        <p:menuitem value="Üyelik Ayarları" action ="register?faces-redirect=true" ajax="false"/>
+					        <p:menuitem rendered="#{userMB.roleUserAdmin}" value="Kullanıcı Ayarları" action ="users?faces-redirect=true" ajax="false"/>
+					        <p:menuitem rendered="#{userMB.roleSystemAdmin}" value="Sistem Ayarları" action ="users?faces-redirect=true" ajax="false"/>
+					        
+					    </p:menuButton>
+				    	
+				    	<p:commandButton rendered="#{!userMB.isLogged}" value="Üye Girişi" icon="ui-icon-document" action ="login?faces-redirect=true" ajax="false"/>
+				    	<p:commandButton rendered="#{!userMB.isLogged}" value="Yeni Üyelik" icon="ui-icon-document" action ="register?faces-redirect=true" ajax="false"/>
+				    	<p:commandButton rendered="#{userMB.isLogged}" value="Çıkış" icon="ui-icon-closethick" action ="logout?faces-redirect=true" ajax="false"/>
+				    
 				    </p:toolbarGroup>				
 				  </p:toolbar>
 			</h:form>

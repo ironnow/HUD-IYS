@@ -311,8 +311,8 @@ public class MevzuatBean implements Serializable {
 		
 		
 		
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf");
-		FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuatIcerik.jsf?id=" +((Mevzuat) event.getObject()).getMevzuatId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("mevzuatIcerik.xhtml?id=" +((Mevzuat) event.getObject()).getMevzuatId());
 
 
     }
@@ -322,13 +322,48 @@ public class MevzuatBean implements Serializable {
  
         //FacesContext.getCurrentInstance().addMessage(null, msg);
         
-        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.jsf?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("Mevzuat.xhtml?id=" +((MevzuatSeti) event.getObject()).getMevzuatSetiId());
 
 
     }
     
     public void MevzuatIcerikSec() throws IOException{
-    	FacesContext.getCurrentInstance().getExternalContext().redirect( selectedMevzuatIcerikTip.getMevzuatIcerikTipAdi() + ".jsf");
+    	if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 1 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("Kanunlar.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 2 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("Tebligler.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 3 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("Yonetmelikler.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 4 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("Tuzukler.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 5 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("CVOAnlasmalari.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 6 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("VKBDAnlasmalari.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 7 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("Gerekceler.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 8 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("KHKlar.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 9 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("BKKlar.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 10 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("Sirkulerler.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 11 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("Muktezalar.xhtml");
+    	}
+    	else if ( selectedMevzuatIcerikTip.getMevzuatIcerikTipId() == 12 ){
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("IcGenelgeler.xhtml");
+    	}
     }
     	 
     public void mevzuatIcerikDuzenleClick () {
