@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">
+       
+	</style>
+	
+	<script type="text/javascript">  
+	    PrimeFaces.locales['tr'] = {
+	    closeText: 'kapat',
+	    prevText: 'geri',
+	    nextText: 'ileri',
+	    currentText: 'bugün',
+	    monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+	    monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz', 'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+	    dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+	    dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    weekHeader: 'Hf',
+	    firstDay: 1,
+	    isRTL: false,
+	    showMonthAfterYear: false,
+	    yearSuffix: '',
+	    timeOnlyTitle: 'Zaman Seçiniz',
+	    timeText: 'Zaman',
+	    hourText: 'Saat',
+	    minuteText: 'Dakika',
+	    secondText: 'Saniye',
+	    ampm: false,
+	    month: 'Ay',
+	    week: 'Hafta',
+	    day: 'Gün',
+	    allDayText : 'Tüm Gün'
+	};
+	</script>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<table style="width:100%; margin:0px; min-width:100%;">
+				<tr>
+					<td style="idth:80%">
+						<h3 style="font-family:arial"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" /> İç Genelgeleri</h3>	
+						
+					</td>
+					<td style="text-align:right; width:20%">
+						<h:form>
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" id="showDialogButton" update="yeniForm" action="#{icGenelgeMB.reset}" type="button" value="Yeni İç Genelge" onclick="PF('dlgYeni').show()" />
+						</h:form>
+					</td>
+				</tr>
+			</table>	
+				
+			
+			<p:dialog header="Yeni İç Genelge" widgetVar="dlgYeni" resizable="false">
+				<h:form id="yeniForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="İç Genelge Adı: "/>
+							<p:inputText id="icGenelgeAdi" value="#{icGenelgeMB.icGenelgeAdi}"></p:inputText>         
+							<h:outputText value="Konu: " />
+							<p:inputText id="icGenelgeKonu" value="#{icGenelgeMB.icGenelgeKonu}"> </p:inputText>		
+							<h:outputText value="Sayı: " />
+							<p:inputText id="sayi" value="#{icGenelgeMB.sayi}"></p:inputText>							
+							<p:outputLabel for="calendar" value="Tarihi:" />
+        					<p:calendar id="calendar" value="#{icGenelgeMB.tarih}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />	
+        					<h:outputText value="Sıra No: " />
+							<p:inputText id="siraNo" value="#{icGenelgeMB.siraNo}"></p:inputText>						
+ 							<h:outputText value="İlgili Kanun No: " />
+							<p:inputText id="ilgiliKanunNo" value="#{icGenelgeMB.ilgiliKanunNo}"></p:inputText>         
+							<h:outputText value="İlgili Kanun Adı: " />
+							<p:inputText id="ilgiliKanunAdi" value="#{icGenelgeMB.ilgiliKanunAdi}"></p:inputText>   
+ 							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{icGenelgeMB.aciklama}"></p:inputText>						      
+							
+							<p:commandButton id="addicGenelge" update=":form:icGenelgeler" value="Ekle" action="#{icGenelgeMB.addIcGenelge}" onclick="PF('dlgYeni').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{icGenelgeMB.reset}" onclick="PF('dlgYeni').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog header="Düzenle" widgetVar="dlgDuzenle" resizable="false">
+				<h:form id="duzenleForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="İç Genelge Adı: "/>
+							<p:inputText id="icGenelgeAdi" value="#{icGenelgeMB.selectedIcGenelge.icGenelgeAdi}"></p:inputText>         
+							<h:outputText value="Konu: " />
+							<p:inputText id="icGenelgeKonu" value="#{icGenelgeMB.selectedIcGenelge.icGenelgeKonu}"> </p:inputText>		
+							<h:outputText value="Sayı: " />
+							<p:inputText id="sayi" value="#{icGenelgeMB.selectedIcGenelge.sayi}"></p:inputText>							
+							<p:outputLabel for="calendar" value="Tarihi:" />
+        					<p:calendar id="calendar" value="#{icGenelgeMB.selectedIcGenelge.tarih}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />	
+        					<h:outputText value="Sıra No: " />
+							<p:inputText id="siraNo" value="#{icGenelgeMB.selectedIcGenelge.siraNo}"></p:inputText>							
+ 							<h:outputText value="İlgili Kanun No: " />
+							<p:inputText id="ilgiliKanunNo" value="#{icGenelgeMB.selectedIcGenelge.ilgiliKanunNo}"></p:inputText>         
+							<h:outputText value="İlgili Kanun Adı: " />
+							<p:inputText id="ilgiliKanunAdi" value="#{icGenelgeMB.selectedIcGenelge.ilgiliKanunAdi}"></p:inputText>   
+ 							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{icGenelgeMB.selectedIcGenelge.aciklama}"></p:inputText>			  
+						
+							<p:commandButton id="updateicGenelge" update=":form:icGenelgeler" value="Düzenle" action="#{icGenelgeMB.updateIcGenelge}" onclick="PF('dlgDuzenle').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{icGenelgeMB.reset}" onclick="PF('dlgDuzenle').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+ 				
+ 			
+			
+			<h:form id="form" styleClass="form-style">
+				<p:contextMenu rendered="#{userMB.isLogged and userMB.roleWriter}" for="icGenelgeler">
+			        <p:menuitem value="Düzenle" update=":duzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenle').show()"/>
+			        <p:menuitem value="Sil" update="icGenelgeler" icon="ui-icon-close" actionListener="#{icGenelgeMB.deleteIcGenelge}"/>
+			    </p:contextMenu>
+			    
+				<p:dataTable id="icGenelgeler" var="icGenelge" value="#{icGenelgeMB.icGenelgelerModel}" sortMode="multiple" rows="20" paginator="true"
+						selection="#{icGenelgeMB.selectedIcGenelge}" selectionMode="single" >
+						
+					<p:ajax event="rowSelect" listener="#{icGenelgeMB.onRowSelect}" update=":form:icGenelgeler,:duzenleForm" />					
+					<p:ajax event="rowUnselect" listener="#{icGenelgeMB.onRowUnselect}" />
+					
+					<p:column style="width:5%" sortBy="#{icGenelge.durumId}" headerText="Durum">
+						<p:graphicImage value="../images/icons/#{icGenelge.durumId}.jpg"
+			                    				width="15"
+			                    				height="15"/> 
+			        </p:column>
+					
+					<p:column style="width:15%" sortBy="#{icGenelge.icGenelgeAdi}" headerText="İç Genelge Adı">
+						<h:outputText value="#{icGenelge.icGenelgeAdi}" />
+					</p:column>
+					<p:column style="width:15%" sortBy="#{icGenelge.icGenelgeKonu}" headerText="Konu">
+						<h:outputText value="#{icGenelge.icGenelgeKonu}" />
+					</p:column>        
+					 <p:column style="width:5%" sortBy="#{icGenelge.sayi}" headerText="Sayı">
+						<h:outputText value="#{icGenelge.sayi}" />
+					</p:column>        
+					 <p:column style="width:10%" sortBy="#{icGenelge.tarih}" headerText="Tarihi">
+						<h:outputText value="#{icGenelge.tarih}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					 <p:column style="width:5%" sortBy="#{icGenelge.siraNo}" headerText="Sıra No">
+						<h:outputText value="#{icGenelge.siraNo}" />
+					</p:column>   
+					<p:column style="width:5%" sortBy="#{icGenelge.ilgiliKanunNo}" headerText="İlgili Kanun No">
+						<h:outputText value="#{icGenelge.ilgiliKanunNo}" />
+					</p:column>  
+					<p:column style="width:10%" sortBy="#{icGenelge.ilgiliKanunAdi}" headerText="İlgili Kanun Adı">
+						<h:outputText value="#{icGenelge.ilgiliKanunAdi}" />
+					</p:column>  
+					<p:column style="width:30%" sortBy="#{icGenelge.aciklama}" headerText="Açıklama">
+						<h:outputText value="#{icGenelge.aciklama}" />
+					</p:column>  
+				</p:dataTable>
+			</h:form>	
+			
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

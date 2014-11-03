@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">
+       
+	</style>
+	
+	<script type="text/javascript">  
+	    PrimeFaces.locales['tr'] = {
+	    closeText: 'kapat',
+	    prevText: 'geri',
+	    nextText: 'ileri',
+	    currentText: 'bugün',
+	    monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+	    monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz', 'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+	    dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+	    dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    weekHeader: 'Hf',
+	    firstDay: 1,
+	    isRTL: false,
+	    showMonthAfterYear: false,
+	    yearSuffix: '',
+	    timeOnlyTitle: 'Zaman Seçiniz',
+	    timeText: 'Zaman',
+	    hourText: 'Saat',
+	    minuteText: 'Dakika',
+	    secondText: 'Saniye',
+	    ampm: false,
+	    month: 'Ay',
+	    week: 'Hafta',
+	    day: 'Gün',
+	    allDayText : 'Tüm Gün'
+	};
+	</script>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<table style="width:100%; margin:0px; min-width:100%;">
+				<tr>
+					<td style="idth:80%">
+						<h3 style="font-family:arial"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" /> Tüzükleri</h3>	
+						
+					</td>
+					<td style="text-align:right; width:20%">
+						<h:form>
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" id="showDialogButton" update="yeniForm" action="#{tuzukMB.reset}" type="button" value="Yeni Tüzük" onclick="PF('dlgYeni').show()" />
+						</h:form>
+					</td>
+				</tr>
+			</table>	
+				
+			
+			<p:dialog header="Yeni Tüzük" widgetVar="dlgYeni" resizable="false">
+				<h:form id="yeniForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Tüzük Adı: "/>
+							<p:inputText id="tuzukAdi" value="#{tuzukMB.tuzukAdi}"></p:inputText>         
+							
+							<h:outputText value="BKK No: " />
+							<p:inputText id="bkkNo" value="#{tuzukMB.bkkNo}"> </p:inputText>
+							<p:outputLabel for="calendar1" value="BKK Tarihi:" />
+        					<p:calendar id="calendar1" value="#{tuzukMB.bkkTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 									
+							<h:outputText value="Dayandığı Kanun No: " />
+							<p:inputText id="dayandigiKanunNo" value="#{tuzukMB.dayandigiKanunNo}"></p:inputText>        
+							<p:outputLabel for="calendar2" value="Dayandığı Kanun Tarihi:" />
+        					<p:calendar id="calendar2" value="#{tuzukMB.dayandigiKanunTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+        					
+        					<h:outputText value="RG No: " />
+							<p:inputText id="rgNo" value="#{tuzukMB.RGNo}"></p:inputText>        
+							<p:outputLabel for="calendar3" value="RG Tarihi:" />
+        					<p:calendar id="calendar3" value="#{tuzukMB.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+							
+ 							<h:outputText value="Dustür Tertibi: " />
+							<p:inputText id="dusturTertibi" value="#{tuzukMB.dusturTertibi}"></p:inputText>  
+							<h:outputText value="Dustür Cildi: " />
+							<p:inputText id="dusturCildi" value="#{tuzukMB.dusturCildi}"></p:inputText>  
+							<h:outputText value="Dustür Sayfası: " />
+							<p:inputText id="dusturSayfasi" value="#{tuzukMB.dusturSayfasi}"></p:inputText>          
+							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{tuzukMB.aciklama}"></p:inputText>         
+							      
+							
+							<p:commandButton id="addTuzuk" update=":form:tuzukler" value="Ekle" action="#{tuzukMB.addTuzuk}" onclick="PF('dlgYeni').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{tuzukMB.reset}" onclick="PF('dlgYeni').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog header="Düzenle" widgetVar="dlgDuzenle" resizable="false">
+				<h:form id="duzenleForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Tüzük Adı: "/>
+							<p:inputText id="tuzukAdi" value="#{tuzukMB.selectedTuzuk.tuzukAdi}"></p:inputText>         
+							
+							<h:outputText value="BKK No: " />
+							<p:inputText id="bkkNo" value="#{tuzukMB.selectedTuzuk.bkkNo}"> </p:inputText>
+							<p:outputLabel for="calendar1" value="BKK Tarihi:" />
+        					<p:calendar id="calendar1" value="#{tuzukMB.selectedTuzuk.bkkTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 									
+							<h:outputText value="Dayandığı Kanun No: " />
+							<p:inputText id="dayandigiKanunNo" value="#{tuzukMB.selectedTuzuk.dayandigiKanunNo}"></p:inputText>        
+							<p:outputLabel for="calendar2" value="Dayandığı Kanun Tarihi:" />
+        					<p:calendar id="calendar2" value="#{tuzukMB.selectedTuzuk.dayandigiKanunTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+        					
+        					<h:outputText value="RG No: " />
+							<p:inputText id="rgNo" value="#{tuzukMB.selectedTuzuk.RGNo}"></p:inputText>        
+							<p:outputLabel for="calendar3" value="RG Tarihi:" />
+        					<p:calendar id="calendar3" value="#{tuzukMB.selectedTuzuk.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+							
+ 							<h:outputText value="Dustür Tertibi: " />
+							<p:inputText id="dusturTertibi" value="#{tuzukMB.selectedTuzuk.dusturTertibi}"></p:inputText>  
+							<h:outputText value="Dustür Cildi: " />
+							<p:inputText id="dusturCildi" value="#{tuzukMB.selectedTuzuk.dusturCildi}"></p:inputText>  
+							<h:outputText value="Dustür Sayfası: " />
+							<p:inputText id="dusturSayfasi" value="#{tuzukMB.selectedTuzuk.dusturSayfasi}"></p:inputText>          
+							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{tuzukMB.selectedTuzuk.aciklama}"></p:inputText>    
+						
+							 
+						
+							<p:commandButton id="updateTuzuk" update=":form:tuzukler" value="Düzenle" action="#{tuzukMB.updateTuzuk}" onclick="PF('dlgDuzenle').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{tuzukMB.reset}" onclick="PF('dlgDuzenle').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+ 				
+ 			
+			
+			<h:form id="form" styleClass="form-style">
+				<p:contextMenu rendered="#{userMB.isLogged and userMB.roleWriter}" for="tuzukler">
+			        <p:menuitem value="Düzenle" update=":duzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenle').show()"/>
+			        <p:menuitem value="Sil" update="tuzukler" icon="ui-icon-close" actionListener="#{tuzukMB.deleteTuzuk}"/>
+			    </p:contextMenu>
+			    
+				<p:dataTable id="tuzukler" var="tuzuk" value="#{tuzukMB.tuzuklerModel}" sortMode="multiple" rows="20" paginator="true"
+						selection="#{tuzukMB.selectedTuzuk}" selectionMode="single" >
+						
+					<p:ajax event="rowSelect" listener="#{tuzukMB.onRowSelect}" update=":form:tuzukler,:duzenleForm" />					
+					<p:ajax event="rowUnselect" listener="#{tuzukMB.onRowUnselect}" />
+					
+					<p:column style="width:5%" sortBy="#{tuzuk.durumId}" headerText="Durum">
+						<p:graphicImage value="../images/icons/#{tuzuk.durumId}.jpg"
+			                    				width="15"
+			                    				height="15"/> 
+			        </p:column>
+					
+					<p:column style="width:10%" sortBy="#{tuzuk.tuzukAdi}" headerText="Tüzük Adı">
+						<h:outputText value="#{tuzuk.tuzukAdi}" />
+					</p:column>
+					<p:column style="width:5%" sortBy="#{tuzuk.bkkNo}" headerText="BKK No">
+						<h:outputText value="#{tuzuk.bkkNo}" />
+					</p:column>        
+					 <p:column style="width:10%" sortBy="#{tuzuk.bkkTarihi}" headerText="BKK Tarihi">
+						<h:outputText value="#{tuzuk.bkkTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					
+					<p:column style="width:5%" sortBy="#{tuzuk.dayandigiKanunNo}" headerText="Dayandığı Kanun No">
+						<h:outputText value="#{tuzuk.dayandigiKanunNo}" />
+					</p:column>        
+					 <p:column style="width:10%" sortBy="#{tuzuk.dayandigiKanunTarihi}" headerText="Dayandığı Kanun Tarihi">
+						<h:outputText value="#{tuzuk.dayandigiKanunTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					        
+					<p:column style="width:5%" sortBy="#{tuzuk.RGNo}" headerText="RG No">
+						<h:outputText value="#{tuzuk.RGNo}" />
+					</p:column>        
+					 <p:column style="width:10%" sortBy="#{tuzuk.RGTarihi}" headerText="RG Tarihi">
+						<h:outputText value="#{tuzuk.RGTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					<p:column style="width:5%" sortBy="#{tuzuk.dusturTertibi}" headerText="Dustür Tertibi">
+						<h:outputText value="#{tuzuk.dusturTertibi}" />
+					</p:column>
+					<p:column style="width:5%" sortBy="#{tuzuk.dusturCildi}" headerText="Dustür Cildi">
+						<h:outputText value="#{tuzuk.dusturCildi}" />
+					</p:column>
+					<p:column style="width:5%" sortBy="#{tuzuk.dusturSayfasi}" headerText="Dustür Sayfası">
+						<h:outputText value="#{tuzuk.dusturSayfasi}" />
+					</p:column>
+					<p:column style="width:25%" sortBy="#{tuzuk.aciklama}" headerText="Açıklama">
+						<h:outputText value="#{tuzuk.aciklama}" />
+					</p:column>  
+				</p:dataTable>
+			</h:form>	
+			
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

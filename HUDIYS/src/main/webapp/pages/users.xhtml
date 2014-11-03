@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">
+       
+	</style>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<table style="width:100%; margin:0px; min-width:100%;">
+				<tr>
+					<td style="width:80%">
+						<h3 style="font-family:arial">Kullanıcılar</h3>		
+					</td>
+					<td style="text-align:right; width:20%">
+<!-- 						<h:form>				 -->
+<!-- 							<p:commandButton align="right" id="save" type="button" value="Kaydet" action="#{userMB.updateUsers}"/> -->
+<!-- 						</h:form> -->
+					</td>
+				</tr>
+			</table>		
+			
+				
+			
+			
+ 			<h:form id="form" styleClass="form-style"> 
+  				<p:dataTable id="roleDataTable" var="user" value="#{userMB.users}">        
+					
+	
+       				<p:column style="width:40%" headerText="Kullanıcı Adı">
+           				<h:outputText value="#{user.userName}" />
+      				</p:column>
+
+			        <p:column style="width:14%" headerText="Okuyucu">
+			            <p:selectBooleanCheckbox id="roleReader" value="#{user.roleReader}" disabled="true"/>
+			            		             	
+			        </p:column>
+			        
+			        <p:column style="width:14%" headerText="Yazar">
+			            <p:selectBooleanCheckbox id="roleWriter" value="#{user.roleWriter}" disabled="true"/>
+			        </p:column>
+			        
+			        <p:column style="width:14%" headerText="Kullanıcı Yöneticisi">
+			            <p:selectBooleanCheckbox id="roleUserAdmin" value="#{user.roleUserAdmin}" disabled="true"/>
+			        </p:column>
+			        
+			        <p:column style="width:14%" headerText="Sistem Yöneticisi">
+			            <p:selectBooleanCheckbox id="roleSystemAdmin" value="#{user.roleSystemAdmin}" disabled="true"/>
+			        </p:column>
+			        
+			         <p:column style="width:4%">
+			            <p:commandButton icon="ui-icon-gear" title="Kaydet" onclick="PF('userDialog').show()" update=":form:userDetail">
+			                <f:setPropertyActionListener target="#{userMB.selectedUser}" value="#{user}" />
+			                
+			            </p:commandButton>
+			        </p:column>
+			        
+			       
+			        
+   				</p:dataTable>
+                <p:dialog header="Kullanıcı Yetkileri" widgetVar="userDialog" modal="true" resizable="false">
+				        
+			        <p:panel id="userDetail"  style="width:200px;margin: 0 auto">
+			            <h:panelGrid columns="2" rendered="#{not empty userMB.selectedUser}" columnClasses="label,value">
+			               				 
+			                <h:outputText value="Okuyucu :" />
+			                <p:selectBooleanCheckbox id="roleReader" value="#{userMB.selectedUser.roleReader}"/>
+			 
+			                <h:outputText value="Yazar : " />
+			                <p:selectBooleanCheckbox id="roleWriter" value="#{userMB.selectedUser.roleWriter}" />
+			 
+			                <h:outputText value="Kullanıcı Yöneticisi : " />
+			                <p:selectBooleanCheckbox id="roleUserAdmin" value="#{userMB.selectedUser.roleUserAdmin}" />
+			 
+			                <h:outputText value="Sistem Yöneticisi : " />
+			                <p:selectBooleanCheckbox id="roleSystemAdmin" value="#{userMB.selectedUser.roleSystemAdmin}" />
+			                
+			                <p:commandButton id="updateUser"  update=":form:roleDataTable" onclick="PF('userDialog').hide()" value="Kaydet" action="#{userMB.updateUser}"/>
+							
+			            </h:panelGrid>
+			        </p:panel>
+			        
+			    </p:dialog>
+			</h:form>
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

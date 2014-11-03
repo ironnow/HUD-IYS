@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">
+       
+	</style>
+	
+	<script type="text/javascript">  
+	    PrimeFaces.locales['tr'] = {
+	    closeText: 'kapat',
+	    prevText: 'geri',
+	    nextText: 'ileri',
+	    currentText: 'bugün',
+	    monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+	    monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz', 'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+	    dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+	    dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    weekHeader: 'Hf',
+	    firstDay: 1,
+	    isRTL: false,
+	    showMonthAfterYear: false,
+	    yearSuffix: '',
+	    timeOnlyTitle: 'Zaman Seçiniz',
+	    timeText: 'Zaman',
+	    hourText: 'Saat',
+	    minuteText: 'Dakika',
+	    secondText: 'Saniye',
+	    ampm: false,
+	    month: 'Ay',
+	    week: 'Hafta',
+	    day: 'Gün',
+	    allDayText : 'Tüm Gün'
+	};
+	</script>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<table style="width:100%; margin:0px; min-width:100%;">
+				<tr>
+					<td style="idth:80%">
+						<h3 style="font-family:arial"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" /> Kanun Hükmünde Kararnameleri</h3>	
+						
+					</td>
+					<td style="text-align:right; width:20%">
+						<h:form>
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" id="showDialogButton" update="yeniForm" action="#{khkMB.reset}" type="button" value="Yeni Kararname" onclick="PF('dlgYeni').show()" />
+						</h:form> 
+					</td>
+				</tr>
+			</table>	
+				
+			
+			<p:dialog header="Yeni Kararname" widgetVar="dlgYeni" resizable="false">
+				<h:form id="yeniForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Kararname No: "/>
+							<p:inputText id="khkNo" value="#{khkMB.khkNo}"></p:inputText>         
+							<h:outputText value="Kararname Adı: " />
+							<p:inputText id="khkAdi" value="#{khkMB.khkAdi}"> </p:inputText>
+							<p:outputLabel for="calendar1" value="Kabul Tarihi:" />
+        					<p:calendar id="calendar1" value="#{khkMB.kabulTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+        							
+							<h:outputText value="RG No: " />
+							<p:inputText id="RGNo" value="#{khkMB.RGNo}"></p:inputText>							
+							<p:outputLabel for="calendar2" value="RG Tarihi:" />
+        					<p:calendar id="calendar2" value="#{khkMB.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 							
+ 							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{khkMB.aciklama}"></p:inputText>         
+							      
+							
+							<p:commandButton id="addKhk" update=":form:khklar" value="Ekle" action="#{khkMB.addKhk}" onclick="PF('dlgYeni').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{khkMB.reset}" onclick="PF('dlgYeni').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog header="Düzenle" widgetVar="dlgDuzenle" resizable="false">
+				<h:form id="duzenleForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Kararname No: "/>
+							<p:inputText id="khkNo" value="#{khkMB.selectedKhk.khkNo}"></p:inputText>         
+							<h:outputText value="Kararname Adı: " />
+							<p:inputText id="khkAdi" value="#{khkMB.selectedKhk.khkAdi}"> </p:inputText>
+							<p:outputLabel for="calendar1" value="Kabul Tarihi:" />
+        					<p:calendar id="calendar1" value="#{khkMB.selectedKhk.kabulTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+        							
+							<h:outputText value="RG No: " />
+							<p:inputText id="RGNo" value="#{khkMB.selectedKhk.RGNo}"></p:inputText>							
+							<p:outputLabel for="calendar2" value="RG Tarihi:" />
+        					<p:calendar id="calendar2" value="#{khkMB.selectedKhk.RGTarihi}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />
+ 							
+ 							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{khkMB.selectedKhk.aciklama}"></p:inputText>         
+							         
+						
+							<p:commandButton id="updateKhk" update=":form:khklar" value="Düzenle" action="#{khkMB.updateKhk}" onclick="PF('dlgDuzenle').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{khkMB.reset}" onclick="PF('dlgDuzenle').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+ 				
+ 			
+			
+			<h:form id="form" styleClass="form-style">
+				<p:contextMenu rendered="#{userMB.isLogged and userMB.roleWriter}" for="khklar">
+			        <p:menuitem value="Düzenle" update=":duzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenle').show()"/>
+			        <p:menuitem value="Sil" update="khklar" icon="ui-icon-close" actionListener="#{khkMB.deleteKhk}"/>
+			    </p:contextMenu>
+			    
+				<p:dataTable id="khklar" var="khk" value="#{khkMB.khklarModel}" sortMode="multiple" rows="20" paginator="true"
+						selection="#{khkMB.selectedKhk}" selectionMode="single" >
+						
+					<p:ajax event="rowSelect" listener="#{khkMB.onRowSelect}" update=":form:khklar,:duzenleForm" />					
+					<p:ajax event="rowUnselect" listener="#{khkMB.onRowUnselect}" />
+					
+					<p:column style="width:5%" sortBy="#{khk.durumId}" headerText="Durum">
+						<p:graphicImage value="../images/icons/#{khk.durumId}.jpg"
+			                    				width="15"
+			                    				height="15"/> 
+			        </p:column>
+					
+					<p:column style="width:7%" sortBy="#{khk.khkNo}" headerText="Kararname No">
+						<h:outputText value="#{khk.khkNo}" />
+					</p:column>
+					<p:column style="width:10%" sortBy="#{khk.khkAdi}" headerText="Kararname Adı">
+						<h:outputText value="#{khk.khkAdi}" />
+					</p:column> 
+					<p:column style="width:10%" sortBy="#{khk.kabulTarihi}" headerText="Kabul Tarihi">
+						<h:outputText value="#{khk.kabulTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>       
+					 <p:column style="width:5%" sortBy="#{khk.RGNo}" headerText="RG No">
+						<h:outputText value="#{khk.RGNo}" />
+					</p:column>        
+					<p:column style="width:10%" sortBy="#{khk.RGTarihi}" headerText="RG Tarihi">
+						<h:outputText value="#{khk.RGTarihi}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					<p:column style="width:53%" sortBy="#{khk.aciklama}" headerText="Açıklama">
+						<h:outputText value="#{khk.aciklama}" />
+					</p:column>
+					
+					  
+				</p:dataTable>
+			</h:form>	
+			
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

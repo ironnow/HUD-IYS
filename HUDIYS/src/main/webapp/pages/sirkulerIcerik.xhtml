@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:pe="http://primefaces.org/ui/extensions">
+	  
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">     
+
+		
+        
+        .folder-open {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/open-folder.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+		
+		.folder-collapsed {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/closed-folder.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+		
+		.document-node {
+		    background: url('#{facesContext.externalContext.requestContextPath}/images/icons/document-icon.png')!important;
+		    height: 16px;
+		    width: 16px;
+		}
+		.ui-orderlist .ui-orderlist-list{
+           width: 600px;
+           height : 400px;
+        }
+        
+        .ui-dt-c {
+          padding: 0px !important;
+       }
+       
+       .ui-datatable tbody td.wrap {
+		    white-space: normal;
+		}
+		.ui-datatable td,.ui-datatable th {
+		    white-space: normal;
+		    background-color: white;
+		    border-style: hidden !important;
+		}
+		.ui-datatable table {
+		    border-style: hidden !important;			     
+		}
+		
+		.ui-datatable .ui-datatable-header {
+		    border-bottom: 0px none;
+		}
+        
+        .fixed-size {
+        
+		    table-layout: fixed;
+		    white-space: normal;
+		    word-wrap: break-word;
+		    text-wrap: break-word;
+		}
+		.ui-treetable td,.ui-treetable th {
+		    white-space: normal;
+		}
+		
+		.ui-treetable table {
+		    border-style: hidden !important;			     
+		}
+		
+		.ui-treetable .ui-treetable-header {
+		    border-bottom: 0px none;
+		    
+		}
+		
+		.ui-treetable .ui-treetable-data td,
+		.ui-treetable .ui-treetable-data-empty td {
+		   border-style: hidden !important;
+		   font-size: 9pt;
+		}
+		
+		.ui-datatable .ui-datatable-data td,
+		.ui-datatable .ui-datatable-data-empty td {
+		   border-style: hidden !important;
+		   font-size: 9pt;
+		}
+		
+		.ui-datalist .ui-datalist-header,
+		.ui-datalist .ui-datalist-footer {
+		    text-align:center;
+		    padding:4px 10px;
+		}
+		
+		.ui-datalist .ui-datalist-header {
+		    border-bottom: 0px none;
+		}
+		
+		.ui-datalist .ui-datalist-footer {
+		    border-top: 0px none;
+		}
+		
+		.ui-datalist .ui-paginator-top {
+		    border-bottom: 0px none;
+		}
+		
+		.ui-datalist .ui-paginator-bottom {
+		    border-top: 0px none;
+		}
+		
+		.ui-datalist .ui-datalist-empty-message {
+		    padding: 4px 10px;
+		}
+		
+		.ui-datalist .ui-datalist-nobullets {
+		    list-style-type: none;
+		}
+		.ui-datalist .ui-datalist-list{
+		   border-style: hidden !important;
+           width: 600px;
+           height : 400px;
+        }   
+        
+        .ui-datalist-item:empty {
+	        display: none;
+	        empty-cells: none;
+	        
+	    }    
+	    .ui-datalist-item{
+	        background: none;
+	        font-family: cursive;
+	        border: none !important;
+	        background-image: none;
+	        border-style: hidden !important;	
+	    }
+	    .datalist-noborder .ui-widget-content {
+			border: none;
+		}
+	
+		.ui-datatable td.baslik { 
+		    text-align: center;
+		    font-weight: bold;
+		}
+		.ui-datatable td.madde{ 
+		    text-align: left;
+		    font-weight: bold;
+		}
+		.ui-datatable td.metin{ 
+		    text-align: left;
+		}
+		
+		.ui-editor {
+	        width: 99.5% !important;
+	        height: 80% !important;
+	    }
+	    .ui-editor iframe {
+	        width: 99.5% !important;
+	        height: 80% !important;
+	    }
+		
+	</style>
+	
+	<script type="text/javascript">
+	    function makeDipnotEnabled(dipnotButton) {
+	    	var obj = document.getElementById(dipnotButton); 
+	    	if (obj) { 
+	    		obj.disabled = false; 
+	    		alert(1);
+	    		
+	    	} 
+	        
+	    }
+	</script>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<p:layout style="min-width:1000px; height:750px">
+			
+				<p:layoutUnit position="center">
+				
+
+					<p:outputPanel>
+					
+						<p:breadCrumb>
+						    
+						    <p:menuitem value="Icerik" url="/pages/index.xhtml" />
+						    <p:menuitem value="#{mevzuatSetiMB.selectedMevzuatSeti.mevzuatSetiAdi}" url="/pages/mevzuatSeti.xhtml" />
+						    <p:menuitem value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" url="/pages/mevzuat.xhtml" />
+						    <p:menuitem value="#{sirkulerMB.selectedSirkuler.sirkulerAdi}" url="/pages/Sirkulerler.xhtml" />
+						   
+						</p:breadCrumb>
+						
+						<h:form id="duzenleForm">
+							<table style="width:100%;margin:0px; min-width:100%;">
+								<tr>
+									<td style="width:90%">
+										<h3>
+											<h:outputText id="outputAdi" value="#{sirkulerMB.selectedSirkuler.sirkulerAdi}" />
+										</h3>
+									</td>
+									<td style="padding:5px; text-align:center; width:10%">
+										<p:commandButton value="Düzenle" update="duzenleForm" rendered="#{sirkulerMB.editModeOpen != true and userMB.isLogged and userMB.roleWriter}" id="ajax1" actionListener="#{sirkulerMB.openEditMode}" styleClass="ui-priority-primary" />
+						 				<p:commandButton value="Kaydet" update="duzenleForm" rendered="#{sirkulerMB.editModeOpen and userMB.isLogged and userMB.roleWriter}" id="ajax2" action="#{sirkulerMB.updateSirkuler}" styleClass="ui-priority-primary" />
+						
+									</td>
+								</tr>
+							</table>
+						 
+							<p>									
+								<h:outputText id="outputMetin" rendered="#{sirkulerMB.editModeOpen != true}" escape="false" value="#{sirkulerMB.selectedSirkuler.metin}" />	 
+								<p:editor id="editor" rendered="#{sirkulerMB.editModeOpen}" widgetVar="editorWidget" value="#{sirkulerMB.selectedSirkuler.metin}" />
+								
+							</p>
+						</h:form>
+						
+					</p:outputPanel>
+						
+								
+							
+				</p:layoutUnit> 
+						  
+					
+				
+			</p:layout>
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>

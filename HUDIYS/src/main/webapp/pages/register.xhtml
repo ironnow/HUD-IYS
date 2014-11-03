@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>HUD İYS</title>
+	<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">
+.ui-widget, .ui-widget .ui-widget {
+	font-size: 90% !important;
+}
+</style>
+
+	<script type="text/javascript">
+		function handleLoginRequest(xhr, status, args) {
+
+			if (args.validationFailed || !args.loggedIn) {
+				PF('dlg').jq.effect("shake", {
+					times : 5
+				}, 100);
+			} else {
+				PF('dlg').hide();
+				$('#loginLink').fadeOut();
+			}
+		}
+
+		$('#sehir').puidropdown();
+	</script>
+</h:head>
+<h:body>
+	<ui:decorate template="templates/template.xhtml">
+		<ui:define name="content">
+			
+			
+				<h:form>
+					<p:panel header="Kullanıcı Bilgileri"  style="width:600px;margin: 0 auto">
+						<h:panelGrid columns="2" style="margin: 0 auto;" columnClasses="label, value">
+							<h:outputText value="T.C. Kimlik No " />
+							<p:inputMask id="tcNo" value="#{userMB.tcNo}"
+								mask="99999999999" />
+							<h:outputText value="Ünvan " />
+							<p:inputText id="unvan" value="#{userMB.unvan}" />
+							<h:outputText value="Adınız " />
+							<p:inputText id="ad" value="#{userMB.ad}" />
+							<h:outputText value="Soyadınız " />
+							<p:inputText id="soyad" value="#{userMB.soyad}" />
+							<h:outputText value="Gsm Numaranız" />
+							<p:inputMask id="gsmNo" value="#{userMB.gsmNo}"
+								mask="(999) 999-9999" />
+							<h:outputText value="Telefon" />
+							<p:inputMask id="telefon" value="#{userMB.telefon}"
+								mask="(999) 999-9999" />
+							<h:outputText value="E-Posta Adresiniz" />
+							<p:inputText id="email" value="#{userMB.eMail}" />
+							<h:outputText value="Kullanıcı Adınız " />
+							<p:inputText id="kullaniciAdi" value="#{userMB.kullaniciAdi}" />
+							<h:outputText value="Şifre " />
+							<p:inputText id="sifre" value="#{userMB.sifre}" type="password" />
+							<h:outputText value="Şifre Tekrar " />
+							<p:inputText id="sifreTekrar" value="#{userMB.sifreTekrar}"
+								type="password" />
+							<h:outputText value="Şehir " />
+							<p:selectOneMenu id="sehir" value="#{userMB.sehir}">
+								<f:selectItem itemValue="Adana" itemLabel="Adana" />
+								<f:selectItem itemValue="Adıyaman" itemLabel="Adıyaman" />
+								<f:selectItem itemValue="Afyonkarahisar"
+									itemLabel="Afyonkarahisar" />
+								<f:selectItem itemValue="Ağrı" itemLabel="Ağrı" />
+								<f:selectItem itemValue="Aksaray" itemLabel="Aksaray" />
+								<f:selectItem itemValue="Amasya" itemLabel="Amasya" />
+								<f:selectItem itemValue="Ankara" itemLabel="Ankara" />
+								<f:selectItem itemValue="Antalya" itemLabel="Antalya" />
+								<f:selectItem itemValue="Ardahan" itemLabel="Ardahan" />
+								<f:selectItem itemValue="Artvin" itemLabel="Artvin" />
+								<f:selectItem itemValue="Aydın" itemLabel="Aydın" />
+								<f:selectItem itemValue="Balıkesir" itemLabel="Balıkesir" />
+								<f:selectItem itemValue="Bartın" itemLabel="Bartın" />
+								<f:selectItem itemValue="Batman" itemLabel="Batman" />
+								<f:selectItem itemValue="Bayburt" itemLabel="Bayburt" />
+								<f:selectItem itemValue="Bilecik" itemLabel="Bilecik" />
+								<f:selectItem itemValue="Bingöl" itemLabel="Bingöl" />
+								<f:selectItem itemValue="Bitlis" itemLabel="Bitlis" />
+								<f:selectItem itemValue="Bolu" itemLabel="Bolu" />
+								<f:selectItem itemValue="Burdur" itemLabel="Burdur" />
+								<f:selectItem itemValue="Bursa" itemLabel="Bursa" />
+								<f:selectItem itemValue="Çanakkale" itemLabel="Çanakkale" />
+								<f:selectItem itemValue="Çankırı" itemLabel="Çankırı" />
+								<f:selectItem itemValue="Çorum" itemLabel="Çorum" />
+								<f:selectItem itemValue="Denizli" itemLabel="Denizli" />
+								<f:selectItem itemValue="Diyarbakır" itemLabel="Diyarbakır" />
+								<f:selectItem itemValue="Düzce" itemLabel="Düzce" />
+								<f:selectItem itemValue="Edirne" itemLabel="Edirne" />
+								<f:selectItem itemValue="Elazığ" itemLabel="Elazığ" />
+								<f:selectItem itemValue="Erzincan" itemLabel="Erzincan" />
+								<f:selectItem itemValue="Erzurum" itemLabel="Erzurum" />
+								<f:selectItem itemValue="Eskişehir" itemLabel="Eskişehir" />
+								<f:selectItem itemValue="Gaziantep" itemLabel="Gaziantep" />
+								<f:selectItem itemValue="Giresun" itemLabel="Giresun" />
+								<f:selectItem itemValue="Gümüşhane" itemLabel="Gümüşhane" />
+								<f:selectItem itemValue="Hakkari" itemLabel="Hakkari" />
+								<f:selectItem itemValue="Hatay" itemLabel="Hatay" />
+								<f:selectItem itemValue="Iğdır" itemLabel="Iğdır" />
+								<f:selectItem itemValue="Isparta" itemLabel="Isparta" />
+								<f:selectItem itemValue="İstanbul" itemLabel="İstanbul" />
+								<f:selectItem itemValue="İzmir" itemLabel="İzmir" />
+								<f:selectItem itemValue="Kahramanmaraş"
+									itemLabel="Kahramanmaraş" />
+								<f:selectItem itemValue="Karabük" itemLabel="Karabük" />
+								<f:selectItem itemValue="Karaman" itemLabel="Karaman" />
+								<f:selectItem itemValue="Kars" itemLabel="Kars" />
+								<f:selectItem itemValue="Kastamonu" itemLabel="Kastamonu" />
+								<f:selectItem itemValue="Kayseri" itemLabel="Kayseri" />
+								<f:selectItem itemValue="Kilis" itemLabel="Kilis" />
+								<f:selectItem itemValue="Kırıkkale" itemLabel="Kırıkkale" />
+								<f:selectItem itemValue="Kırklareli" itemLabel="Kırklareli" />
+								<f:selectItem itemValue="Kırşehir" itemLabel="Kırşehir" />
+								<f:selectItem itemValue="Kocaeli" itemLabel="Kocaeli" />
+								<f:selectItem itemValue="Konya" itemLabel="Konya" />
+								<f:selectItem itemValue="Kütahya" itemLabel="Kütahya" />
+								<f:selectItem itemValue="Malatya" itemLabel="Malatya" />
+								<f:selectItem itemValue="Manisa" itemLabel="Manisa" />
+								<f:selectItem itemValue="Mardin" itemLabel="Mardin" />
+								<f:selectItem itemValue="Mersin" itemLabel="Mersin" />
+								<f:selectItem itemValue="Muğla" itemLabel="Muğla" />
+								<f:selectItem itemValue="Muş" itemLabel="Muş" />
+								<f:selectItem itemValue="Nevşehir" itemLabel="Nevşehir" />
+								<f:selectItem itemValue="Niğde" itemLabel="Niğde" />
+								<f:selectItem itemValue="Ordu" itemLabel="Ordu" />
+								<f:selectItem itemValue="Osmaniye" itemLabel="Osmaniye" />
+								<f:selectItem itemValue="Rize" itemLabel="Rize" />
+								<f:selectItem itemValue="Sakarya" itemLabel="Sakarya" />
+								<f:selectItem itemValue="Samsun" itemLabel="Samsun" />
+								<f:selectItem itemValue="Siirt" itemLabel="Siirt" />
+								<f:selectItem itemValue="Sinop" itemLabel="Sinop" />
+								<f:selectItem itemValue="Sivas" itemLabel="Sivas" />
+								<f:selectItem itemValue="Şanlıurfa" itemLabel="Şanlıurfa" />
+								<f:selectItem itemValue="Şırnak" itemLabel="Şırnak" />
+								<f:selectItem itemValue="Tekirdağ" itemLabel="Tekirdağ" />
+								<f:selectItem itemValue="Tokat" itemLabel="Tokat" />
+								<f:selectItem itemValue="Trabzon" itemLabel="Trabzon" />
+								<f:selectItem itemValue="Tunceli" itemLabel="Tunceli" />
+								<f:selectItem itemValue="Uşak" itemLabel="Uşak" />
+								<f:selectItem itemValue="Van" itemLabel="Van" />
+								<f:selectItem itemValue="Yalova" itemLabel="Yalova" />
+								<f:selectItem itemValue="Yozgat" itemLabel="Yozgat" />
+								<f:selectItem itemValue="Zonguldak" itemLabel="Zonguldak" />
+							</p:selectOneMenu>
+							<h:outputText value="İlçe " />
+							<p:inputText id="ilce" value="#{userMB.ilce}" />
+							<h:outputText value="Açık Adres " />
+							<p:inputTextarea id="adres" value="#{userMB.adres}" />
+						</h:panelGrid>
+						<p:panel header="Ödeme Bilgileri" style="width:560px;margin: 0 auto">
+							<h:panelGrid columns="2" style="margin: 0 auto;" columnClasses="label, value" >
+								<h:outputText value="Üyelik Tipi " />
+								<p:selectOneMenu id="ÜyelikTipi">
+									<f:selectItem itemValue="Premium Üyelik"
+										itemLabel="Premium Üyelik 400 TL" />
+									<f:selectItem itemValue="Gold Üyelik"
+										itemLabel="Gold Üyelik 200 TL" />
+									<f:selectItem itemValue="Silver Üyelik"
+										itemLabel="Silver Üyelik  100 TL" />
+								</p:selectOneMenu>
+								<h:outputText value="Kart Üzerindeki İsim " />
+								<p:inputText  />
+								<h:outputText value="Kart No" />
+								<p:inputMask id="kartno" mask="9999-9999-9999-9999" />
+								<h:outputText value="Son Kullanım Tarihi(aa/yy)" />
+								<p:inputMask id="sonkullanımtarihi" mask="99-99" />
+								<h:outputText value="CVC" />
+								<p:inputMask id="cvc" mask="999" />
+							</h:panelGrid>
+						</p:panel>
+						<h:panelGrid columns="2" style="margin: 0 auto;" columnClasses="label, value" >
+							<p:commandButton id="addUser" value="Kaydet" action="#{userMB.addUser}" ajax="false" />
+							<p:commandButton id="reset" value="Iptal" action="#{userMB.reset}" ajax="false"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			
+
+		</ui:define>
+	</ui:decorate>
+</h:body>
+</html>

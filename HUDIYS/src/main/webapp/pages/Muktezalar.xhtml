@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  
+<h:head>
+<title>HUD İYS</title>
+<link rel="icon" href="../images/icons/hudicon.png" type="image/x-icon" />
+	<style type="text/css">
+       
+	</style>
+	
+	<script type="text/javascript">  
+	    PrimeFaces.locales['tr'] = {
+	    closeText: 'kapat',
+	    prevText: 'geri',
+	    nextText: 'ileri',
+	    currentText: 'bugün',
+	    monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+	    monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz', 'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+	    dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+	    dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+	    weekHeader: 'Hf',
+	    firstDay: 1,
+	    isRTL: false,
+	    showMonthAfterYear: false,
+	    yearSuffix: '',
+	    timeOnlyTitle: 'Zaman Seçiniz',
+	    timeText: 'Zaman',
+	    hourText: 'Saat',
+	    minuteText: 'Dakika',
+	    secondText: 'Saniye',
+	    ampm: false,
+	    month: 'Ay',
+	    week: 'Hafta',
+	    day: 'Gün',
+	    allDayText : 'Tüm Gün'
+	};
+	</script>
+</h:head>
+<h:body> 
+	<ui:decorate template="templates/template.xhtml">			 
+		<ui:define name="content"> 
+		
+			<table style="width:100%; margin:0px; min-width:100%;">
+				<tr>
+					<td style="idth:80%">
+						<h3 style="font-family:arial"><h:outputText value="#{mevzuatMB.selectedMevzuat.mevzuatAdi}" /> Muktezaları</h3>	
+						
+					</td>
+					<td style="text-align:right; width:20%">
+						<h:form>
+							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" align="right" id="showDialogButton" update="yeniForm" action="#{muktezaMB.reset}" type="button" value="Yeni Mukteza" onclick="PF('dlgYeni').show()" />
+						</h:form>
+					</td>
+				</tr>
+			</table>	
+				
+			
+			<p:dialog header="Yeni Mukteza" widgetVar="dlgYeni" resizable="false">
+				<h:form id="yeniForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Başlık: "/>
+							<p:inputText id="baslik" value="#{muktezaMB.baslik}"></p:inputText>         
+							<h:outputText value="Veren Birim: " />
+							<p:inputText id="verenBirim" value="#{muktezaMB.verenBirim}"> </p:inputText>		
+							<h:outputText value="Sayı: " />
+							<p:inputText id="sayi" value="#{muktezaMB.sayi}"></p:inputText>							
+							<p:outputLabel for="calendar" value="Tarihi:" />
+        					<p:calendar id="calendar" value="#{muktezaMB.tarih}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />							
+ 							<h:outputText value="İlgili Kanun No: " />
+							<p:inputText id="ilgiliKanunNo" value="#{muktezaMB.ilgiliKanunNo}"></p:inputText>         
+							<h:outputText value="İlgili Kanun Adı: " />
+							<p:inputText id="ilgiliKanunAdi" value="#{muktezaMB.ilgiliKanunAdi}"></p:inputText>   
+ 							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{muktezaMB.aciklama}"></p:inputText>						      
+							
+							<p:commandButton id="addmukteza" update=":form:muktezalar" value="Ekle" action="#{muktezaMB.addMukteza}" onclick="PF('dlgYeni').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{muktezaMB.reset}" onclick="PF('dlgYeni').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog header="Düzenle" widgetVar="dlgDuzenle" resizable="false">
+				<h:form id="duzenleForm">
+					<p:panel>				
+						<h:panelGrid columns="2" columnClasses="label, value" styleClass="grid">
+							<h:outputText value="Başlık: "/>
+							<p:inputText id="baslik" value="#{muktezaMB.selectedMukteza.baslik}"></p:inputText>         
+							<h:outputText value="Veren Birim: " />
+							<p:inputText id="verenBirim" value="#{muktezaMB.selectedMukteza.verenBirim}"> </p:inputText>		
+							<h:outputText value="Sayı: " />
+							<p:inputText id="sayi" value="#{muktezaMB.selectedMukteza.sayi}"></p:inputText>							
+							<p:outputLabel for="calendar" value="Tarihi:" />
+        					<p:calendar id="calendar" value="#{muktezaMB.selectedMukteza.tarih}" locale="tr" navigator="true" pattern="yyyy-MMM-dd" />							
+ 							<h:outputText value="İlgili Kanun No: " />
+							<p:inputText id="ilgiliKanunNo" value="#{muktezaMB.selectedMukteza.ilgiliKanunNo}"></p:inputText>         
+							<h:outputText value="İlgili Kanun Adı: " />
+							<p:inputText id="ilgiliKanunAdi" value="#{muktezaMB.selectedMukteza.ilgiliKanunAdi}"></p:inputText>   
+ 							<h:outputText value="Açıklama: " />
+							<p:inputText id="aciklama" value="#{muktezaMB.selectedMukteza.aciklama}"></p:inputText>			  
+						
+							<p:commandButton id="updatemukteza" update=":form:muktezalar" value="Düzenle" action="#{muktezaMB.updateMukteza}" onclick="PF('dlgDuzenle').hide()"/>
+							<p:commandButton id="reset" value="İptal" action="#{muktezaMB.reset}" onclick="PF('dlgDuzenle').hide()"/>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+ 				
+ 			
+			
+			<h:form id="form" styleClass="form-style">
+				<p:contextMenu rendered="#{userMB.isLogged and userMB.roleWriter}" for="muktezalar">
+			        <p:menuitem value="Düzenle" update=":duzenleForm" icon="ui-icon-pencil" oncomplete="PF('dlgDuzenle').show()"/>
+			        <p:menuitem value="Sil" update="muktezalar" icon="ui-icon-close" actionListener="#{muktezaMB.deleteMukteza}"/>
+			    </p:contextMenu>
+			    
+				<p:dataTable id="muktezalar" var="mukteza" value="#{muktezaMB.muktezalarModel}" sortMode="multiple" rows="20" paginator="true"
+						selection="#{muktezaMB.selectedMukteza}" selectionMode="single" >
+						
+					<p:ajax event="rowSelect" listener="#{muktezaMB.onRowSelect}" update=":form:muktezalar,:duzenleForm" />					
+					<p:ajax event="rowUnselect" listener="#{muktezaMB.onRowUnselect}" />
+					
+					<p:column style="width:5%" sortBy="#{mukteza.durumId}" headerText="Durum">
+						<p:graphicImage value="../images/icons/#{mukteza.durumId}.jpg"
+			                    				width="15"
+			                    				height="15"/> 
+			        </p:column>
+					
+					<p:column style="width:15%" sortBy="#{mukteza.baslik}" headerText="Başlık">
+						<h:outputText value="#{mukteza.baslik}" />
+					</p:column>
+					<p:column style="width:15%" sortBy="#{mukteza.verenBirim}" headerText="Veren Birim">
+						<h:outputText value="#{mukteza.verenBirim}" />
+					</p:column>        
+					 <p:column style="width:5%" sortBy="#{mukteza.sayi}" headerText="Sayı">
+						<h:outputText value="#{mukteza.sayi}" />
+					</p:column>        
+					 <p:column style="width:10%" sortBy="#{mukteza.tarih}" headerText="Tarihi">
+						<h:outputText value="#{mukteza.tarih}">
+			                <f:convertDateTime pattern="dd/MM/yyyy" />
+			            </h:outputText>
+					</p:column>
+					<p:column style="width:5%" sortBy="#{mukteza.ilgiliKanunNo}" headerText="İlgili Kanun No">
+						<h:outputText value="#{mukteza.ilgiliKanunNo}" />
+					</p:column>  
+					<p:column style="width:15%" sortBy="#{mukteza.ilgiliKanunAdi}" headerText="İlgili Kanun Adı">
+						<h:outputText value="#{mukteza.ilgiliKanunAdi}" />
+					</p:column>  
+					<p:column style="width:30%" sortBy="#{mukteza.aciklama}" headerText="Açıklama">
+						<h:outputText value="#{mukteza.aciklama}" />
+					</p:column>  
+				</p:dataTable>
+			</h:form>	
+			
+			
+		</ui:define> 			 
+	</ui:decorate> 
+</h:body> 
+</html>
