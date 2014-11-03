@@ -35,12 +35,12 @@
 				</tr>
 			</table>		
 			
-			<p:dialog header="İçerikleri Düzenle" widgetVar="dlgIcerikTip" resizable="false" height="400" width="690">
+			<p:dialog header="İçerikleri Düzenle" widgetVar="dlgIcerikTip" resizable="false" height="400" width="700">
 				<h:form>
 					 <p:pickList id="icerikTipPickList" value="#{mevzuatMB.icerikTipleri}" var="mevzuatIcerikTip" itemLabel="#{mevzuatIcerikTip.mevzuatIcerikTipAdi}" itemValue="#{mevzuatIcerikTip.mevzuatIcerikTipId}" >
 					 	 <p:ajax event="transfer" listener="#{mevzuatMB.onTransfer}" update=":form:mevzuatIcerikTipleri" />
  					 </p:pickList>
-    				 <p:commandButton id="icerikleriDuzenle" action="#{mevzuatMB.mevzuatIcerikDuzenleClick}" onclick="PF('dlgIcerikTip').hide()" value="Tamam" update=":form:mevzuatIcerikTipleri" style="margin-left:300px;margin-right:auto;margin-top:5px" />
+    				 <p:commandButton id="icerikleriDuzenle" action="#{mevzuatMB.mevzuatIcerikDuzenle}" onclick="PF('dlgIcerikTip').hide()" value="Tamam" update=":form:mevzuatIcerikTipleri" style="margin-left:300px;margin-right:auto;margin-top:5px" />
 				</h:form>
 			</p:dialog>
 			

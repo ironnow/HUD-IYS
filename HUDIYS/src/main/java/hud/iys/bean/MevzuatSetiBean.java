@@ -13,6 +13,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.Transient;
 
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -38,7 +39,7 @@ public class MevzuatSetiBean implements Serializable {
 	 @ManagedProperty(value="#{MevzuatSetiService}")
 	 IMevzuatSetiService mevzuatSetiService;
 	 
-	//Spring Mevzuat Service is injected...
+	 @Transient
 	 @ManagedProperty(value="#{MevzuatService}")
 	 IMevzuatService mevzuatService;
 	

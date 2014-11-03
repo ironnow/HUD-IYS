@@ -543,7 +543,7 @@
 					                <span class="ui-icon ui-icon-grip-dotted-vertical" />
 					            </span>
 					            
-					            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" styleClass="ui-priority-primary" icon="ui-icon-note" title="Maddeler" action="#{kanunIcerikMB.showOnlyMaddeler}" update="tree" />
+					            <p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" styleClass="ui-priority-primary" icon="ui-icon-transferthick-e-w" title="Maddeler" action="#{kanunIcerikMB.showOnlyMaddeler}" update="tree" />
 								<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="ajax2" onclick="PF('dlgYeni').show()" styleClass="ui-priority-primary" icon="ui-icon-plus" title="Yeni" />
 	 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="ajax5" onclick="PF('dlgLinkKI').show()" styleClass="ui-priority-primary" icon="ui-icon-link" title="İlişkilendir" />	 							
 	 							<p:commandButton rendered="#{userMB.isLogged and userMB.roleWriter}" id="addDipnotKI" title="Dipnot Ekle" onclick="PF('dlgDipnotKI').show()" update=":outputDipnotTab:maddeIcerikDipnotlar" action="#{kanunIcerikMB.addDipnot}" icon="ui-icon-comment" />

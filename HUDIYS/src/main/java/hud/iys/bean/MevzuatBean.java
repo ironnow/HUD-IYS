@@ -98,18 +98,25 @@ public class MevzuatBean implements Serializable {
 	 @PostConstruct
     public void init() {
 		mevzuatIcerikTipListesi = new ArrayList<MevzuatIcerikTip>();		
-			
+		
 		 
-	    List<MevzuatIcerikTip> unselectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
-	    unselectedMevzuatIcerikTipleri = getMevzuatIcerikTipService().getMevzuatIcerikTipleri();
-    	for(MevzuatIcerikTip mevIcerikTip1 : unselectedMevzuatIcerikTipleri) {
-    		
+		List<MevzuatIcerikTip> mevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
+		mevzuatIcerikTipleri = getMevzuatIcerikTipService().getMevzuatIcerikTipleri();
+    	List<MevzuatIcerikTip> unselectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
+    	boolean selected = false;
+    	for(MevzuatIcerikTip mevIcerikTip1 : mevzuatIcerikTipleri) {
+    		selected = false;
     		for(MevzuatIcerikTip mevIcerikTip2 : mevzuatIcerikTipListesi) {
     			if(mevIcerikTip1.getMevzuatIcerikTipId() == mevIcerikTip2.getMevzuatIcerikTipId()){
     				unselectedMevzuatIcerikTipleri.remove(mevIcerikTip1);
+    				selected = true;
     			}
     		}
+    		if(!selected){
+    			unselectedMevzuatIcerikTipleri.add(mevIcerikTip1);
+    		}
     	}
+        
         List<MevzuatIcerikTip> selectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
         
         icerikTipleri = new DualListModel<MevzuatIcerikTip>(unselectedMevzuatIcerikTipleri, selectedMevzuatIcerikTipleri);
@@ -366,32 +373,77 @@ public class MevzuatBean implements Serializable {
     	}
     }
     	 
-    public void mevzuatIcerikDuzenleClick () {
+    public void mevzuatIcerikDuzenle() {
     	
-    	List<MevzuatIcerikEsleme> mevzuatIcerikEslemeleri = new ArrayList<MevzuatIcerikEsleme>();
-		mevzuatIcerikEslemeleri.addAll(getMevzuatIcerikEslemeService().getMevzuatIcerikEslemeleriByMevzuatId(selectedMevzuat.getMevzuatId()));
-		
-		for(int i=0; i < mevzuatIcerikEslemeleri.size(); i++){
-			mevzuatIcerikTipListesi.add(getMevzuatIcerikTipService().getMevzuatIcerikTipById(mevzuatIcerikEslemeleri.get(i).getMevzuatIcerikTipId()));
-		}
-		    	
+//    	for(MevzuatIcerikTip  mevzuatIcerikTip : icerikTipleri.getTarget()){
+//    		mevzuatIcerikTipListesi.add(mevzuatIcerikTip);
+//    		MevzuatIcerikEsleme newMevzuatIcerikEsleme = new MevzuatIcerikEsleme();
+//        	newMevzuatIcerikEsleme.setMevzuatId(selectedMevzuat.getMevzuatId());
+//        	newMevzuatIcerikEsleme.setMevzuatIcerikTipId(mevzuatIcerikTip.getMevzuatIcerikTipId());
+//        	
+//        	getMevzuatIcerikEslemeService().addMevzuatIcerikEsleme(newMevzuatIcerikEsleme);
+//    	}
     	
-    	List<MevzuatIcerikTip> unselectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
-    	unselectedMevzuatIcerikTipleri = getMevzuatIcerikTipService().getMevzuatIcerikTipleri();
-    	for(MevzuatIcerikTip mevIcerikTip1 : unselectedMevzuatIcerikTipleri) {
-    		for(MevzuatIcerikTip mevIcerikTip2 : mevzuatIcerikTipListesi) {
-    			if(mevIcerikTip1.getMevzuatIcerikTipId() == mevIcerikTip2.getMevzuatIcerikTipId()){
-    				unselectedMevzuatIcerikTipleri.remove(mevIcerikTip1);
-    			}
-    		}
-    	}
-        List<MevzuatIcerikTip> selectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
-       
+    	 for(Object item : icerikTipleri.getTarget()) {
+         	mevzuatIcerikTipListesi.add(getMevzuatIcerikTipService().getMevzuatIcerikTipById(Long.parseLong((String)item)));
+         	MevzuatIcerikEsleme newMevzuatIcerikEsleme = new MevzuatIcerikEsleme();
+         	newMevzuatIcerikEsleme.setMevzuatId(selectedMevzuat.getMevzuatId());
+         	newMevzuatIcerikEsleme.setMevzuatIcerikTipId(Long.parseLong((String)item));
+         	
+         	getMevzuatIcerikEslemeService().addMevzuatIcerikEsleme(newMevzuatIcerikEsleme);
+         	
+             
+         }
+    	
+//    	List<MevzuatIcerikEsleme> mevzuatIcerikEslemeleri = new ArrayList<MevzuatIcerikEsleme>();
+//		mevzuatIcerikEslemeleri.addAll(getMevzuatIcerikEslemeService().getMevzuatIcerikEslemeleriByMevzuatId(selectedMevzuat.getMevzuatId()));
+//		
+//		for(int i=0; i < mevzuatIcerikEslemeleri.size(); i++){
+//			mevzuatIcerikTipListesi.add(getMevzuatIcerikTipService().getMevzuatIcerikTipById(mevzuatIcerikEslemeleri.get(i).getMevzuatIcerikTipId()));
+//		}
+//		    	
+//		List<MevzuatIcerikTip> mevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
+//		mevzuatIcerikTipleri = getMevzuatIcerikTipService().getMevzuatIcerikTipleri();
+//    	List<MevzuatIcerikTip> unselectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
+//    	boolean selected = false;
+//    	for(MevzuatIcerikTip mevIcerikTip1 : mevzuatIcerikTipleri) {
+//    		selected = false;
+//    		for(MevzuatIcerikTip mevIcerikTip2 : mevzuatIcerikTipListesi) {
+//    			if(mevIcerikTip1.getMevzuatIcerikTipId() == mevIcerikTip2.getMevzuatIcerikTipId()){
+//    				unselectedMevzuatIcerikTipleri.remove(mevIcerikTip1);
+//    				selected = true;
+//    			}
+//    		}
+//    		if(!selected){
+//    			unselectedMevzuatIcerikTipleri.add(mevIcerikTip1);
+//    		}
+//    	}
         
-        icerikTipleri = new DualListModel<MevzuatIcerikTip>(unselectedMevzuatIcerikTipleri, selectedMevzuatIcerikTipleri);
+        
+//        icerikTipleri = new DualListModel<MevzuatIcerikTip>(unselectedMevzuatIcerikTipleri, mevzuatIcerikTipListesi);
     }
 
 	public DualListModel<MevzuatIcerikTip> getIcerikTipleri() {
+		List<MevzuatIcerikTip> mevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
+		mevzuatIcerikTipleri = getMevzuatIcerikTipService().getMevzuatIcerikTipleri();
+    	List<MevzuatIcerikTip> unselectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
+    	boolean selected = false;
+    	for(MevzuatIcerikTip mevIcerikTip1 : mevzuatIcerikTipleri) {
+    		selected = false;
+    		for(MevzuatIcerikTip mevIcerikTip2 : mevzuatIcerikTipListesi) {
+    			if(mevIcerikTip1.getMevzuatIcerikTipId() == mevIcerikTip2.getMevzuatIcerikTipId()){
+    				unselectedMevzuatIcerikTipleri.remove(mevIcerikTip1);
+    				selected = true;
+    			}
+    		}
+    		if(!selected){
+    			unselectedMevzuatIcerikTipleri.add(mevIcerikTip1);
+    		}
+    	}
+        
+        List<MevzuatIcerikTip> selectedMevzuatIcerikTipleri = new ArrayList<MevzuatIcerikTip>();
+        
+        icerikTipleri = new DualListModel<MevzuatIcerikTip>(unselectedMevzuatIcerikTipleri, selectedMevzuatIcerikTipleri);
 		return icerikTipleri;
 	}
 
@@ -401,16 +453,16 @@ public class MevzuatBean implements Serializable {
 	}
 	 
 	 public void onTransfer(TransferEvent event) {
-        for(Object item : event.getItems()) {
-        	mevzuatIcerikTipListesi.add(getMevzuatIcerikTipService().getMevzuatIcerikTipById(Long.parseLong((String)item)));
-        	MevzuatIcerikEsleme newMevzuatIcerikEsleme = new MevzuatIcerikEsleme();
-        	newMevzuatIcerikEsleme.setMevzuatId(selectedMevzuat.getMevzuatId());
-        	newMevzuatIcerikEsleme.setMevzuatIcerikTipId(Long.parseLong((String)item));
-        	
-        	getMevzuatIcerikEslemeService().addMevzuatIcerikEsleme(newMevzuatIcerikEsleme);
-        	
-            
-        }
+//        for(Object item : event.getItems()) {
+//        	mevzuatIcerikTipListesi.add(getMevzuatIcerikTipService().getMevzuatIcerikTipById(Long.parseLong((String)item)));
+//        	MevzuatIcerikEsleme newMevzuatIcerikEsleme = new MevzuatIcerikEsleme();
+//        	newMevzuatIcerikEsleme.setMevzuatId(selectedMevzuat.getMevzuatId());
+//        	newMevzuatIcerikEsleme.setMevzuatIcerikTipId(Long.parseLong((String)item));
+//        	
+//        	getMevzuatIcerikEslemeService().addMevzuatIcerikEsleme(newMevzuatIcerikEsleme);
+//        	
+//            
+//        }
        
     }  
     
